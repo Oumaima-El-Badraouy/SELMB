@@ -10,6 +10,7 @@ import '../../core/l10n/strings.dart';
 import '../../core/network/dio_error_message.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/form_spacing.dart';
+import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_pattern_background.dart';
 
 class AuthRegisterClientScreen extends ConsumerStatefulWidget {
@@ -101,7 +102,7 @@ class _AuthRegisterClientScreenState extends ConsumerState<AuthRegisterClientScr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(S.registerClientTitle)),
+      appBar: const AlAselFlatAppBar(title: S.registerClientTitle),
       body: MoroccanPatternBackground(
         child: ListView(
           padding: const EdgeInsets.all(20),

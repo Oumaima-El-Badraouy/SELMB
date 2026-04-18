@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
+import '../widgets/ds/al_asel_bottom_nav.dart';
 import '../widgets/responsive_content.dart';
 import '../widgets/shell_messages_bar.dart';
 import 'client_favorites_screen.dart';
@@ -31,7 +32,10 @@ class _ClientShellScreenState extends ConsumerState<ClientShellScreen> {
       await prefs.setBool('welcome_snack_v3', true);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.welcomeSnack), behavior: SnackBarBehavior.floating),
+        const SnackBar(
+          content: Text(S.welcomeSnack),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     });
   }
@@ -62,22 +66,30 @@ class _ClientShellScreenState extends ConsumerState<ClientShellScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: AlAselBottomNavBar(
         selectedIndex: tab,
         onDestinationSelected: (i) => setState(() => tab = i),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: S.navHome),
           NavigationDestination(
-            icon: Icon(Icons.groups_outlined),
-            selectedIcon: Icon(Icons.groups),
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home_rounded),
+            label: S.navHome,
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.grid_view_rounded),
+            selectedIcon: Icon(Icons.dashboard_customize_rounded),
             label: S.navArtisans,
           ),
           NavigationDestination(
-            icon: Icon(Icons.bookmark_border),
-            selectedIcon: Icon(Icons.bookmark),
+            icon: Icon(Icons.bookmark_border_rounded),
+            selectedIcon: Icon(Icons.bookmark_rounded),
             label: S.navFavorites,
           ),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: S.navProfile),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded),
+            label: S.navProfile,
+          ),
         ],
       ),
     );

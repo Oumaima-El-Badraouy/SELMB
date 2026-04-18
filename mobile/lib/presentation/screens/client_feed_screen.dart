@@ -9,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/models/post_model.dart';
 import '../providers/app_providers.dart';
 import '../widgets/client_feed_post_card.dart';
+import '../widgets/ds/design_system.dart';
 
 final _clientFeedProvider = FutureProvider.autoDispose.family<List<PostModel>, String>((ref, key) async {
   ref.watch(feedSocketTickProvider);
@@ -78,12 +79,29 @@ class _ClientFeedScreenState extends ConsumerState<ClientFeedScreen> {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
+              pinned: false,
+              stretch: true,
+              expandedHeight: 248,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              flexibleSpace: AlAselParallaxHeader(
+                title: AlAselGradientTitle(S.navHome, fontSize: 30),
+                subtitle: Text(
+                  S.homeIntroSubtitle,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            SliverAppBar(
               pinned: true,
-              floating: false,
+              floating: true,
               backgroundColor: AppColors.parchment,
               surfaceTintColor: Colors.transparent,
-              elevation: 1,
-              shadowColor: AppColors.deepBlue.withValues(alpha: 0.08),
+              elevation: 0,
+              shadowColor: AppColors.terracotta.withValues(alpha: 0.12),
+              toolbarHeight: 64,
               title: TextField(
                 controller: _searchCtrl,
                 onChanged: _onSearchChanged,

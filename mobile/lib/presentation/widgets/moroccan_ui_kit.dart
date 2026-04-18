@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/theme/app_colors.dart';
+import 'ds/gradient_title.dart';
 
 /// Filet horizontal type « bande zellige » or.
 class MoroccanGoldBand extends StatelessWidget {
@@ -43,14 +43,7 @@ class MoroccanSectionTitle extends StatelessWidget {
         Expanded(child: Divider(color: AppColors.gold.withValues(alpha: 0.35))),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Text(
-            text,
-            style: GoogleFonts.elMessiri(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.deepBlue,
-            ),
-          ),
+          child: AlAselGradientTitleOnLight(text, fontSize: 17, fontWeight: FontWeight.w800),
         ),
         Expanded(child: Divider(color: AppColors.gold.withValues(alpha: 0.35))),
       ],

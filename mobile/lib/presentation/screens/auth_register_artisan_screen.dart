@@ -11,6 +11,7 @@ import '../../core/l10n/strings.dart';
 import '../../core/network/dio_error_message.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/form_spacing.dart';
+import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_pattern_background.dart';
 
 class AuthRegisterArtisanScreen extends ConsumerStatefulWidget {
@@ -141,7 +142,7 @@ class _AuthRegisterArtisanScreenState extends ConsumerState<AuthRegisterArtisanS
     final hasR = _cinRectoDataUrl != null && _cinRectoDataUrl!.isNotEmpty;
     final hasV = _cinVersoDataUrl != null && _cinVersoDataUrl!.isNotEmpty;
     return Scaffold(
-      appBar: AppBar(title: const Text(S.registerArtisanTitle)),
+      appBar: const AlAselFlatAppBar(title: S.registerArtisanTitle),
       body: MoroccanPatternBackground(
         child: ListView(
           padding: const EdgeInsets.all(20),
@@ -172,7 +173,8 @@ class _AuthRegisterArtisanScreenState extends ConsumerState<AuthRegisterArtisanS
             ),
             FormSpacing.betweenInputs,
             DropdownButtonFormField<String>(
-              value: _tradeId,
+              key: ValueKey(_tradeId),
+              initialValue: _tradeId,
               decoration: const InputDecoration(labelText: S.fieldTraditionalTrade),
               items: [
                 for (final t in moroccanTrades)

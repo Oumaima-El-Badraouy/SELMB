@@ -13,6 +13,7 @@ import '../../core/theme/form_spacing.dart';
 import '../../data/models/user_model.dart';
 import '../providers/app_providers.dart';
 import '../widgets/cin_upload_section.dart';
+import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_pattern_background.dart';
 
 /// Nombre de demandes clients (posts `client_request`) visibles pour les artisans.
@@ -180,11 +181,11 @@ class _ArtisanProfileTabScreenState extends ConsumerState<ArtisanProfileTabScree
     final demandsAsync = ref.watch(_clientDemandsCountProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(S.artisanMyProfileTitle),
+      appBar: AlAselFlatAppBar(
+        title: S.artisanMyProfileTitle,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout_rounded),
             onPressed: () async {
               await ref.read(authNotifierProvider.notifier).logout();
               if (context.mounted) context.go('/auth/login');

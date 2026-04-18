@@ -6,6 +6,7 @@ import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/post_model.dart';
 import '../providers/app_providers.dart';
+import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_pattern_background.dart';
 import '../widgets/post_card.dart';
 
@@ -22,7 +23,7 @@ class ArtisanMyPostsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(_myServicePostsProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text(S.navMyPosts)),
+      appBar: const AlAselFlatAppBar(title: S.navMyPosts),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/create-post?type=artisan_service'),
         icon: const Icon(Icons.add),

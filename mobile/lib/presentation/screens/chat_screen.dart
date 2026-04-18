@@ -8,12 +8,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/auth/auth_notifier.dart';
 import '../../core/l10n/strings.dart';
 import '../../core/realtime/socket_hub.dart';
 import '../../core/theme/app_colors.dart';
 import '../providers/app_providers.dart';
+import '../widgets/moroccan_app_bar.dart';
 import '../widgets/responsive_content.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
@@ -262,8 +264,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.sand,
-      appBar: AppBar(
-        title: Column(
+      appBar: AlAselFlatAppBar(
+        centerTitle: true,
+        titleWidget: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -271,6 +274,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               widget.peerName,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.elMessiri(
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+                color: AppColors.parchment,
+              ),
             ),
             if (_peerPhone != null && _peerPhone!.isNotEmpty)
               Text(
@@ -278,12 +286,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.75),
+                  color: AppColors.parchment.withValues(alpha: 0.82),
                 ),
               ),
           ],
         ),
-        centerTitle: true,
         actions: [
           IconButton(
             tooltip: S.callTooltip,

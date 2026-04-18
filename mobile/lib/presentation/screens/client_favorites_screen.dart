@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_gradients.dart';
 import '../../data/models/post_model.dart';
 import '../providers/app_providers.dart';
 import '../widgets/client_feed_post_card.dart';
@@ -27,13 +29,26 @@ class ClientFavoritesScreen extends ConsumerWidget {
         },
         child: CustomScrollView(
           slivers: [
-              const SliverAppBar(
+              SliverAppBar(
                 pinned: true,
                 floating: false,
-                backgroundColor: AppColors.white,
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                backgroundColor: Colors.transparent,
                 surfaceTintColor: Colors.transparent,
-                elevation: 0.5,
-                title: Text(S.favoritesTitle, style: TextStyle(fontWeight: FontWeight.w800)),
+                foregroundColor: AppColors.parchment,
+                iconTheme: const IconThemeData(color: AppColors.parchment),
+                flexibleSpace: Container(
+                  decoration: const BoxDecoration(gradient: AppGradients.headerWarm),
+                ),
+                title: Text(
+                  S.favoritesTitle,
+                  style: GoogleFonts.elMessiri(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                    color: AppColors.parchment,
+                  ),
+                ),
               ),
               async.when(
                 data: (posts) {

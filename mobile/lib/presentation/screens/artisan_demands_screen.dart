@@ -6,6 +6,7 @@ import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/post_model.dart';
 import '../providers/app_providers.dart';
+import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_pattern_background.dart';
 import '../widgets/post_card.dart';
 
@@ -34,7 +35,7 @@ class _ArtisanDemandsScreenState extends ConsumerState<ArtisanDemandsScreen> {
     final async = ref.watch(_demandsFeedProvider(catKey));
 
     return Scaffold(
-      appBar: AppBar(title: const Text(S.clientDemandsScreenTitle)),
+      appBar: const AlAselFlatAppBar(title: S.clientDemandsScreenTitle),
       body: MoroccanPatternBackground(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

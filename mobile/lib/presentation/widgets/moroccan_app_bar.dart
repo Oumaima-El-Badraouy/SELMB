@@ -1,10 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_gradients.dart';
 
-/// AppBar + bandeau zellij sous le titre (style médina / artisanat).
+/// AppBar avec dégradé maghrébin + bandeau zellij sous le titre.
 class MoroccanAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MoroccanAppBar({
     super.key,
@@ -25,11 +27,21 @@ class MoroccanAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AppBar(
-          elevation: 0,
-          leading: leading,
-          title: title,
-          actions: actions,
+        Container(
+          decoration: const BoxDecoration(gradient: AppGradients.headerWarm),
+          child: AppBar(
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            backgroundColor: Colors.transparent,
+            foregroundColor: AppColors.parchment,
+            iconTheme: const IconThemeData(color: AppColors.parchment),
+            leading: leading,
+            title: DefaultTextStyle(
+              style: const TextStyle(color: AppColors.parchment),
+              child: title,
+            ),
+            actions: actions,
+          ),
         ),
         SizedBox(
           height: 10,
@@ -50,12 +62,12 @@ class _ZellijBandPainter extends CustomPainter {
     final p = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
-      ..color = AppColors.deepBlue.withValues(alpha: 0.2);
+      ..color = AppColors.parchment.withValues(alpha: 0.35);
 
     final g = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.8
-      ..color = AppColors.gold.withValues(alpha: 0.35);
+      ..color = AppColors.gold.withValues(alpha: 0.45);
 
     const step = 24.0;
     for (double x = 0; x < size.width + step; x += step) {
@@ -82,4 +94,56 @@ class _ZellijBandPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// AppBar simple — dégradé pleine largeur (écrans formulaires / listes).
+class AlAselFlatAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const AlAselFlatAppBar({
+    super.key,
+    this.title,
+    this.titleWidget,
+    this.actions,
+    this.leading,
+    this.centerTitle = false,
+  }) : assert(title != null || titleWidget != null, 'Provide title or titleWidget');
+
+  final String? title;
+  final Widget? titleWidget;
+  final List<Widget>? actions;
+  final Widget? leading;
+  final bool centerTitle;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    final t = titleWidget ??
+        Text(
+          title!,
+          style: GoogleFonts.elMessiri(
+            fontWeight: FontWeight.w700,
+            fontSize: 19,
+            color: AppColors.parchment,
+          ),
+        );
+
+    return AppBar(
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      leading: leading,
+      centerTitle: centerTitle,
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(gradient: AppGradients.headerWarm),
+      ),
+      backgroundColor: Colors.transparent,
+      foregroundColor: AppColors.parchment,
+      iconTheme: const IconThemeData(color: AppColors.parchment),
+      title: DefaultTextStyle.merge(
+        style: const TextStyle(color: AppColors.parchment),
+        child: t,
+      ),
+      actions: actions,
+    );
+  }
 }

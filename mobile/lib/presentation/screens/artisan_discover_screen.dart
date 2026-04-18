@@ -5,6 +5,7 @@ import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/post_model.dart';
 import '../providers/app_providers.dart';
+import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_pattern_background.dart';
 import '../widgets/post_card.dart';
 
@@ -22,7 +23,7 @@ class ArtisanDiscoverScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(_discoverProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text(S.otherArtisansTitle)),
+      appBar: const AlAselFlatAppBar(title: S.otherArtisansTitle),
       body: MoroccanPatternBackground(
         child: async.when(
           data: (posts) {

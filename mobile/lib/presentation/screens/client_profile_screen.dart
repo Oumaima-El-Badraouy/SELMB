@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/auth/auth_notifier.dart';
 import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_gradients.dart';
 import '../../core/theme/form_spacing.dart';
 import '../../data/models/post_model.dart';
 import '../../data/models/user_model.dart';
@@ -92,10 +94,23 @@ class ClientProfileScreen extends ConsumerWidget {
               slivers: [
                 SliverAppBar(
                   pinned: true,
-                  backgroundColor: AppColors.white,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  backgroundColor: Colors.transparent,
                   surfaceTintColor: Colors.transparent,
-                  elevation: 0.5,
-                  title: Text(_handle(u), style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.ink)),
+                  foregroundColor: AppColors.parchment,
+                  iconTheme: const IconThemeData(color: AppColors.parchment),
+                  flexibleSpace: Container(
+                    decoration: const BoxDecoration(gradient: AppGradients.headerWarm),
+                  ),
+                  title: Text(
+                    _handle(u),
+                    style: GoogleFonts.elMessiri(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                      color: AppColors.parchment,
+                    ),
+                  ),
                   centerTitle: true,
                   actions: [
                     IconButton(
@@ -104,7 +119,7 @@ class ClientProfileScreen extends ConsumerWidget {
                       onPressed: () => context.push('/create-post?type=client_request'),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.menu),
+                      icon: const Icon(Icons.menu_rounded),
                       onPressed: () => _menuSheet(context, ref, u),
                     ),
                   ],

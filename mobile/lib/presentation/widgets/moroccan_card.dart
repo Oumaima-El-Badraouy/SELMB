@@ -3,8 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_gradients.dart';
 
-/// Carte style « cadre zellige » : filet or, ombre douce, étoiles aux coins.
+/// Carte design system : dégradé léger, coins décoratifs *clippés*, ombre colorée (glow), grand rayon.
 class MoroccanCard extends StatelessWidget {
   const MoroccanCard({
     super.key,
@@ -17,72 +18,138 @@ class MoroccanCard extends StatelessWidget {
   final VoidCallback? onTap;
   final EdgeInsets padding;
 
+  static const double _r = 28;
+
   @override
   Widget build(BuildContext context) {
-    final inner = CustomPaint(
-      foregroundPainter: _ZellijCornerPainter(),
-      child: Container(
-        padding: padding,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: AppColors.gold.withValues(alpha: 0.55), width: 1.4),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.deepBlue.withValues(alpha: 0.08),
-              blurRadius: 22,
-              offset: const Offset(0, 10),
+    final inner = ClipRRect(
+      borderRadius: BorderRadius.circular(_r),
+      child: Stack(
+        clipBehavior: Clip.hardEdge,
+        children: [
+          const Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(gradient: AppGradients.cardBody),
             ),
-            BoxShadow(
-              color: AppColors.terracotta.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
+          ),
+          // Lisière type kilim / bordure tapis
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 4,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(_r)),
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.burgundy.withValues(alpha: 0.65),
+                    AppColors.gold,
+                    AppColors.zellijGlaze,
+                    AppColors.terracotta.withValues(alpha: 0.75),
+                  ],
+                ),
+              ),
             ),
-          ],
-        ),
-        child: child,
+          ),
+          // Bulles décoratives dans les coins (clipées par le parent)
+          Positioned(
+            top: -24,
+            right: -20,
+            child: _blob(72, AppColors.gold.withValues(alpha: 0.14)),
+          ),
+          Positioned(
+            bottom: -18,
+            left: -14,
+            child: _blob(56, AppColors.terracotta.withValues(alpha: 0.12)),
+          ),
+          Positioned(
+            top: 12,
+            left: 12,
+            child: CustomPaint(
+              size: const Size(40, 40),
+              painter: _ZellijSparkPainter(),
+            ),
+          ),
+          Positioned(
+            bottom: 12,
+            right: 12,
+            child: CustomPaint(
+              size: const Size(36, 36),
+              painter: _ZellijSparkPainter(small: true),
+            ),
+          ),
+          Padding(
+            padding: padding,
+            child: child,
+          ),
+        ],
       ),
     );
 
+    final decorated = Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(_r),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45), width: 1.2),
+        boxShadow: AppGradients.glowDeepBlue(blur: 26, y: 12),
+      ),
+      child: inner,
+    );
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       child: onTap == null
-          ? inner
+          ? decorated
           : Material(
               color: Colors.transparent,
               child: InkWell(
                 onTap: onTap,
-                borderRadius: BorderRadius.circular(22),
-                child: inner,
+                borderRadius: BorderRadius.circular(_r),
+                splashColor: AppColors.gold.withValues(alpha: 0.12),
+                highlightColor: AppColors.deepBlue.withValues(alpha: 0.04),
+                child: decorated,
               ),
             ),
     );
   }
+
+  static Widget _blob(double d, Color color) {
+    return Container(
+      width: d,
+      height: d,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+      ),
+    );
+  }
 }
 
-class _ZellijCornerPainter extends CustomPainter {
+class _ZellijSparkPainter extends CustomPainter {
+  _ZellijSparkPainter({this.small = false});
+
+  final bool small;
+
   @override
   void paint(Canvas canvas, Size size) {
-    const r = 14.0;
+    final r = small ? 6.0 : 8.0;
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.25
-      ..color = AppColors.deepBlue.withValues(alpha: 0.38);
+      ..strokeWidth = small ? 0.9 : 1.1
+      ..color = AppColors.deepBlue.withValues(alpha: 0.22);
 
     final gold = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0
-      ..color = AppColors.gold.withValues(alpha: 0.72);
+      ..strokeWidth = 0.8
+      ..color = AppColors.gold.withValues(alpha: 0.5);
 
     void star(Offset c) {
       _drawStar(canvas, c, r, paint);
       _drawStar(canvas, c, r * 0.45, gold);
     }
 
-    star(Offset(r * 0.35, r * 0.35));
-    star(Offset(size.width - r * 0.35, r * 0.35));
-    star(Offset(r * 0.35, size.height - r * 0.35));
-    star(Offset(size.width - r * 0.35, size.height - r * 0.35));
+    star(Offset(size.width * 0.35, size.height * 0.35));
+    star(Offset(size.width * 0.72, size.height * 0.68));
   }
 
   void _drawStar(Canvas canvas, Offset c, double radius, Paint paint) {

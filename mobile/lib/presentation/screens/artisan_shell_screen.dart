@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
+import '../widgets/ds/al_asel_bottom_nav.dart';
 import '../widgets/shell_messages_bar.dart';
 import 'artisan_demands_screen.dart';
 import 'artisan_discover_screen.dart';
@@ -30,7 +31,10 @@ class _ArtisanShellScreenState extends ConsumerState<ArtisanShellScreen> {
       await prefs.setBool('welcome_artisan_snack_v1', true);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.welcomeSnack), behavior: SnackBarBehavior.floating),
+        const SnackBar(
+          content: Text(S.welcomeSnack),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     });
   }
@@ -55,14 +59,30 @@ class _ArtisanShellScreenState extends ConsumerState<ArtisanShellScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: AlAselBottomNavBar(
         selectedIndex: tab,
         onDestinationSelected: (i) => setState(() => tab = i),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.inbox_outlined), selectedIcon: Icon(Icons.inbox), label: S.navDemands),
-          NavigationDestination(icon: Icon(Icons.explore_outlined), selectedIcon: Icon(Icons.explore), label: S.navDiscover),
-          NavigationDestination(icon: Icon(Icons.post_add_outlined), selectedIcon: Icon(Icons.post_add), label: S.navMyPosts),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: S.navProfile),
+          NavigationDestination(
+            icon: Icon(Icons.inbox_outlined),
+            selectedIcon: Icon(Icons.inbox_rounded),
+            label: S.navDemands,
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.explore_outlined),
+            selectedIcon: Icon(Icons.explore_rounded),
+            label: S.navDiscover,
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.post_add_outlined),
+            selectedIcon: Icon(Icons.post_add_rounded),
+            label: S.navMyPosts,
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded),
+            label: S.navProfile,
+          ),
         ],
       ),
     );

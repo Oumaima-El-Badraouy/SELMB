@@ -74,7 +74,8 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
             ),
             FormSpacing.betweenInputs,
             DropdownButtonFormField<String>(
-              value: category,
+              key: ValueKey(category),
+              initialValue: category,
               decoration: const InputDecoration(labelText: S.fieldCategory),
               items: [
                 for (final t in moroccanTrades)
@@ -106,7 +107,8 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: urgency,
+                    key: ValueKey(urgency),
+                    initialValue: urgency,
                     decoration: const InputDecoration(labelText: S.fieldUrgency),
                     items: const [
                       DropdownMenuItem(value: 'normal', child: Text(S.urgencyNormal)),

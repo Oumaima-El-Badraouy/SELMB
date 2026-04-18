@@ -3,35 +3,49 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_gradients.dart';
+import 'ds/cultural_motifs_painter.dart';
 
-/// Fond type riad : dégradé parchemin + zellige (étoiles, losanges, filets or).
+/// Fond type riad : dégradé parchemin + zellige (étoiles, octogones) + texture tapis (kilim).
 class MoroccanPatternBackground extends StatelessWidget {
-  const MoroccanPatternBackground({super.key, required this.child});
+  const MoroccanPatternBackground({
+    super.key,
+    required this.child,
+    this.showRugWeft = true,
+    this.showOctagonGrid = true,
+  });
 
   final Widget child;
+  final bool showRugWeft;
+  final bool showOctagonGrid;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Positioned.fill(
+        const Positioned.fill(
           child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: AppColors.sandGradient,
-                stops: const [0.0, 0.5, 1.0],
-              ),
-            ),
+            decoration: BoxDecoration(gradient: AppGradients.screenBackdrop),
           ),
         ),
-        Positioned.fill(
+        if (showRugWeft)
+          const Positioned.fill(
+            child: CustomPaint(
+              painter: RugKilimBandsPainter(opacity: 0.85),
+            ),
+          ),
+        const Positioned.fill(
           child: CustomPaint(
             painter: _ZellijFieldPainter(),
           ),
         ),
+        if (showOctagonGrid)
+          const Positioned.fill(
+            child: CustomPaint(
+              painter: ZellijOctagonGridPainter(opacity: 0.9),
+            ),
+          ),
         child,
       ],
     );
@@ -39,6 +53,8 @@ class MoroccanPatternBackground extends StatelessWidget {
 }
 
 class _ZellijFieldPainter extends CustomPainter {
+  const _ZellijFieldPainter();
+
   @override
   void paint(Canvas canvas, Size size) {
     _stars(canvas, size);

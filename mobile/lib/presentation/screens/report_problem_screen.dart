@@ -7,6 +7,7 @@ import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/form_spacing.dart';
 import '../providers/app_providers.dart';
+import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_pattern_background.dart';
 
 class ReportProblemScreen extends ConsumerStatefulWidget {
@@ -64,7 +65,7 @@ class _ReportProblemScreenState extends ConsumerState<ReportProblemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(S.reportProblem)),
+      appBar: const AlAselFlatAppBar(title: S.reportProblem),
       body: MoroccanPatternBackground(
         child: ListView(
           padding: const EdgeInsets.all(20),

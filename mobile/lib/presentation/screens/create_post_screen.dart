@@ -11,6 +11,7 @@ import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/form_spacing.dart';
 import '../providers/app_providers.dart';
+import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_pattern_background.dart';
 import '../widgets/post_media_preview.dart';
 
@@ -111,7 +112,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(isArtisanService ? S.newServicePost : S.newRequestPost)),
+      appBar: AlAselFlatAppBar(title: isArtisanService ? S.newServicePost : S.newRequestPost),
       body: MoroccanPatternBackground(
         child: ListView(
           padding: const EdgeInsets.all(16),
@@ -128,7 +129,8 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             ),
             FormSpacing.betweenInputs,
             DropdownButtonFormField<String>(
-              value: _categoryId,
+              key: ValueKey(_categoryId),
+              initialValue: _categoryId,
               decoration: const InputDecoration(labelText: S.fieldDomainCategory),
               items: [
                 for (final t in moroccanTrades)
