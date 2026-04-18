@@ -27,6 +27,11 @@ class MoroccanAppBar extends StatelessWidget implements PreferredSizeWidget {
       children: [
         AppBar(
           elevation: 0,
+          scrolledUnderElevation: 0.5,
+          shadowColor: AppColors.deepBlue.withValues(alpha: 0.08),
+          backgroundColor: AppColors.shellAppBarSurface,
+          surfaceTintColor: Colors.transparent,
+          foregroundColor: AppColors.deepBlue,
           leading: leading,
           title: title,
           actions: actions,

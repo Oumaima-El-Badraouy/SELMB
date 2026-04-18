@@ -9,9 +9,11 @@ import '../../core/auth/auth_notifier.dart';
 import '../../core/l10n/strings.dart';
 import '../../core/network/dio_error_message.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_gradients.dart';
 import '../../core/theme/form_spacing.dart';
+import '../widgets/cinematic_moroccan_background.dart';
+import '../widgets/gradient_primary_button.dart';
 import '../widgets/moroccan_card.dart';
-import '../widgets/moroccan_pattern_background.dart';
 import '../widgets/moroccan_ui_kit.dart';
 
 class AuthLoginScreen extends ConsumerStatefulWidget {
@@ -54,6 +56,7 @@ class _AuthLoginScreenState extends ConsumerState<AuthLoginScreen> {
   }
 
   Future<void> _submit() async {
+    if (loading) return;
     setState(() {
       loading = true;
       err = null;
@@ -85,110 +88,165 @@ class _AuthLoginScreenState extends ConsumerState<AuthLoginScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
-          S.loginTitle,
-          style: GoogleFonts.elMessiri(fontWeight: FontWeight.w700, fontSize: 20),
+        title: ShaderMask(
+          blendMode: BlendMode.srcIn,
+          shaderCallback: (b) => AppGradients.titleArabic.createShader(Offset.zero & b.size),
+          child: Text(
+            S.loginTitle,
+            style: GoogleFonts.elMessiri(fontWeight: FontWeight.w800, fontSize: 21, color: Colors.white),
+          ),
         ),
       ),
-      body: MoroccanPatternBackground(
+      body: CinematicMoroccanBackground(
         child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Center(
-                  child: Image.asset(
-                    'assets/branding/logo_al_asel.png',
-                    height: 88,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, __, ___) => SvgPicture.asset(
-                      'assets/branding/logo.svg',
-                      height: 88,
-                      fit: BoxFit.contain,
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 900),
+            curve: Curves.easeOutCubic,
+            builder: (context, t, child) {
+              return Opacity(
+                opacity: t,
+                child: Transform.translate(
+                  offset: Offset(0, 28 * (1 - t)),
+                  child: child,
+                ),
+              );
+            },
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: Hero(
+                      tag: 'al_asel_logo',
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.gold.withValues(alpha: 0.35),
+                              blurRadius: 20,
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: AppColors.zellijGlaze.withValues(alpha: 0.2),
+                              blurRadius: 14,
+                              spreadRadius: 0,
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: Container(
+                            color: AppColors.white.withValues(alpha: 0.92),
+                            padding: const EdgeInsets.all(8),
+                            child: Image.asset(
+                              'assets/branding/logo_al_asel.png',
+                              height: 92,
+                              fit: BoxFit.contain,
+                              errorBuilder: (_, __, ___) => SvgPicture.asset(
+                                'assets/branding/logo.svg',
+                                height: 92,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                const MoroccanGoldBand(width: 100),
-                const SizedBox(height: 20),
-                Text(
-                  S.welcomeLogin,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.elMessiri(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.deepBlue,
+                  const SizedBox(height: 12),
+                  const Center(child: MoroccanGoldBand(width: 110)),
+                  const SizedBox(height: 18),
+                  ShaderMask(
+                    blendMode: BlendMode.srcIn,
+                    shaderCallback: (b) => AppGradients.titleArabic.createShader(Offset.zero & b.size),
+                    child: Text(
+                      S.welcomeLogin,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.elMessiri(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        height: 1.15,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  S.loginSubtitle,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.cairo(
-                    fontSize: 14,
-                    color: AppColors.muted,
-                    height: 1.4,
+                  const SizedBox(height: 8),
+                  Text(
+                    S.loginSubtitle,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.cairo(
+                      fontSize: 14.5,
+                      color: AppColors.white.withValues(alpha: 0.88),
+                      height: 1.45,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                MoroccanCard(
-                  padding: const EdgeInsets.fromLTRB(18, 22, 18, 22),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TextField(
-                        controller: _email,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: S.emailLabel,
-                          prefixIcon: const Icon(Icons.mail_outline_rounded),
+                  const SizedBox(height: 22),
+                  MoroccanCard(
+                    padding: const EdgeInsets.fromLTRB(18, 22, 18, 22),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextField(
+                          controller: _email,
+                          keyboardType: TextInputType.emailAddress,
+                          style: GoogleFonts.cairo(),
+                          decoration: const InputDecoration(
+                            labelText: S.emailLabel,
+                            prefixIcon: Icon(Icons.mail_outline_rounded, color: AppColors.deepBlue),
+                          ),
                         ),
-                      ),
-                      FormSpacing.betweenInputs,
-                      TextField(
-                        controller: _password,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: S.passwordLabel,
-                          prefixIcon: const Icon(Icons.lock_outline_rounded),
+                        FormSpacing.betweenInputs,
+                        TextField(
+                          controller: _password,
+                          obscureText: true,
+                          style: GoogleFonts.cairo(),
+                          decoration: const InputDecoration(
+                            labelText: S.passwordLabel,
+                            prefixIcon: Icon(Icons.lock_outline_rounded, color: AppColors.deepBlue),
+                          ),
                         ),
-                      ),
-                      CheckboxListTile(
-                        contentPadding: EdgeInsets.zero,
-                        value: _rememberMe,
-                        onChanged: loading ? null : (v) => setState(() => _rememberMe = v ?? false),
-                        title: Text(S.rememberLogin, style: GoogleFonts.cairo(fontSize: 14)),
-                        controlAffinity: ListTileControlAffinity.leading,
-                      ),
-                      if (err != null) ...[
-                        const SizedBox(height: 12),
-                        Text(err!, style: const TextStyle(color: AppColors.terracotta, fontWeight: FontWeight.w600)),
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          value: _rememberMe,
+                          onChanged: loading ? null : (v) => setState(() => _rememberMe = v ?? false),
+                          title: Text(S.rememberLogin, style: GoogleFonts.cairo(fontSize: 14)),
+                          activeColor: AppColors.deepBlue,
+                          checkColor: AppColors.white,
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                        if (err != null) ...[
+                          const SizedBox(height: 12),
+                          Text(err!, style: GoogleFonts.cairo(color: AppColors.terracotta, fontWeight: FontWeight.w700)),
+                        ],
+                        const SizedBox(height: 20),
+                        GradientPrimaryButton(
+                          onPressed: _submit,
+                          loading: loading,
+                          label: S.loginButton,
+                        ),
                       ],
-                      const SizedBox(height: 22),
-                      FilledButton(
-                        onPressed: loading ? null : _submit,
-                        child: loading
-                            ? const SizedBox(
-                                height: 22,
-                                width: 22,
-                                child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.white),
-                              )
-                            : Text(S.loginButton, style: GoogleFonts.cairo(fontWeight: FontWeight.w800)),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                TextButton(
-                  onPressed: () => context.push('/auth/register/client'),
-                  child: Text(S.registerClient, style: GoogleFonts.cairo(fontWeight: FontWeight.w700)),
-                ),
-                TextButton(
-                  onPressed: () => context.push('/auth/register/artisan'),
-                  child: Text(S.registerArtisan, style: GoogleFonts.cairo(fontWeight: FontWeight.w700)),
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  TextButton(
+                    onPressed: () => context.push('/auth/register/client'),
+                    child: Text(
+                      S.registerClient,
+                      style: GoogleFonts.cairo(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.goldMuted),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => context.push('/auth/register/artisan'),
+                    child: Text(
+                      S.registerArtisan,
+                      style: GoogleFonts.cairo(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.goldMuted),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -4,6 +4,9 @@ class S {
 
   static const String appName = 'الأصل';
 
+  /// Ligne sous le logo (splash) — effet « premium » sans répéter le nom de marque.
+  static const String splashTagline = 'مديونة · زليج · أصالة';
+
   // Accueil (home)
   static const String homeDecorLine = 'مرحبا — الأصل';
   static const String homeMainTitle = 'الأصل';
@@ -178,7 +181,15 @@ class S {
   static const String otherArtisansTitle = 'حرفيون آخرون';
   static const String noOtherServices = 'لا توجد خدمات أخرى منشورة.';
   static const String clientDemandsScreenTitle = 'طلبات الزبائن — مديونة';
+  /// Sous-titre carte héros (écran demandes artisan).
+  static const String artisanDemandsHeroSubtitle = 'تصفح حسب الصنعة وتواصل مع الزبائن في مديونة.';
   static const String noDemandsYet = 'لا طلبات بعد.';
+  /// Fil client — bandeau sous la recherche.
+  static const String clientFeedHeroLine = 'خدمات وحرف تقليدية من حرفيي الجهة';
+  /// Carte haut de page profil client.
+  static const String clientProfileHeroLine = 'طلباتك، متابعاتك، ومديونة في مكان واحد';
+  /// En-tête carte profil artisan.
+  static const String artisanProfileHeroLine = 'إدارة ملفك، خدماتك، وثقة الزبائن';
   static const String fabNew = 'جديد';
   static const String createFirstServicePost = 'أنشئ أول منشور خدمة';
 

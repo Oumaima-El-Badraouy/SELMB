@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/l10n/strings.dart';
-import '../../core/theme/app_colors.dart';
+import '../widgets/moroccan_bottom_nav_bar.dart';
+import '../widgets/moroccan_shell_background.dart';
 import '../widgets/responsive_content.dart';
 import '../widgets/shell_messages_bar.dart';
 import 'client_favorites_screen.dart';
@@ -39,45 +40,39 @@ class _ClientShellScreenState extends ConsumerState<ClientShellScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.sand,
-      body: Column(
-        children: [
-          const ShellMessagesBar(),
-          Expanded(
-            child: SafeArea(
-              top: false,
-              bottom: false,
-              child: ResponsiveContent(
-                child: IndexedStack(
-                  index: tab,
-                  children: const [
-                    ClientFeedScreen(),
-                    ExploreScreen(),
-                    ClientFavoritesScreen(),
-                    ClientProfileScreen(),
-                  ],
+      backgroundColor: Colors.transparent,
+      body: MoroccanShellBackground(
+        child: Column(
+          children: [
+            const ShellMessagesBar(),
+            Expanded(
+              child: SafeArea(
+                top: false,
+                bottom: false,
+                child: ResponsiveContent(
+                  child: IndexedStack(
+                    index: tab,
+                    children: const [
+                      ClientFeedScreen(),
+                      ExploreScreen(),
+                      ClientFavoritesScreen(),
+                      ClientProfileScreen(),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: tab,
+      bottomNavigationBar: MoroccanBottomNavBar(
+        currentIndex: tab,
         onDestinationSelected: (i) => setState(() => tab = i),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: S.navHome),
-          NavigationDestination(
-            icon: Icon(Icons.groups_outlined),
-            selectedIcon: Icon(Icons.groups),
-            label: S.navArtisans,
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bookmark_border),
-            selectedIcon: Icon(Icons.bookmark),
-            label: S.navFavorites,
-          ),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: S.navProfile),
+          MoroccanNavDestination(icon: Icons.home_outlined, selectedIcon: Icons.home, label: S.navHome),
+          MoroccanNavDestination(icon: Icons.groups_outlined, selectedIcon: Icons.groups, label: S.navArtisans),
+          MoroccanNavDestination(icon: Icons.bookmark_border, selectedIcon: Icons.bookmark, label: S.navFavorites),
+          MoroccanNavDestination(icon: Icons.person_outline, selectedIcon: Icons.person, label: S.navProfile),
         ],
       ),
     );

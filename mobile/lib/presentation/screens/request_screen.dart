@@ -8,7 +8,7 @@ import '../../core/theme/form_spacing.dart';
 import '../providers/app_providers.dart';
 import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_card.dart';
-import '../widgets/moroccan_pattern_background.dart';
+import '../widgets/moroccan_shell_background.dart';
 
 class RequestScreen extends ConsumerStatefulWidget {
   const RequestScreen({super.key});
@@ -58,13 +58,14 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: MoroccanAppBar(
         title: Text(
           S.newRequestPost,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.zellijGlaze),
         ),
       ),
-      body: MoroccanPatternBackground(
+      body: MoroccanShellBackground(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [

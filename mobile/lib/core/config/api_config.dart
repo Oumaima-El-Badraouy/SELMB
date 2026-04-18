@@ -2,14 +2,14 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, Tar
 
 /// API locale — port **4000**, routes sous `/api/v1`.
 ///
-/// Android : IP du PC sur le réseau (développement). Changez [_lanDevHost] si votre IP change.
+/// Android : IP du PC sur le réseau (développement). `ipconfig` → IPv4 **Wi‑Fi**.
 /// Autre plateforme : `127.0.0.1`.
 /// Surcharge build : `--dart-define=API_BASE=http://.../api/v1`
 class ApiConfig {
   static const String _apiBaseFromEnv = String.fromEnvironment('API_BASE', defaultValue: '');
 
-  /// IP du PC (cmd → `ipconfig` → IPv4). Téléphone et PC sur le même Wi‑Fi.
-  static const String _lanDevHost = '192.168.1.198';
+  /// IP du PC (Wi‑Fi). Téléphone et PC sur le même réseau.
+  static const String _lanDevHost = '192.168.0.164';
   static const int _apiPort = 4000;
 
   static String get baseUrl {
@@ -21,10 +21,14 @@ class ApiConfig {
   }
 
   static String _defaultBaseForPlatform() {
-    if (kIsWeb) return 'http://127.0.0.1:$_apiPort/api/v1';
+    if (kIsWeb) {
+      return 'http://127.0.0.1:$_apiPort/api/v1';
+    }
+
     if (defaultTargetPlatform == TargetPlatform.android) {
       return 'http://$_lanDevHost:$_apiPort/api/v1';
     }
+
     return 'http://127.0.0.1:$_apiPort/api/v1';
   }
 

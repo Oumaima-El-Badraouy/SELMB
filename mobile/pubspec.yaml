@@ -18,7 +18,10 @@ dependencies:
   shared_preferences: ^2.3.3
   image_picker: ^1.1.2
   socket_io_client: ^3.0.2
-  google_fonts: ^6.2.1
+  # 6.2.1: map const<FontWeight,...> -> erreur web « FontWeight n'a pas d'opérateur == primitif »
+  # sur Flutter récent. ≥6.3 utilise une map non-const (ok web/desktop).
+  # Toujours compiler avec `flutter` (SDK intégré), pas le binaire `dart` seul.
+  google_fonts: ^6.3.0
   cached_network_image: ^3.4.1
   flutter_svg: ^2.0.10+1
   record: ^6.2.0

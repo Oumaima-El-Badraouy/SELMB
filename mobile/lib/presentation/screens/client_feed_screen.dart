@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/constants/moroccan_trades.dart';
 import '../../core/l10n/strings.dart';
@@ -9,6 +10,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/models/post_model.dart';
 import '../providers/app_providers.dart';
 import '../widgets/client_feed_post_card.dart';
+import '../widgets/moroccan_internal_dashboard.dart';
 
 final _clientFeedProvider = FutureProvider.autoDispose.family<List<PostModel>, String>((ref, key) async {
   ref.watch(feedSocketTickProvider);
@@ -69,7 +71,7 @@ class _ClientFeedScreenState extends ConsumerState<ClientFeedScreen> {
     final async = ref.watch(_clientFeedProvider(_providerKey));
 
     return Scaffold(
-      backgroundColor: AppColors.sand,
+      backgroundColor: Colors.transparent,
       body: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(_clientFeedProvider(_providerKey));
@@ -80,25 +82,39 @@ class _ClientFeedScreenState extends ConsumerState<ClientFeedScreen> {
             SliverAppBar(
               pinned: true,
               floating: false,
-              backgroundColor: AppColors.parchment,
+              backgroundColor: AppColors.shellAppBarSurface,
               surfaceTintColor: Colors.transparent,
-              elevation: 1,
-              shadowColor: AppColors.deepBlue.withValues(alpha: 0.08),
+              elevation: 2,
+              shadowColor: AppColors.deepBlue.withValues(alpha: 0.06),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(1.5),
+                child: Container(height: 1.5, color: AppColors.gold.withValues(alpha: 0.85)),
+              ),
               title: TextField(
                 controller: _searchCtrl,
                 onChanged: _onSearchChanged,
                 textInputAction: TextInputAction.search,
+                style: GoogleFonts.cairo(fontSize: 14),
                 decoration: InputDecoration(
                   hintText: S.searchHint,
+                  hintStyle: GoogleFonts.cairo(color: AppColors.muted, fontSize: 14),
                   isDense: true,
                   filled: true,
                   fillColor: AppColors.white,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: AppColors.deepBlue.withValues(alpha: 0.1)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: AppColors.gold.withValues(alpha: 0.9), width: 2),
+                  ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  prefixIcon: const Icon(Icons.search, color: AppColors.deepBlue, size: 22),
+                  prefixIcon: const Icon(Icons.search_rounded, color: AppColors.deepBlue, size: 22),
                   suffixIcon: _searchCtrl.text.isNotEmpty
                       ? IconButton(
-                          icon: const Icon(Icons.clear, size: 20),
+                          icon: const Icon(Icons.clear_rounded, size: 20),
                           onPressed: () {
                             _searchCtrl.clear();
                             setState(() => _searchQuery = '');
@@ -113,10 +129,11 @@ class _ClientFeedScreenState extends ConsumerState<ClientFeedScreen> {
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: sortMode,
-                      icon: const Icon(Icons.sort, size: 22, color: AppColors.ink),
+                      icon: Icon(Icons.sort_rounded, size: 24, color: AppColors.deepBlue.withValues(alpha: 0.9)),
+                      style: GoogleFonts.cairo(fontWeight: FontWeight.w700, color: AppColors.deepBlue, fontSize: 12),
                       items: [
-                        DropdownMenuItem(value: 'recent', child: Text(S.sortRecent)),
-                        DropdownMenuItem(value: 'popular', child: Text(S.sortPopular)),
+                        DropdownMenuItem(value: 'recent', child: Text(S.sortRecent, style: GoogleFonts.cairo())),
+                        DropdownMenuItem(value: 'popular', child: Text(S.sortPopular, style: GoogleFonts.cairo())),
                       ],
                       onChanged: (v) => setState(() => sortMode = v ?? 'recent'),
                     ),
@@ -125,24 +142,45 @@ class _ClientFeedScreenState extends ConsumerState<ClientFeedScreen> {
               ],
             ),
             SliverToBoxAdapter(
-              child: SizedBox(
-                height: 46,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  children: [
-                    for (final c in _cats)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: FilterChip(
-                          label: Text(S.categoryLabel(c), style: const TextStyle(fontSize: 13)),
-                          selected: catKey == c,
-                          onSelected: (_) => setState(() => catKey = c),
-                          selectedColor: AppColors.terracotta.withValues(alpha: 0.2),
-                          checkmarkColor: AppColors.deepBlue,
-                        ),
+              child: MoroccanFeedWelcomeStrip(line: S.clientFeedHeroLine),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.white.withValues(alpha: 0.88),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.deepBlue.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
-                  ],
+                    ],
+                  ),
+                  child: SizedBox(
+                    height: 46,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      children: [
+                        for (final c in _cats)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: FilterChip(
+                              label: Text(S.categoryLabel(c), style: const TextStyle(fontSize: 13)),
+                              selected: catKey == c,
+                              onSelected: (_) => setState(() => catKey = c),
+                              selectedColor: AppColors.terracotta.withValues(alpha: 0.2),
+                              checkmarkColor: AppColors.deepBlue,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),

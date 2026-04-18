@@ -14,6 +14,8 @@ import '../../core/l10n/strings.dart';
 import '../../core/realtime/socket_hub.dart';
 import '../../core/theme/app_colors.dart';
 import '../providers/app_providers.dart';
+import '../widgets/moroccan_shell_background.dart';
+import '../widgets/moroccan_ui_kit.dart';
 import '../widgets/responsive_content.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
@@ -261,8 +263,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final paddingBottom = MediaQuery.paddingOf(context).bottom;
 
     return Scaffold(
-      backgroundColor: AppColors.sand,
-      appBar: AppBar(
+      backgroundColor: Colors.transparent,
+      appBar: MoroccanTabAppBar.bar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -283,7 +285,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               ),
           ],
         ),
-        centerTitle: true,
         actions: [
           IconButton(
             tooltip: S.callTooltip,
@@ -298,7 +299,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           ),
         ],
       ),
-      body: ResponsiveContent(
+      body: MoroccanShellBackground(
+        child: ResponsiveContent(
         maxWidth: 560,
         child: loading
             ? const Center(child: CircularProgressIndicator())
@@ -413,6 +415,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   ),
                 ],
               ),
+        ),
       ),
     );
   }

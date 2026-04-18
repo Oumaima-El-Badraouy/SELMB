@@ -9,7 +9,6 @@ import '../../data/models/artisan_model.dart';
 import '../providers/app_providers.dart';
 import '../widgets/moroccan_app_bar.dart';
 import '../widgets/moroccan_card.dart';
-import '../widgets/moroccan_pattern_background.dart';
 
 class ExploreScreen extends ConsumerStatefulWidget {
   const ExploreScreen({super.key});
@@ -32,20 +31,17 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     final async = ref.watch(artisanListProvider(_filterKey));
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: MoroccanAppBar(
         title: Text(
           S.exploreSubtitle,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.zellijGlaze),
         ),
       ),
-      body: MoroccanPatternBackground(
-        child: Positioned.fill(
-          child: async.when(
-            data: (list) => _buildScrollContent(context, list: list, loading: false, err: null),
-            loading: () => _buildScrollContent(context, list: const [], loading: true, err: null),
-            error: (e, _) => _buildScrollContent(context, list: const [], loading: false, err: e),
-          ),
-        ),
+      body: async.when(
+        data: (list) => _buildScrollContent(context, list: list, loading: false, err: null),
+        loading: () => _buildScrollContent(context, list: const [], loading: true, err: null),
+        error: (e, _) => _buildScrollContent(context, list: const [], loading: false, err: e),
       ),
     );
   }

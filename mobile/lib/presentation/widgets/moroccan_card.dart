@@ -26,15 +26,20 @@ class MoroccanCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: AppColors.gold.withValues(alpha: 0.55), width: 1.4),
+          border: Border.all(color: AppColors.gold.withValues(alpha: 0.62), width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: AppColors.deepBlue.withValues(alpha: 0.08),
+              color: AppColors.deepBlue.withValues(alpha: 0.09),
               blurRadius: 22,
               offset: const Offset(0, 10),
             ),
             BoxShadow(
-              color: AppColors.terracotta.withValues(alpha: 0.04),
+              color: AppColors.zerbiyaGarnet.withValues(alpha: 0.06),
+              blurRadius: 14,
+              offset: const Offset(0, 6),
+            ),
+            BoxShadow(
+              color: AppColors.terracotta.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),

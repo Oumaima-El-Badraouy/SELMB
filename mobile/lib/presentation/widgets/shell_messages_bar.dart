@@ -38,22 +38,30 @@ class _ShellMessagesBarState extends ConsumerState<ShellMessagesBar> {
   Widget build(BuildContext context) {
     final async = ref.watch(inboxUnreadTotalProvider);
     return Material(
-      elevation: 3,
-      shadowColor: AppColors.deepBlue.withValues(alpha: 0.15),
+      elevation: 6,
+      shadowColor: AppColors.deepBlue.withValues(alpha: 0.2),
       color: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [
+              AppColors.white.withValues(alpha: 0.97),
               AppColors.parchment,
-              AppColors.sand.withValues(alpha: 0.96),
+              AppColors.sandDeep.withValues(alpha: 0.85),
             ],
           ),
           border: Border(
-            bottom: BorderSide(color: AppColors.gold.withValues(alpha: 0.45), width: 1.2),
+            bottom: BorderSide(color: AppColors.gold.withValues(alpha: 0.65), width: 2),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.zellijGlaze.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: SafeArea(
           bottom: false,
