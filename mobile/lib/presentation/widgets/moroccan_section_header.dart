@@ -80,9 +80,9 @@ class MoroccanSectionHeader extends StatelessWidget {
             borderRadius: BorderRadius.circular(1.5),
             gradient: LinearGradient(
               colors: [
-                AppColors.zerbiyaGarnet.withValues(alpha: 0.55),
-                AppColors.zellijGlaze.withValues(alpha: 0.5),
-                AppColors.zerbiyaIndigo.withValues(alpha: 0.55),
+                AppColors.zerbiyaIndigo.withValues(alpha: 0.5),
+                AppColors.zellijGlaze.withValues(alpha: 0.55),
+                AppColors.deepBlueLight.withValues(alpha: 0.45),
               ],
             ),
           ),

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 
-/// Carte style « cadre zellige » : filet or, ombre douce, étoiles aux coins.
-class MoroccanCard extends StatelessWidget {
+/// Carte « zellige » + *lift* / *scale* léger au press si [onTap] est défini.
+class MoroccanCard extends StatefulWidget {
   const MoroccanCard({
     super.key,
     required this.child,
@@ -18,20 +18,27 @@ class MoroccanCard extends StatelessWidget {
   final EdgeInsets padding;
 
   @override
+  State<MoroccanCard> createState() => _MoroccanCardState();
+}
+
+class _MoroccanCardState extends State<MoroccanCard> {
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
     final inner = CustomPaint(
       foregroundPainter: _ZellijCornerPainter(),
       child: Container(
-        padding: padding,
+        padding: widget.padding,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(22),
           border: Border.all(color: AppColors.gold.withValues(alpha: 0.62), width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: AppColors.deepBlue.withValues(alpha: 0.09),
-              blurRadius: 22,
-              offset: const Offset(0, 10),
+              color: AppColors.deepBlue.withValues(alpha: _pressed ? 0.06 : 0.09),
+              blurRadius: _pressed ? 14 : 22,
+              offset: Offset(0, _pressed ? 4 : 10),
             ),
             BoxShadow(
               color: AppColors.zerbiyaGarnet.withValues(alpha: 0.06),
@@ -45,20 +52,30 @@ class MoroccanCard extends StatelessWidget {
             ),
           ],
         ),
-        child: child,
+        child: widget.child,
       ),
+    );
+
+    final scaled = AnimatedScale(
+      scale: _pressed ? 0.985 : 1.0,
+      duration: const Duration(milliseconds: 140),
+      curve: Curves.easeOutCubic,
+      child: inner,
     );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-      child: onTap == null
-          ? inner
+      child: widget.onTap == null
+          ? scaled
           : Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: onTap,
+                onTap: widget.onTap,
                 borderRadius: BorderRadius.circular(22),
-                child: inner,
+                splashColor: AppColors.gold.withValues(alpha: 0.18),
+                highlightColor: AppColors.moroccoGreen.withValues(alpha: 0.06),
+                onHighlightChanged: (v) => setState(() => _pressed = v),
+                child: scaled,
               ),
             ),
     );
@@ -84,10 +101,11 @@ class _ZellijCornerPainter extends CustomPainter {
       _drawStar(canvas, c, r * 0.45, gold);
     }
 
-    star(Offset(r * 0.35, r * 0.35));
-    star(Offset(size.width - r * 0.35, r * 0.35));
-    star(Offset(r * 0.35, size.height - r * 0.35));
-    star(Offset(size.width - r * 0.35, size.height - r * 0.35));
+    const inset = r * 0.35;
+    star(const Offset(inset, inset));
+    star(Offset(size.width - inset, inset));
+    star(Offset(inset, size.height - inset));
+    star(Offset(size.width - inset, size.height - inset));
   }
 
   void _drawStar(Canvas canvas, Offset c, double radius, Paint paint) {

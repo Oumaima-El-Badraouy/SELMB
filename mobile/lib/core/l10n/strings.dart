@@ -18,6 +18,8 @@ class S {
   static const String homeCardArtisanTitle = 'فضاء الحرفي';
   static const String homeCardArtisanSubtitle = 'الملف، معرض قبل/بعد';
   static const String mediouna = 'مديونة';
+  /// Porte emblématique — cadre connexion / storytelling.
+  static const String mediounaKasbahCaption = 'قصبة مديونة';
 
   // Shell / nav
   static const String messages = 'الرسائل';
@@ -149,6 +151,15 @@ class S {
   static const String fieldPhoneRequired = 'الهاتف (إلزامي)';
   static const String fieldLocationRequired = 'الموقع / الحي (إلزامي)';
   static const String fieldLocationHint = 'مثال: حي، دوار، نقطة قريبة منك';
+  static const String mapPickLocationTitle = 'اختر الموقع على الخريطة';
+  static const String mapUseMyPosition = 'موقعي الحالي';
+  static const String mapConfirmSelection = 'تأكيد المكان';
+  static const String mapOpenPickerHint = 'فتح الخريطة';
+  static const String mapManualBelow = 'حرّك الخريطة تحت الصليب، أو عدّل النص يدوياً.';
+  static const String mapPermissionDenied = 'لم يُسمح بالموقع — أدخل العنوان يدوياً أو فعّل الإذن من الإعدادات.';
+  static const String mapGeoError = 'تعذر قراءة العنوان من الخريطة. اكتب الموقع يدوياً.';
+  static const String mapWebHint =
+      'على الويب: أدخل موقعك في الحقل أدناه. على الهاتف تتوفر الخريطة مع تحديد تلقائي.';
   static const String errLocationRequired = 'أدخل موقعك (حي أو منطقة، حرفان على الأقل).';
   static const String locationSectionTitle = 'الموقع';
   static const String saveLocationButton = 'حفظ';

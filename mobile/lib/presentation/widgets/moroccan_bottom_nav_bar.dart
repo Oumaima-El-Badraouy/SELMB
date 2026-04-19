@@ -1,9 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/theme/app_colors.dart';
 
-/// Barre du bas — nuit **Fès / médina**, filet or, icônes comme lanternes.
+/// Barre du bas — *glass* + dégradé royal + filet or (نقوش خفيفة).
 class MoroccanNavDestination {
   const MoroccanNavDestination({
     required this.icon,
@@ -31,46 +33,51 @@ class MoroccanBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 16,
-      shadowColor: AppColors.deepBlue.withValues(alpha: 0.35),
+      elevation: 20,
+      shadowColor: AppColors.deepBlue.withValues(alpha: 0.4),
       color: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF0C1F33),
-              Color(0xFF122A42),
-              Color(0xFF152B45),
-            ],
-          ),
-          border: Border(
-            top: BorderSide(color: AppColors.gold.withValues(alpha: 0.9), width: 2),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.gold.withValues(alpha: 0.18),
-              blurRadius: 20,
-              offset: const Offset(0, -6),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          top: false,
-          minimum: const EdgeInsets.only(bottom: 4),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                for (var i = 0; i < destinations.length; i++)
-                  _NavTile(
-                    spec: destinations[i],
-                    selected: i == currentIndex,
-                    onTap: () => onDestinationSelected(i),
-                  ),
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xE60C1F33),
+                  Color(0xE8122A42),
+                  Color(0xEB152B45),
+                ],
+              ),
+              border: Border(
+                top: BorderSide(color: AppColors.gold.withValues(alpha: 0.92), width: 2),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.gold.withValues(alpha: 0.22),
+                  blurRadius: 22,
+                  offset: const Offset(0, -8),
+                ),
               ],
+            ),
+            child: SafeArea(
+              top: false,
+              minimum: const EdgeInsets.only(bottom: 4),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (var i = 0; i < destinations.length; i++)
+                      _NavTile(
+                        spec: destinations[i],
+                        selected: i == currentIndex,
+                        onTap: () => onDestinationSelected(i),
+                      ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -79,7 +86,7 @@ class MoroccanBottomNavBar extends StatelessWidget {
   }
 }
 
-class _NavTile extends StatelessWidget {
+class _NavTile extends StatefulWidget {
   const _NavTile({
     required this.spec,
     required this.selected,
@@ -91,70 +98,84 @@ class _NavTile extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_NavTile> createState() => _NavTileState();
+}
+
+class _NavTileState extends State<_NavTile> {
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap,
+          onTap: widget.onTap,
           borderRadius: BorderRadius.circular(18),
-          splashColor: AppColors.gold.withValues(alpha: 0.2),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutCubic,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: selected
-                        ? LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              AppColors.gold.withValues(alpha: 0.55),
-                              AppColors.terracotta.withValues(alpha: 0.45),
-                            ],
-                          )
-                        : null,
-                    color: selected ? null : AppColors.white.withValues(alpha: 0.06),
-                    border: Border.all(
-                      color: selected ? AppColors.gold : AppColors.white.withValues(alpha: 0.12),
-                      width: selected ? 1.5 : 1,
+          splashColor: AppColors.gold.withValues(alpha: 0.28),
+          highlightColor: AppColors.moroccoGreen.withValues(alpha: 0.15),
+          onHighlightChanged: (v) => setState(() => _pressed = v),
+          child: AnimatedScale(
+            scale: _pressed ? 0.9 : 1.0,
+            duration: const Duration(milliseconds: 110),
+            curve: Curves.easeOutCubic,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.easeOutCubic,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: widget.selected
+                          ? LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                AppColors.gold.withValues(alpha: 0.58),
+                                AppColors.zellijGlaze.withValues(alpha: 0.52),
+                              ],
+                            )
+                          : null,
+                      color: widget.selected ? null : AppColors.white.withValues(alpha: 0.08),
+                      border: Border.all(
+                        color: widget.selected ? AppColors.gold : AppColors.white.withValues(alpha: 0.14),
+                        width: widget.selected ? 1.5 : 1,
+                      ),
+                      boxShadow: widget.selected
+                          ? [
+                              BoxShadow(
+                                color: AppColors.gold.withValues(alpha: 0.45),
+                                blurRadius: 14,
+                                spreadRadius: 0,
+                              ),
+                            ]
+                          : null,
                     ),
-                    boxShadow: selected
-                        ? [
-                            BoxShadow(
-                              color: AppColors.gold.withValues(alpha: 0.35),
-                              blurRadius: 12,
-                              spreadRadius: 0,
-                            ),
-                          ]
-                        : null,
+                    child: Icon(
+                      widget.selected ? widget.spec.selectedIcon : widget.spec.icon,
+                      size: 24,
+                      color: widget.selected ? AppColors.white : AppColors.white.withValues(alpha: 0.74),
+                    ),
                   ),
-                  child: Icon(
-                    selected ? spec.selectedIcon : spec.icon,
-                    size: 24,
-                    color: selected ? AppColors.white : AppColors.white.withValues(alpha: 0.72),
+                  const SizedBox(height: 4),
+                  Text(
+                    widget.spec.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.cairo(
+                      fontSize: 10.5,
+                      height: 1.1,
+                      fontWeight: widget.selected ? FontWeight.w800 : FontWeight.w600,
+                      color: widget.selected ? AppColors.goldMuted : AppColors.white.withValues(alpha: 0.64),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  spec.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.cairo(
-                    fontSize: 10.5,
-                    height: 1.1,
-                    fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-                    color: selected ? AppColors.goldMuted : AppColors.white.withValues(alpha: 0.62),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

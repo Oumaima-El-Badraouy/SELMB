@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/theme/app_colors.dart';
 
-/// Bandeau **زربية** : grenat — or — indigo (bordure tapis / kilim).
+/// Bandeau **زربية** : indigo — or — émail (bordure tapis, sans rouge).
 class ZerbiyaMotifStrip extends StatelessWidget {
   const ZerbiyaMotifStrip({super.key, this.width = 200, this.height = 6});
 
@@ -19,11 +19,11 @@ class ZerbiyaMotifStrip extends StatelessWidget {
         borderRadius: BorderRadius.circular(3),
         gradient: LinearGradient(
           colors: [
-            AppColors.zerbiyaGarnet.withValues(alpha: 0.85),
+            AppColors.zerbiyaIndigo.withValues(alpha: 0.88),
             AppColors.gold,
-            AppColors.zerbiyaIndigo.withValues(alpha: 0.9),
+            AppColors.zellijGlaze.withValues(alpha: 0.85),
             AppColors.gold,
-            AppColors.zerbiyaGarnet.withValues(alpha: 0.85),
+            AppColors.zerbiyaIndigo.withValues(alpha: 0.88),
           ],
           stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
         ),
@@ -56,7 +56,7 @@ class MoroccanGoldBand extends StatelessWidget {
           colors: [
             AppColors.gold.withValues(alpha: 0),
             AppColors.gold,
-            AppColors.terracotta.withValues(alpha: 0.85),
+            AppColors.zellijMint.withValues(alpha: 0.75),
             AppColors.gold,
             AppColors.gold.withValues(alpha: 0),
           ],

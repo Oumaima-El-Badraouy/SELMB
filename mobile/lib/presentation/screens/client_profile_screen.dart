@@ -15,6 +15,7 @@ import '../providers/app_providers.dart';
 import '../widgets/author_avatar.dart';
 import '../widgets/cin_upload_section.dart';
 import '../widgets/moroccan_card.dart';
+import '../widgets/morocco_location_picker.dart';
 
 final _myDemandsProvider = FutureProvider.autoDispose<List<PostModel>>((ref) async {
   ref.watch(feedSocketTickProvider);
@@ -33,14 +34,28 @@ Future<void> _editClientLocation(BuildContext context, WidgetRef ref, String? cu
     context: context,
     builder: (ctx) => AlertDialog(
       title: const Text(S.locationSectionTitle),
-      content: TextField(
-        controller: c,
-        autofocus: true,
-        maxLines: 2,
-        decoration: const InputDecoration(
-          labelText: S.fieldLocationRequired,
-          hintText: S.fieldLocationHint,
-        ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: c,
+            autofocus: false,
+            maxLines: 2,
+            decoration: const InputDecoration(
+              labelText: S.fieldLocationRequired,
+              hintText: S.fieldLocationHint,
+            ),
+          ),
+          const SizedBox(height: 10),
+          OutlinedButton.icon(
+            onPressed: () async {
+              final v = await showMoroccoLocationPicker(ctx, initialText: c.text);
+              if (v != null && v.trim().length >= 2) c.text = v.trim();
+            },
+            icon: const Icon(Icons.map_outlined),
+            label: Text(S.mapOpenPickerHint, style: Theme.of(ctx).textTheme.labelLarge),
+          ),
+        ],
       ),
       actions: [
         TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text(S.cancel)),

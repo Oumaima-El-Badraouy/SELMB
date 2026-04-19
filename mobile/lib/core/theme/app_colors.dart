@@ -25,11 +25,11 @@ abstract class AppColors {
   static const Color zellijGlaze = Color(0xFF2A6B6F);
   static const Color zellijMint = Color(0xFF3D8A8E);
 
-  /// Bordeaux / accent tapis
-  static const Color burgundy = Color(0xFF6B2D3C);
+  /// Prune–ardoise (accent tapis / bordures — **pas** de rouge vif).
+  static const Color burgundy = Color(0xFF4A3F55);
 
-  /// **زربية** — tons classiques tapis berbères / Boujad (bordures, losanges).
-  static const Color zerbiyaGarnet = Color(0xFF8B2942);
+  /// **زربية** — slot « grenat » en UI : teinte **indigo–ardoise** (chaleur sans rouge).
+  static const Color zerbiyaGarnet = Color(0xFF3D4F62);
   static const Color zerbiyaIndigo = Color(0xFF2C3E6E);
   static const Color zerbiyaSaffron = Color(0xFFC17F3A);
 
@@ -53,6 +53,17 @@ abstract class AppColors {
 
   /// Accent pour indicateurs / succès
   static const Color oasis = Color(0xFF2D6A4F);
+
+  /// Tons drapeau / paysage — utilisés avec parcimonie (UI, pas « drapeau à l’écran »).
+  /// Vert palmier adouci (accents, focus, liens positifs).
+  static const Color moroccoGreen = Color(0xFF1F6F54);
+  static const Color moroccoGreenMuted = Color(0xFF3D8F72);
+  /// Erreurs / alertes : **terre brûlée** lisible, sans rouge primaire agressif.
+  static const Color moroccoRed = Color(0xFF8B5E4D);
+  static const Color moroccoRedSoft = Color(0xFFE8D8D2);
+  /// Gris ardoise médina (texte secondaire sur fond clair).
+  static const Color moroccoSlate = Color(0xFF5A6168);
+  static const Color moroccoSlateLight = Color(0xFF8E959D);
 
   /// AppBar / bandeaux sur le fond shell (motif zellige + parchemin).
   static const Color shellAppBarSurface = Color(0xE8FDF8F3);

@@ -15,6 +15,7 @@ import '../../data/models/user_model.dart';
 import '../providers/app_providers.dart';
 import '../widgets/cin_upload_section.dart';
 import '../widgets/moroccan_card.dart';
+import '../widgets/morocco_location_picker.dart';
 import '../widgets/moroccan_ui_kit.dart';
 
 /// Nombre de demandes clients (posts `client_request`) visibles pour les artisans.
@@ -327,14 +328,10 @@ class _ArtisanProfileTabScreenState extends ConsumerState<ArtisanProfileTabScree
                     ),
                   ),
                   FormSpacing.betweenInputs,
-                  TextField(
+                  MoroccoLocationTextField(
                     controller: _location,
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: const InputDecoration(
-                      labelText: S.fieldLocationRequired,
-                      hintText: S.fieldLocationHint,
-                      border: OutlineInputBorder(),
-                    ),
+                    labelText: S.fieldLocationRequired,
+                    hintText: S.fieldLocationHint,
                   ),
                   const SizedBox(height: 20),
                   const Text(S.identitySection, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),

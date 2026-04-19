@@ -16,6 +16,7 @@ import '../../core/theme/form_spacing.dart';
 import '../widgets/cinematic_moroccan_background.dart';
 import '../widgets/gradient_primary_button.dart';
 import '../widgets/moroccan_card.dart';
+import '../widgets/morocco_location_picker.dart';
 import '../widgets/moroccan_ui_kit.dart';
 
 class AuthRegisterArtisanScreen extends ConsumerStatefulWidget {
@@ -222,13 +223,10 @@ class _AuthRegisterArtisanScreenState extends ConsumerState<AuthRegisterArtisanS
                       decoration: const InputDecoration(labelText: S.fieldPhoneRequired),
                     ),
                     FormSpacing.betweenInputs,
-                    TextField(
+                    MoroccoLocationTextField(
                       controller: _location,
-                      textCapitalization: TextCapitalization.sentences,
-                      decoration: const InputDecoration(
-                        labelText: S.fieldLocationRequired,
-                        hintText: S.fieldLocationHint,
-                      ),
+                      labelText: S.fieldLocationRequired,
+                      hintText: S.fieldLocationHint,
                     ),
                     FormSpacing.betweenInputs,
                     TextField(
