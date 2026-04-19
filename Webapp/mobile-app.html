@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar" class="site-layout">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="تطبيق الأصل للجوال — مديونة. قريباً على Google Play." />
+    <title>تطبيق الجوال — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/site-chrome.css" />
+    <link rel="stylesheet" href="css/mobile-app-page.css" />
+  </head>
+  <body data-nav-active="app" class="site-layout">
+    <div id="site-nav-root"></div>
+
+    <main class="site-body-flex">
+      <div class="mobile-app-wrap">
+        <div class="mobile-app-intro">
+          <h1>تطبيق الأصل للجوال</h1>
+          <p>
+            نفس تجربة الويب — منشورات، حرفيون، رسائل، وملفك في الجيب. المعاينة أدناه مستوحاة من واجهة التطبيق (معاينة
+            بصرية وليست لقطة شاشة من جهاز حقيقي).
+          </p>
+        </div>
+
+        <div class="mobile-app-columns">
+          <div class="phone-showcase">
+            <div class="phone-frame" aria-hidden="true">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="phone-status"><span>9:41</span><span>● LTE</span></div>
+                <div class="phone-shell-mini">
+                  <img src="assets/branding/logo_al_asel.png" width="28" height="28" alt="" />
+                  <span>مديونة</span>
+                </div>
+                <div class="phone-feed-mock">
+                  <div class="phone-mock-card">
+                    <strong>الرئيسية</strong>
+                    <span>خدمات وحرف تقليدية من حرفيي الجهة…</span>
+                    <div class="phone-mock-chip-row">
+                      <span class="phone-mock-chip">الزليج</span>
+                      <span class="phone-mock-chip">السباكة</span>
+                      <span class="phone-mock-chip">النقاشة</span>
+                    </div>
+                  </div>
+                  <div class="phone-mock-card">
+                    <strong>طلب في مديونة</strong>
+                    <span>بحث عن حرفي للزرابي — عرض سعر…</span>
+                  </div>
+                  <div class="phone-mock-card">
+                    <strong>حرفي موثوق</strong>
+                    <span>تقييم ٤٫٨ · استجابة خلال ساعات</span>
+                  </div>
+                </div>
+                <div class="phone-mock-nav">
+                  <span>⌂ رئيسية</span>
+                  <span>◎ حرفيون</span>
+                  <span>★ مفضلة</span>
+                  <span>☺ ملف</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mobile-app-aside">
+            <p style="margin: 0 0 16px; font-weight: 700; color: var(--deep-blue); font-size: 1.05rem">حمّل التطبيق</p>
+            <button type="button" class="play-store-badge" disabled aria-disabled="true" title="غير متاح حتى نشر التطبيق في المتجر">
+              <span class="play-store-badge__pre">قريباً على</span>
+              <span class="play-store-badge__row">
+                <span class="play-store-badge__play" aria-hidden="true"></span>
+                <span class="play-store-badge__brand">Google Play</span>
+              </span>
+            </button>
+            <p class="play-store-note">
+              هذا الزر <strong>غير قابل للنقر</strong> عمداً: التطبيق غير منشور على متجر Google Play بعد. سنفعّل الرابط
+              الرسمي فور الموافقة والنشر.
+            </p>
+            <p style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center">
+              <a href="index.html" class="site-btn site-btn--outline">العودة للموقع</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="site-footer-root"></div>
+    <script src="js/site-chrome.js"></script>
+  </body>
+</html>

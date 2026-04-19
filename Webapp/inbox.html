@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>الرسائل — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/app-shell.css" />
+  </head>
+  <body class="app-page">
+    <div class="top-bar">
+      <button type="button" class="icon-btn" id="back">←</button>
+      <h1>الرسائل</h1>
+      <button type="button" class="icon-btn" id="btnReload" title="تحديث">↻</button>
+    </div>
+    <div class="page-scroll" style="max-width: 520px">
+      <div id="list"><p class="empty-hint">…</p></div>
+    </div>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/socket-hub.js"></script>
+    <script>
+      (function () {
+        if (!AlAselConfig.getToken()) location.href = 'login.html';
+        document.getElementById('back').onclick = function () {
+          history.back();
+        };
+        var err = null;
+        async function load() {
+          var root = document.getElementById('list');
+          if (!err) root.innerHTML = '<p class="empty-hint">…</p>';
+          err = null;
+          try {
+            var data = await AlAselApi.listConversations();
+            var items = data.items || [];
+            if (!items.length) {
+              root.innerHTML = '<p class="empty-hint">لا رسائل بعد.</p>';
+              return;
+            }
+            root.innerHTML = items
+              .map(function (c) {
+                var peer = c.peerDisplayName || c.peerId || '—';
+                var unread = c.unreadCount && c.unreadCount > 0 ? ' (' + c.unreadCount + ')' : '';
+                var href =
+                  'chat.html?peer=' +
+                  encodeURIComponent(c.peerId || '') +
+                  '&name=' +
+                  encodeURIComponent(peer);
+                return (
+                  '<a class="card" style="display:block;padding:14px 16px;margin-bottom:10px;text-decoration:none;color:inherit" href="' +
+                  href +
+                  '"><div style="font-weight:800">' +
+                  AlAselUi.escapeHtml(peer) +
+                  '</div><div style="font-size:0.82rem;color:var(--muted)">' +
+                  AlAselUi.escapeHtml((c.lastMessagePreview || c.lastPreview || '').slice(0, 80)) +
+                  unread +
+                  '</div></a>'
+                );
+              })
+              .join('');
+          } catch (e) {
+            err = e.message || String(e);
+            root.innerHTML =
+              '<p class="empty-hint">' +
+              AlAselUi.escapeHtml(err) +
+              '</p><button type="button" class="btn btn-primary btn-block" id="retry">إعادة المحاولة</button>';
+            document.getElementById('retry').onclick = load;
+          }
+        }
+        document.getElementById('btnReload').onclick = load;
+        (async function () {
+          try {
+            var u = await AlAselSession.refresh();
+            if (typeof AlAselSocket !== 'undefined' && AlAselSocket.connect) AlAselSocket.connect(u.id);
+            if (typeof AlAselSocket !== 'undefined' && AlAselSocket.onInboxPing) {
+              AlAselSocket.onInboxPing(function () {
+                load();
+              });
+            }
+          } catch (_) {}
+          load();
+        })();
+        setInterval(load, 12000);
+      })();
+    </script>
+  </body>
+</html>

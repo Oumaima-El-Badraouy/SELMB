@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>منشور جديد — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/app-shell.css" />
+  </head>
+  <body class="app-page">
+    <div class="top-bar">
+      <button type="button" class="icon-btn" id="back">←</button>
+      <h1 id="title">منشور</h1>
+      <span></span>
+    </div>
+    <div class="page-scroll" style="max-width: 480px">
+      <div class="card">
+        <div class="card-body">
+          <p id="hint" style="color: var(--muted); font-size: 0.9rem"></p>
+          <div class="field">
+            <label>الوصف</label>
+            <textarea id="content" rows="6" required></textarea>
+          </div>
+          <div class="field">
+            <label>المجال / التصنيف</label>
+            <select id="category"></select>
+          </div>
+          <div class="row-between" style="flex-wrap: wrap">
+            <button type="button" class="btn btn-outline" id="pickImg">صورة</button>
+            <button type="button" class="btn btn-outline" id="pickVid">فيديو</button>
+            <input type="file" id="fileImg" accept="image/*" hidden />
+            <input type="file" id="fileVid" accept="video/*" hidden />
+          </div>
+          <div id="prev" style="margin-top: 10px"></div>
+          <button type="button" class="btn btn-primary btn-block" style="margin-top: 16px" id="pub">نشر</button>
+        </div>
+      </div>
+    </div>
+    <script src="js/moroccan-trades.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+      (function () {
+        if (!AlAselConfig.getToken()) location.href = 'login.html';
+        var params = new URLSearchParams(location.search);
+        var postType = params.get('type') || 'client_request';
+        var isService = postType === 'artisan_service' || postType === 'service';
+        document.getElementById('title').textContent = isService ? 'خدمة جديدة' : 'طلب جديد';
+        document.getElementById('hint').textContent = isService
+          ? 'أضف صورة أو فيديو وصف خدمتك.'
+          : 'صف احتياجك في مديونة.';
+        var sel = document.getElementById('category');
+        MOROCCAN_TRADES.forEach(function (t) {
+          var o = document.createElement('option');
+          o.value = t.id;
+          o.textContent = t.labelAr;
+          sel.appendChild(o);
+        });
+        var media = null;
+        document.getElementById('back').onclick = function () {
+          history.back();
+        };
+        document.getElementById('pickImg').onclick = function () {
+          document.getElementById('fileImg').click();
+        };
+        document.getElementById('fileImg').onchange = function (ev) {
+          var f = ev.target.files[0];
+          if (!f) return;
+          var r = new FileReader();
+          r.onload = function () {
+            media = r.result;
+            document.getElementById('prev').innerHTML =
+              '<img class="media-preview" src="' + media + '" alt=""/>';
+          };
+          r.readAsDataURL(f);
+        };
+        document.getElementById('pickVid').onclick = function () {
+          document.getElementById('fileVid').click();
+        };
+        document.getElementById('fileVid').onchange = async function (ev) {
+          var f = ev.target.files[0];
+          if (!f) return;
+          if (f.size > 12 * 1024 * 1024) {
+            AlAselUi.toast('الفيديو كبير جداً (~12 ميغابايت).', 'error');
+            return;
+          }
+          var btn = document.getElementById('pub');
+          btn.disabled = true;
+          try {
+            var res = await AlAselApi.uploadPostVideo(f);
+            media = (res && res.url) || (typeof res === 'string' ? res : '');
+            document.getElementById('prev').innerHTML =
+              '<video class="media-preview" src="' + media + '" controls></video>';
+          } catch (e) {
+            AlAselUi.toast(e.message || String(e), 'error');
+          }
+          btn.disabled = false;
+        };
+        document.getElementById('pub').onclick = async function () {
+          var c = document.getElementById('content').value.trim();
+          if (!c) return;
+          var btn = document.getElementById('pub');
+          btn.disabled = true;
+          try {
+            await AlAselApi.createPost({
+              type: isService ? 'artisan_service' : 'client_request',
+              content: c,
+              category: document.getElementById('category').value,
+              media: media || undefined,
+            });
+            AlAselUi.toast('تم النشر');
+            history.back();
+          } catch (e) {
+            AlAselUi.toast(e.message || String(e), 'error');
+            btn.disabled = false;
+          }
+        };
+      })();
+    </script>
+  </body>
+</html>

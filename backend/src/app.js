@@ -5,6 +5,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import v1 from './routes/v1.routes.js';
+import * as contact from './controllers/contact.controller.js';
 import { initFirebase } from './config/firebase.js';
 
 if (process.env.MEMORY_STORE !== '1') {
@@ -34,6 +35,9 @@ app.use('/uploads', (req, res, next) => {
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '50mb' }));
+
+/** Contact public — enregistré ici pour éviter toute interception par le routeur v1 (ex. OPTIONS / JWT). */
+app.post('/api/v1/contact', contact.submitContact);
 
 app.use('/api/v1', v1);
 

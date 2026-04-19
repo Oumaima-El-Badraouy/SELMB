@@ -13,6 +13,7 @@ import * as follows from '../controllers/follows.controller.js';
 import * as favorites from '../controllers/favorites.controller.js';
 import * as postEngagement from '../controllers/postEngagement.controller.js';
 import * as reports from '../controllers/reports.controller.js';
+import * as contact from '../controllers/contact.controller.js';
 
 const r = Router();
 
@@ -21,6 +22,7 @@ r.get('/health', (_req, res) => res.json({ ok: true, service: 'al-asel-api', ver
 r.get('/estimate', estimator.getEstimate);
 r.post('/auth/register', auth.register);
 r.post('/auth/login', auth.login);
+r.post('/contact', contact.submitContact);
 
 r.use(requireAuth);
 

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>ملف حرفي — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/app-shell.css" />
+  </head>
+  <body class="app-page">
+    <div class="top-bar">
+      <button type="button" class="icon-btn" id="back">←</button>
+      <h1>ملف حرفي</h1>
+      <span></span>
+    </div>
+    <div class="page-scroll" style="max-width: 600px">
+      <div id="root"><p class="empty-hint">…</p></div>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/categories.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/feed-render.js"></script>
+    <script>
+      (function () {
+        if (!AlAselConfig.getToken()) {
+          location.href = 'login.html';
+          return;
+        }
+        var id = new URLSearchParams(location.search).get('id');
+        document.getElementById('back').onclick = function () {
+          history.back();
+        };
+        if (!id) {
+          document.getElementById('root').innerHTML = '<p class="empty-hint">معرّف غير صالح</p>';
+          return;
+        }
+
+        function displayName(d, prof) {
+          var fn = (d.user && d.user.firstName) || '';
+          var ln = (d.user && d.user.lastName) || '';
+          if ((fn + ln).trim()) return (fn + ' ' + ln).trim();
+          if (d.user && d.user.name) return d.user.name;
+          return (prof && prof.displayName) || '—';
+        }
+
+        async function load() {
+          var root = document.getElementById('root');
+          try {
+            var d = await AlAselApi.getArtisanFull(id);
+            var prof = d.profile || {};
+            var u = d.user || {};
+            var st = d.stats || {};
+            var me = await AlAselApi.me();
+            var stFollow = { following: false };
+            try {
+              stFollow = await AlAselApi.followStatus(id);
+            } catch (_) {}
+
+            var name = displayName(d, prof);
+            var phone = u.phone || '';
+            var loc = (u.location || prof.location || '').trim();
+            var desc = (u.description || prof.bio || '').trim();
+            var trust = prof.trustScore != null ? prof.trustScore : 0;
+            var rating = prof.avgRating != null ? prof.avgRating : 0;
+            var reviews = prof.reviewCount != null ? prof.reviewCount : 0;
+            var photo = u.photoUrl ? AlAselApi.resolveMedia(u.photoUrl) : '';
+            var initials = name.charAt(0) || '?';
+
+            var cats = (prof.categories || [])
+              .map(function (c) {
+                return (
+                  '<span class="badge" style="margin:2px">' + AlAselUi.escapeHtml(AlAselCategories.categoryLabel(c)) + '</span>'
+                );
+              })
+              .join('');
+
+            var posts = d.posts || [];
+            var postsHtml = '';
+            if (!posts.length) {
+              postsHtml = '<p class="empty-hint" style="padding:8px 0">لا توجد منشورات حالياً.</p>';
+            } else {
+              postsHtml = '<div id="artPosts"></div>';
+            }
+
+            var portfolio = prof.portfolio || [];
+            var portHtml = '';
+            if (portfolio.length) {
+              portHtml =
+                '<h3 style="font-size:1rem;margin:20px 0 10px">معرض الأعمال — قبل / بعد</h3>' +
+                portfolio
+                  .map(function (it) {
+                    var cap = it.caption ? '<div style="font-weight:700;margin-bottom:8px">' + AlAselUi.escapeHtml(it.caption) + '</div>' : '';
+                    if (it.type === 'before_after') {
+                      var b = it.beforeUrl ? AlAselApi.resolveMedia(it.beforeUrl) : '';
+                      var a = it.afterUrl ? AlAselApi.resolveMedia(it.afterUrl) : '';
+                      return (
+                        '<div class="card" style="padding:12px;margin-bottom:10px">' +
+                        cap +
+                        '<div style="display:flex;gap:8px">' +
+                        (b ? '<img class="media-preview" style="flex:1" src="' + AlAselUi.escapeHtml(b) + '" alt=""/>' : '') +
+                        (a ? '<img class="media-preview" style="flex:1" src="' + AlAselUi.escapeHtml(a) + '" alt=""/>' : '') +
+                        '</div></div>'
+                      );
+                    }
+                    var one = it.afterUrl || it.beforeUrl;
+                    var u1 = one ? AlAselApi.resolveMedia(one) : '';
+                    return (
+                      '<div class="card" style="padding:12px;margin-bottom:10px">' +
+                      cap +
+                      (u1 ? '<img class="media-preview" src="' + AlAselUi.escapeHtml(u1) + '" alt=""/>' : '') +
+                      '</div>'
+                    );
+                  })
+                  .join('');
+            } else {
+              portHtml = '<p class="empty-hint" style="margin-top:16px">لا صور بعد.</p>';
+            }
+
+            var clientActions = '';
+            if (me.role === 'client') {
+              var chatUrl =
+                'chat.html?peer=' + encodeURIComponent(id) + '&name=' + encodeURIComponent(name);
+              clientActions =
+                '<div class="row-between" style="margin-top:14px;flex-wrap:wrap;gap:8px">' +
+                '<button type="button" class="btn btn-primary" id="btnFol">' +
+                (stFollow.following ? 'متابَع' : 'متابعة') +
+                '</button>' +
+                '<a class="btn btn-outline" href="' +
+                chatUrl +
+                '">رسالة</a>' +
+                '</div>';
+            }
+
+            root.innerHTML =
+              '<div class="card"><div class="card-body">' +
+              '<div style="display:flex;gap:12px;align-items:flex-start">' +
+              (photo ?
+                '<img src="' +
+                AlAselUi.escapeHtml(photo) +
+                '" width="80" height="80" style="border-radius:50%;object-fit:cover"/>'
+              : '<div class="avatar" style="width:80px;height:80px;font-size:2rem">' +
+                AlAselUi.escapeHtml(initials) +
+                '</div>') +
+              '<div style="flex:1">' +
+              '<h2 style="margin:0 0 6px">' +
+              AlAselUi.escapeHtml(name) +
+              '</h2>' +
+              '<p style="color:var(--muted);font-size:0.9rem;margin:0">ثقة ' +
+              trust +
+              ' · ' +
+              rating +
+              '★ (' +
+              reviews +
+              ')</p>' +
+              (phone ?
+                '<p style="margin:8px 0 0;font-weight:700;color:var(--deep-blue)">الرقم: ' +
+                AlAselUi.escapeHtml(phone) +
+                '</p>'
+              : '') +
+              (loc ?
+                '<p style="margin:6px 0 0;font-size:0.9rem">📍 ' + AlAselUi.escapeHtml(loc) + '</p>'
+              : '') +
+              '</div></div>' +
+              '<div style="margin-top:10px">' +
+              cats +
+              '</div>' +
+              '<p style="margin-top:12px;line-height:1.5">' +
+              AlAselUi.escapeHtml(desc) +
+              '</p>' +
+              '<div class="row-between" style="margin-top:14px;text-align:center">' +
+              '<div style="flex:1"><div style="font-weight:800;font-size:1.2rem">' +
+              (st.servicePostsCount != null ? st.servicePostsCount : posts.length) +
+              '</div><div style="font-size:0.75rem;color:var(--muted)">منشورات الخدمة</div></div>' +
+              '<div style="flex:1"><div style="font-weight:800;font-size:1.2rem">' +
+              (st.demandsInTradeCount != null ? st.demandsInTradeCount : 0) +
+              '</div><div style="font-size:0.75rem;color:var(--muted)">طلبات في المهنة</div></div>' +
+              '</div>' +
+              clientActions +
+              '</div></div>' +
+              '<h3 style="font-size:1rem;margin:20px 0 8px">منشورات الخدمة</h3>' +
+              postsHtml +
+              portHtml;
+
+            var btnFol = document.getElementById('btnFol');
+            if (btnFol) {
+              btnFol.onclick = async function () {
+                try {
+                  var cur = await AlAselApi.followStatus(id);
+                  if (cur.following) {
+                    await AlAselApi.unfollow(id);
+                    AlAselUi.toast('تم إلغاء المتابعة');
+                    btnFol.textContent = 'متابعة';
+                  } else {
+                    await AlAselApi.follow(id);
+                    AlAselUi.toast('أنت تتابع هذا الحرفي');
+                    btnFol.textContent = 'متابَع';
+                  }
+                } catch (e) {
+                  AlAselUi.toast(e.message || String(e), 'error');
+                }
+              };
+            }
+
+            if (posts.length) {
+              await AlAselSession.refresh();
+              await AlAselFeed.renderPosts(document.getElementById('artPosts'), posts, {
+                role: me.role,
+                meId: me.id,
+                user: AlAselSession.getUser(),
+                onRefresh: load,
+              });
+            }
+          } catch (e) {
+            root.innerHTML = '<p class="empty-hint">' + AlAselUi.escapeHtml(e.message || String(e)) + '</p>';
+          }
+        }
+        load();
+      })();
+    </script>
+  </body>
+</html>

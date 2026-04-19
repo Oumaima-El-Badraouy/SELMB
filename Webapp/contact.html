@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar" class="site-layout">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>اتصل بنا — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/site-chrome.css" />
+  </head>
+  <body data-nav-active="contact" class="site-layout">
+    <div id="site-nav-root"></div>
+    <main class="site-body-flex page-inner">
+      <article class="landing-section" style="margin-top: 8px">
+        <h1 class="page-title">اتصل بنا</h1>
+        <p>
+          املأ النموذج أدناه ثم اضغط «إرسال الرسالة». تُحفظ الرسائل على الخادم في الملف
+          <code style="font-size: 0.85em">backend/data/contact-messages.json</code>
+          (يتطلّب تشغيل واجهة API محلياً، مثلاً <code style="font-size: 0.85em">npm run dev</code> في مجلد
+          <code style="font-size: 0.85em">backend</code>). إن ظهرت «Unauthorized»، أعد تشغيل الخادم بعد التحديث وتأكد
+          أن العنوان ينتهي بـ <code style="font-size: 0.85em">/api/v1</code>.
+        </p>
+        <form id="f" class="contact-form-panel">
+          <div class="field">
+            <label for="name">الاسم</label>
+            <input id="name" name="name" type="text" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="email">البريد</label>
+            <input id="email" name="email" type="email" required autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="msg">الرسالة</label>
+            <textarea id="msg" name="msg" rows="6" required placeholder="اكتب رسالتك…"></textarea>
+          </div>
+          <button type="submit" class="site-btn site-btn--primary" id="submitBtn" style="width: 100%; border: none; cursor: pointer; margin-top: 8px">
+            إرسال الرسالة
+          </button>
+        </form>
+        <div class="api-settings" style="margin-top: 20px">
+          <strong>عنوان API (إن لزم)</strong>
+          <div style="color: var(--muted); margin-top: 6px; font-size: 0.86rem">مثال: http://127.0.0.1:4000/api/v1</div>
+          <input type="url" id="apiBase" placeholder="http://127.0.0.1:4000/api/v1" />
+          <button type="button" class="btn btn-outline btn-block" style="margin-top: 8px" id="saveApi">حفظ</button>
+        </div>
+        <p style="font-size: 0.92rem; color: var(--muted); margin-top: 18px; line-height: 1.65">
+          للإبلاغ داخل التطبيق بعد تسجيل الدخول: <a href="login.html">دخول</a> ثم «إبلاغ عن مشكلة».
+        </p>
+        <p class="link-back-muted" style="margin-top: 20px; margin-bottom: 0"><a href="index.html">← العودة للرئيسية</a></p>
+      </article>
+    </main>
+    <div id="site-footer-root"></div>
+    <script src="js/site-chrome.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+      (function () {
+        document.getElementById('apiBase').value = AlAselConfig.getApiBase();
+        document.getElementById('saveApi').onclick = function () {
+          var v = document.getElementById('apiBase').value.trim();
+          if (v) AlAselConfig.setApiBase(v);
+          AlAselUi.toast('تم حفظ عنوان API');
+        };
+        document.getElementById('f').onsubmit = async function (e) {
+          e.preventDefault();
+          var btn = document.getElementById('submitBtn');
+          btn.disabled = true;
+          try {
+            await AlAselApi.submitContact({
+              name: document.getElementById('name').value.trim(),
+              email: document.getElementById('email').value.trim(),
+              message: document.getElementById('msg').value.trim(),
+            });
+            AlAselUi.toast('تم استلام رسالتك وحفظها بنجاح');
+            document.getElementById('f').reset();
+          } catch (err) {
+            AlAselUi.toast(err.message || String(err), 'error');
+          }
+          btn.disabled = false;
+        };
+      })();
+    </script>
+  </body>
+</html>

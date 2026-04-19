@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>الأصل — زبون</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/app-shell.css" />
+    <link rel="stylesheet" href="css/client-web.css" />
+  </head>
+  <body class="app-page client-web">
+    <div class="app-shell client-web-layout">
+      <aside class="client-web-sidebar" aria-label="التنقّل">
+        <a href="index.html" class="client-web-sidebar__brand">
+          <img src="assets/branding/logo_al_asel.png" alt="الأصل" width="60" height="60" class="client-web-sidebar__logo" />
+        </a>
+        <nav class="client-web-nav" aria-label="أقسام المنصّة">
+          <button type="button" class="client-web-nav__btn active" data-tab="feed" title="الرئيسية">
+            <svg class="ico-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span class="client-web-nav__label">الرئيسية</span>
+          </button>
+          <button type="button" class="client-web-nav__btn" data-tab="explore" title="الحرفيون">
+            <svg class="ico-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <line x1="11" y1="8" x2="11" y2="14" />
+              <line x1="8" y1="11" x2="14" y2="11" />
+            </svg>
+            <span class="client-web-nav__label">الحرفيون</span>
+          </button>
+          <button type="button" class="client-web-nav__btn" data-tab="favorites" title="المفضلة">
+            <svg class="ico-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <span class="client-web-nav__label">المفضلة</span>
+          </button>
+          <button type="button" class="client-web-nav__btn" data-tab="profile" title="الملف">
+            <svg class="ico-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span class="client-web-nav__label">الملف</span>
+          </button>
+        </nav>
+      </aside>
+
+      <div class="client-web-stage">
+        <header class="client-web-toolbar">
+          <h1 id="topTitle">الرئيسية</h1>
+          <div class="client-web-toolbar__actions">
+            <button type="button" class="icon-btn shell-ico-btn" id="btnRefresh" title="تحديث" style="display: none">
+              <svg class="ico-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="23 4 23 10 17 10" />
+                <polyline points="1 20 1 14 7 14" />
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+              </svg>
+            </button>
+            <button type="button" class="icon-btn shell-ico-btn" id="btnInbox" title="الرسائل">
+              <svg class="ico-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+            </button>
+            <button type="button" class="icon-btn shell-ico-btn" id="btnMenu" title="قائمة">
+              <svg class="ico-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="client-web-main">
+          <div id="panel-feed" class="panel page-scroll active">
+          <div class="card" style="margin-bottom: 12px">
+            <div class="card-hero">خدمات وحرف تقليدية من حرفيي الجهة</div>
+            <div class="card-body">
+              <div class="field">
+                <label>بحث في المنشورات</label>
+                <input type="search" id="feedQ" placeholder="بحث في المنشورات…" />
+              </div>
+              <div class="row-between" style="flex-wrap: wrap; gap: 8px; align-items: center">
+                <label style="font-size: 0.85rem; color: var(--muted)">ترتيب</label>
+                <select id="feedSort" style="flex: 1; min-width: 140px">
+                  <option value="recent">الأحدث</option>
+                  <option value="popular">الأكثر شعبية</option>
+                </select>
+              </div>
+              <input type="hidden" id="feedCatKey" value="" />
+              <p style="font-size: 0.82rem; color: var(--muted); margin: 10px 0 6px">التصنيف</p>
+              <div id="feedChips" class="feed-chip-scroll"></div>
+              <button type="button" class="btn btn-primary btn-block" id="feedSearchBtn" style="margin-top: 12px">تطبيق</button>
+            </div>
+          </div>
+          <div id="feedList"></div>
+        </div>
+
+        <div id="panel-explore" class="panel page-scroll">
+          <div class="card">
+            <div class="card-body">
+              <div class="field">
+                <label>المهنة</label>
+                <select id="exCat"></select>
+              </div>
+              <div class="field">
+                <label>المدينة</label>
+                <input id="exCity" placeholder="المدينة (مثال: الدار البيضاء)" />
+              </div>
+              <label class="checkbox-row">
+                <input type="checkbox" id="exAvail" />
+                <span>المتاحون فقط</span>
+              </label>
+              <button type="button" class="btn btn-primary btn-block" id="exSearch">بحث</button>
+            </div>
+          </div>
+          <div id="exploreList" class="client-explore-grid"></div>
+        </div>
+
+        <div id="panel-favorites" class="panel page-scroll">
+          <h2 class="app-panel-title">المفضلة</h2>
+          <div id="favList"></div>
+        </div>
+
+        <div id="panel-profile" class="panel page-scroll">
+          <div class="row-between" style="margin-bottom: 12px">
+            <h2 id="profHandle" class="app-panel-title" style="margin: 0; border: none; padding: 0">—</h2>
+            <div>
+              <button type="button" class="icon-btn shell-ico-btn" id="btnNewPost" title="طلب جديد">
+                <svg class="ico-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="card" style="padding: 0; overflow: hidden">
+            <div class="card-hero" style="border-radius: 0">طلباتك، متابعاتك، ومديونة في مكان واحد</div>
+            <div class="card-body">
+              <div class="row-between" style="align-items: flex-start">
+                <img id="profAvatar" class="avatar" style="width: 48px; height: 48px; display: none" alt="" />
+                <div style="flex: 1; text-align: center">
+                  <div class="app-stat-grid">
+                    <div class="app-stat-item">
+                      <div class="app-stat-value" id="statDem">0</div>
+                      <div class="app-stat-label">طلبات</div>
+                    </div>
+                    <div class="app-stat-item">
+                      <div class="app-stat-value" id="statFol">0</div>
+                      <div class="app-stat-label">متابَعون</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h3 id="profName" class="app-subheading" style="margin: 12px 0 4px; font-size: 1.15rem">—</h3>
+              <p id="profEmail" style="margin: 0; color: var(--muted); font-size: 0.9rem">—</p>
+              <p style="margin: 8px 0 0">
+                <span id="profLoc">—</span>
+                <button type="button" class="btn btn-outline" style="margin-right: 8px; padding: 4px 10px; font-size: 0.8rem" id="btnEditLoc">تعديل الموقع</button>
+                <button type="button" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem" id="btnEditNames">تعديل الاسم</button>
+              </p>
+              <hr class="app-divider" />
+              <h4 class="app-subheading">طلباتي</h4>
+              <div id="demandList"></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top: 12px">
+            <div class="card-body">
+              <div class="app-subheading" style="margin-bottom: 10px">التحقق من الحساب</div>
+              <div class="row-between" style="gap: 8px; flex-wrap: wrap">
+                <input type="file" id="cinR" accept="image/*" hidden />
+                <input type="file" id="cinV" accept="image/*" hidden />
+                <button type="button" class="btn btn-outline" id="btnCR">صورة البطاقة (الوجه)</button>
+                <button type="button" class="btn btn-outline" id="btnCV">صورة البطاقة (الظهر)</button>
+              </div>
+              <p style="margin-top: 12px"><a href="verify-email.html">تأكيد البريد</a></p>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="js/moroccan-trades.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/categories.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/socket-hub.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/feed-render.js"></script>
+    <script>
+      document.getElementById('btnCR').onclick = function () {
+        document.getElementById('cinR').click();
+      };
+      document.getElementById('btnCV').onclick = function () {
+        document.getElementById('cinV').click();
+      };
+    </script>
+    <script src="js/client-app.js"></script>
+  </body>
+</html>
