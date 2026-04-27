@@ -23,6 +23,7 @@
       <div id="root"><p class="empty-hint">…</p></div>
     </div>
     <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
     <script src="js/api.js"></script>
     <script src="js/categories.js"></script>
     <script src="js/ui.js"></script>
@@ -59,7 +60,10 @@
             var prof = d.profile || {};
             var u = d.user || {};
             var st = d.stats || {};
-            var me = await AlAselApi.me();
+            var me = { role: 'guest', id: '' };
+            try {
+              me = await AlAselApi.me();
+            } catch (_) {}
             var stFollow = { following: false };
             try {
               stFollow = await AlAselApi.followStatus(id);

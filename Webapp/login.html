@@ -45,41 +45,24 @@
           </p>
         </div>
       </div>
-      <div class="api-settings">
-        <strong>عنوان API (اختياري)</strong>
-        <div style="color: var(--muted); margin-top: 4px; font-size: 0.88rem; line-height: 1.45">
-          للتجربة على الجهاز: شغّل الخادم من مجلد <code style="font-size: 0.85em">backend</code> (<code style="font-size: 0.85em">npm run dev</code>) مع المنفذ
-          <strong>4000</strong>. إن ظهرت رسالة خطأ في الاتصال، جرّب «استعادة العنوان الافتراضي» أو صحّح العنوان أدناه.
-          <br />
-          حسابات تجريبية (وضع الذاكرة + <code style="font-size: 0.85em">SEED_DEMO=1</code>): زبون
-          <strong>ali@demo.ma</strong> — حرفي <strong>hassan@demo.ma</strong> — كلمة المرور: <strong>Mediouna2026!</strong>
-        </div>
-        <input type="url" id="apiBase" placeholder="http://127.0.0.1:4000/api/v1" />
-        <button type="button" class="btn btn-outline btn-block" style="margin-top: 8px" id="saveApi">حفظ عنوان API</button>
-        <button type="button" class="btn btn-outline btn-block" style="margin-top: 8px" id="resetApi">استعادة العنوان الافتراضي</button>
-      </div>
       <p class="link-back-muted"><a href="index.html">← العودة للموقع العام</a></p>
     </main>
     <div id="site-footer-root"></div>
     <script src="js/site-chrome.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
     <script src="js/api.js"></script>
     <script src="js/ui.js"></script>
     <script>
       (function () {
-        document.getElementById('apiBase').value = AlAselConfig.getApiBase();
-        document.getElementById('saveApi').onclick = function () {
-          var v = document.getElementById('apiBase').value.trim();
-          if (v) AlAselConfig.setApiBase(v);
-          AlAselUi.toast('تم حفظ عنوان API');
-        };
-        document.getElementById('resetApi').onclick = function () {
-          try {
-            localStorage.removeItem(AlAselConfig.API_BASE_KEY);
-          } catch (_) {}
-          document.getElementById('apiBase').value = AlAselConfig.getApiBase();
-          AlAselUi.toast('تم استعادة العنوان الافتراضي');
-        };
+        try {
+          var qs = new URLSearchParams(location.search);
+          if (qs.get('api') === '1') {
+            AlAselConfig.setStaticApp(false);
+          } else if (qs.get('static') === '1') {
+            AlAselConfig.setStaticApp(true);
+          }
+        } catch (_) {}
         var REM = 'al_asel_remember';
         var KE = 'al_asel_saved_email';
         var KP = 'al_asel_saved_password';

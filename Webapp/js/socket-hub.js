@@ -15,6 +15,7 @@
 
   function connect(uid) {
     if (!uid || !global.io) return;
+    if (global.AlAselConfig && global.AlAselConfig.isStaticApp && global.AlAselConfig.isStaticApp()) return;
     if (boundUid === uid && socket && socket.connected) return;
     disconnect();
     boundUid = uid;

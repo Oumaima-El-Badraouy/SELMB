@@ -6,9 +6,18 @@
 
   async function refresh() {
     const A = global.AlAselApi;
-    if (!A || !global.AlAselConfig.getToken()) {
+    const cfg = global.AlAselConfig;
+    if (!A || !cfg || !cfg.getToken()) {
       S.user = null;
       return null;
+    }
+    if (cfg.isStaticApp && cfg.isStaticApp() && cfg.isStaticToken && cfg.isStaticToken()) {
+      const sm = cfg.getStaticMe && cfg.getStaticMe();
+      if (!sm) {
+        cfg.setToken(null);
+        S.user = null;
+        return null;
+      }
     }
     S.user = await A.me();
     return S.user;

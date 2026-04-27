@@ -48,19 +48,17 @@ body {
   color: var(--ink);
   -webkit-tap-highlight-color: transparent;
   text-rendering: optimizeLegibility;
-  background-color: #f6f0e8;
+  /* Photo de fond visible : voiles légers uniquement (les anciens ~0.8 masquaient tout) */
+  background-color: #f4eadc;
   background-image:
-    radial-gradient(ellipse 100% 70% at 100% 0%, rgba(31, 109, 114, 0.11) 0%, transparent 52%),
-    radial-gradient(ellipse 80% 50% at 0% 100%, rgba(184, 92, 46, 0.09) 0%, transparent 48%),
-    repeating-linear-gradient(
-      135deg,
-      rgba(212, 175, 55, 0.04) 0,
-      rgba(212, 175, 55, 0.04) 1px,
-      transparent 1px,
-      transparent 11px
-    ),
-    linear-gradient(168deg, #fdfaf6 0%, #efe4d8 42%, #e4d8ca 100%);
-  background-attachment: fixed;
+    linear-gradient(180deg, rgba(255, 253, 250, 0.28) 0%, rgba(255, 252, 247, 0.12) 42%, rgba(252, 244, 232, 0.32) 100%),
+    radial-gradient(ellipse 90% 55% at 100% 0%, rgba(31, 109, 114, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 75% 45% at 0% 100%, rgba(184, 92, 46, 0.06) 0%, transparent 50%),
+    url('../assets/branding/site-page-bg.png');
+  background-size: auto, auto, auto, cover;
+  background-position: center, center, center, center center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: scroll;
 }
 
 a {

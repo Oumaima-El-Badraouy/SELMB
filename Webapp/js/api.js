@@ -37,6 +37,9 @@
 
   async function apiFetch(path, opts) {
     opts = opts || {};
+    if (C().isStaticApp && C().isStaticApp() && typeof global.__staticAlAselFetch === 'function') {
+      return global.__staticAlAselFetch(path, opts);
+    }
     const base = C().getApiBase().replace(/\/+$/, '');
     const url = path.startsWith('http') ? path : base + (path.startsWith('/') ? path : '/' + path);
     const headers = Object.assign({}, opts.headers || {});
@@ -49,6 +52,7 @@
     if (opts.body instanceof FormData) {
       delete headers['Content-Type'];
     }
+
     let res;
     try {
       res = await fetch(url, Object.assign({}, opts, { headers }));
