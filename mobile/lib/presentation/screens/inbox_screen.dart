@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../providers/app_providers.dart';
-import '../widgets/moroccan_app_bar.dart';
+import '../widgets/moroccan_shell_background.dart';
+import '../widgets/moroccan_ui_kit.dart';
 import '../widgets/responsive_content.dart';
 
 /// Liste des conversations (messages reçus / envoyés).
@@ -54,12 +55,13 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.sand,
-      appBar: const AlAselFlatAppBar(
-        title: S.messages,
-        centerTitle: true,
+      backgroundColor: Colors.transparent,
+      appBar: MoroccanTabAppBar.bar(
+        title: const Text(S.messages),
+        automaticallyImplyLeading: true,
       ),
-      body: ResponsiveContent(
+      body: MoroccanShellBackground(
+        child: ResponsiveContent(
         maxWidth: 560,
         child: _loading
             ? const Center(child: CircularProgressIndicator())
@@ -125,6 +127,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                             },
                           ),
                   ),
+        ),
       ),
     );
   }

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>طلب خدمة — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/app-shell.css" />
+  </head>
+  <body class="app-page">
+    <div class="top-bar">
+      <button type="button" class="icon-btn" id="back">←</button>
+      <h1>طلب جديد</h1>
+      <span></span>
+    </div>
+    <div class="page-scroll" style="max-width: 480px">
+      <div class="card">
+        <div class="card-body">
+          <form id="f">
+            <div class="field">
+              <label>العنوان</label>
+              <input name="title" required />
+            </div>
+            <div class="field">
+              <label>التصنيف</label>
+              <select name="category" id="cat"></select>
+            </div>
+            <div class="field">
+              <label>الوصف</label>
+              <textarea name="description" rows="3"></textarea>
+            </div>
+            <div class="field">
+              <label>المدينة</label>
+              <input name="city" />
+            </div>
+            <div class="field">
+              <label>المساحة (م²) — اختياري</label>
+              <input name="sqm" type="number" step="0.1" />
+            </div>
+            <div class="field">
+              <label>الأولوية</label>
+              <select name="urgency">
+                <option value="normal">عادي</option>
+                <option value="urgent">عاجل</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-outline btn-block" id="btnEst">تقدير الميزانية (درهم)</button>
+            <div class="card" style="margin-top: 12px; margin-bottom: 12px">
+              <div class="card-body" id="est" style="font-size: 0.9rem; color: var(--muted)">اضغط «تقدير الميزانية» أو غيّر الحقول.</div>
+            </div>
+            <h3 style="font-size: 0.95rem; margin: 16px 0 8px">اقتراح حرفيين (مطابقة)</h3>
+            <div id="matchBox" class="empty-hint" style="text-align: right; padding: 0 0 12px">—</div>
+            <button type="submit" class="btn btn-primary btn-block" id="go">نشر الطلب</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="js/moroccan-trades.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+      (function () {
+        if (!AlAselConfig.getToken()) location.href = 'login.html';
+        var sel = document.getElementById('cat');
+        MOROCCAN_TRADES.forEach(function (t) {
+          var o = document.createElement('option');
+          o.value = t.id;
+          o.textContent = t.labelAr;
+          sel.appendChild(o);
+        });
+        function renderEst(e) {
+          var el = document.getElementById('est');
+          if (!e || e.min == null) {
+            el.textContent = '—';
+            return;
+          }
+          el.innerHTML =
+            '<div style="font-weight:800;font-size:1.15rem;color:var(--deep-blue)">' +
+            e.min +
+            ' – ' +
+            e.max +
+            ' ' +
+            (e.currency || 'د.م.') +
+            '</div><p style="margin:8px 0 0;font-size:0.82rem">' +
+            (e.disclaimer || '') +
+            '</p>';
+        }
+        async function refreshEst() {
+          var fd = new FormData(document.getElementById('f'));
+          try {
+            var e = await AlAselApi.estimate({
+              category: fd.get('category'),
+              sqm: fd.get('sqm') ? parseFloat(fd.get('sqm')) : undefined,
+              urgency: fd.get('urgency'),
+            });
+            renderEst(e);
+          } catch (_) {
+            document.getElementById('est').textContent = '—';
+          }
+        }
+        async function refreshMatch() {
+          var fd = new FormData(document.getElementById('f'));
+          var box = document.getElementById('matchBox');
+          try {
+            var m = await AlAselApi.matchSuggestions(fd.get('category'), (fd.get('city') || '').trim() || undefined);
+            var sug = m.suggestions || [];
+            if (!sug.length) {
+              box.innerHTML = '<span style="color:var(--muted)">لا اقتراحات حالياً.</span>';
+              return;
+            }
+            box.innerHTML = sug
+              .map(function (s) {
+                var id = s.artisanId || s.id || '';
+                var name = s.displayName || s.name || '—';
+                return (
+                  '<a class="card" style="display:block;padding:10px 12px;margin-bottom:8px;text-decoration:none;color:inherit" href="artisan-profile.html?id=' +
+                  encodeURIComponent(id) +
+                  '">' +
+                  AlAselUi.escapeHtml(name) +
+                  '</a>'
+                );
+              })
+              .join('');
+          } catch (e) {
+            box.textContent = e.message || String(e);
+          }
+        }
+        document.getElementById('btnEst').onclick = refreshEst;
+        document.getElementById('f').onchange = function () {
+          refreshMatch();
+        };
+        refreshMatch();
+        document.getElementById('back').onclick = function () {
+          history.back();
+        };
+        document.getElementById('f').onsubmit = async function (e) {
+          e.preventDefault();
+          var fd = new FormData(e.target);
+          var btn = document.getElementById('go');
+          btn.disabled = true;
+          try {
+            await AlAselApi.createRequest({
+              title: fd.get('title'),
+              category: fd.get('category'),
+              description: (fd.get('description') || '').toString(),
+              city: (fd.get('city') || '').toString(),
+              urgency: fd.get('urgency'),
+            });
+            AlAselUi.toast('تم نشر الطلب');
+            location.href = 'client.html#feed';
+          } catch (err) {
+            AlAselUi.toast(err.message || String(err), 'error');
+            btn.disabled = false;
+          }
+        };
+      })();
+    </script>
+  </body>
+</html>

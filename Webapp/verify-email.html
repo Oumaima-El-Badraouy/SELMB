@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>تأكيد البريد — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/app-shell.css" />
+  </head>
+  <body class="app-page">
+    <div class="top-bar">
+      <button type="button" class="icon-btn" id="back">←</button>
+      <h1>تأكيد البريد</h1>
+      <span></span>
+    </div>
+    <div class="page-scroll" style="max-width: 440px">
+      <p style="color: var(--muted)">اطلب رمزاً ثم أدخله. في وضع التجربة قد يظهر الرمز في الرد.</p>
+      <div class="card">
+        <div class="card-body">
+          <button type="button" class="btn btn-outline btn-block" id="req">إرسال الرمز</button>
+          <p id="demo" style="font-size: 0.85rem; color: var(--zellij); margin-top: 8px"></p>
+          <div class="field" style="margin-top: 16px">
+            <label>الرمز</label>
+            <input type="text" id="code" />
+          </div>
+          <button type="button" class="btn btn-primary btn-block" id="ok">تأكيد</button>
+        </div>
+      </div>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/session.js"></script>
+    <script>
+      (function () {
+        if (!AlAselConfig.getToken()) location.href = 'login.html';
+        document.getElementById('back').onclick = function () {
+          history.back();
+        };
+        document.getElementById('req').onclick = async function () {
+          try {
+            var r = await AlAselApi.requestEmailCode();
+            document.getElementById('demo').textContent = r && r.demoCode ? 'رمز تجريبي: ' + r.demoCode : '';
+            AlAselUi.toast('تم إرسال الطلب');
+          } catch (e) {
+            AlAselUi.toast(e.message || String(e), 'error');
+          }
+        };
+        document.getElementById('ok').onclick = async function () {
+          try {
+            await AlAselApi.verifyEmailCode(document.getElementById('code').value);
+            if (AlAselSession && AlAselSession.refresh) await AlAselSession.refresh();
+            AlAselUi.toast('تم تأكيد البريد.');
+          } catch (e) {
+            AlAselUi.toast(e.message || String(e), 'error');
+          }
+        };
+      })();
+    </script>
+  </body>
+</html>

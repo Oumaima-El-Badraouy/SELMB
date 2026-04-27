@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_gradients.dart';
 
-/// Carte design system : dégradé léger, coins décoratifs *clippés*, ombre colorée (glow), grand rayon.
-class MoroccanCard extends StatelessWidget {
+/// Carte « zellige » + *lift* / *scale* léger au press si [onTap] est défini.
+class MoroccanCard extends StatefulWidget {
   const MoroccanCard({
     super.key,
     required this.child,
@@ -21,93 +21,64 @@ class MoroccanCard extends StatelessWidget {
   static const double _r = 28;
 
   @override
+  State<MoroccanCard> createState() => _MoroccanCardState();
+}
+
+class _MoroccanCardState extends State<MoroccanCard> {
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    final inner = ClipRRect(
-      borderRadius: BorderRadius.circular(_r),
-      child: Stack(
-        clipBehavior: Clip.hardEdge,
-        children: [
-          const Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(gradient: AppGradients.cardBody),
+    final inner = CustomPaint(
+      foregroundPainter: _ZellijCornerPainter(),
+      child: Container(
+        padding: widget.padding,
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: AppColors.gold.withValues(alpha: 0.62), width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.deepBlue.withValues(alpha: _pressed ? 0.06 : 0.09),
+              blurRadius: _pressed ? 14 : 22,
+              offset: Offset(0, _pressed ? 4 : 10),
             ),
-          ),
-          // Lisière type kilim / bordure tapis
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 4,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(_r)),
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.burgundy.withValues(alpha: 0.65),
-                    AppColors.gold,
-                    AppColors.zellijGlaze,
-                    AppColors.terracotta.withValues(alpha: 0.75),
-                  ],
-                ),
-              ),
+            BoxShadow(
+              color: AppColors.zerbiyaGarnet.withValues(alpha: 0.06),
+              blurRadius: 14,
+              offset: const Offset(0, 6),
             ),
-          ),
-          // Bulles décoratives dans les coins (clipées par le parent)
-          Positioned(
-            top: -24,
-            right: -20,
-            child: _blob(72, AppColors.gold.withValues(alpha: 0.14)),
-          ),
-          Positioned(
-            bottom: -18,
-            left: -14,
-            child: _blob(56, AppColors.terracotta.withValues(alpha: 0.12)),
-          ),
-          Positioned(
-            top: 12,
-            left: 12,
-            child: CustomPaint(
-              size: const Size(40, 40),
-              painter: _ZellijSparkPainter(),
+            BoxShadow(
+              color: AppColors.terracotta.withValues(alpha: 0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
-          ),
-          Positioned(
-            bottom: 12,
-            right: 12,
-            child: CustomPaint(
-              size: const Size(36, 36),
-              painter: _ZellijSparkPainter(small: true),
-            ),
-          ),
-          Padding(
-            padding: padding,
-            child: child,
-          ),
-        ],
+          ],
+        ),
+        child: widget.child,
       ),
     );
 
-    final decorated = Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(_r),
-        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45), width: 1.2),
-        boxShadow: AppGradients.glowDeepBlue(blur: 26, y: 12),
-      ),
+    final scaled = AnimatedScale(
+      scale: _pressed ? 0.985 : 1.0,
+      duration: const Duration(milliseconds: 140),
+      curve: Curves.easeOutCubic,
       child: inner,
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-      child: onTap == null
-          ? decorated
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+      child: widget.onTap == null
+          ? scaled
           : Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: onTap,
-                borderRadius: BorderRadius.circular(_r),
-                splashColor: AppColors.gold.withValues(alpha: 0.12),
-                highlightColor: AppColors.deepBlue.withValues(alpha: 0.04),
-                child: decorated,
+                onTap: widget.onTap,
+                borderRadius: BorderRadius.circular(22),
+                splashColor: AppColors.gold.withValues(alpha: 0.18),
+                highlightColor: AppColors.moroccoGreen.withValues(alpha: 0.06),
+                onHighlightChanged: (v) => setState(() => _pressed = v),
+                child: scaled,
               ),
             ),
     );
@@ -148,8 +119,16 @@ class _ZellijSparkPainter extends CustomPainter {
       _drawStar(canvas, c, r * 0.45, gold);
     }
 
+<<<<<<< HEAD
     star(Offset(size.width * 0.35, size.height * 0.35));
     star(Offset(size.width * 0.72, size.height * 0.68));
+=======
+    const inset = r * 0.35;
+    star(const Offset(inset, inset));
+    star(Offset(size.width - inset, inset));
+    star(Offset(inset, size.height - inset));
+    star(Offset(size.width - inset, size.height - inset));
+>>>>>>> temp-save
   }
 
   void _drawStar(Canvas canvas, Offset c, double radius, Paint paint) {

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>محادثة — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <style>
+      #msgs {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-bottom: 88px;
+      }
+      .bubble {
+        max-width: 88%;
+        padding: 10px 14px;
+        border-radius: 16px;
+        font-size: 0.92rem;
+        line-height: 1.45;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+      }
+      .bubble.me {
+        align-self: flex-end;
+        background: var(--deep-blue);
+        color: #fff;
+      }
+      .bubble.them {
+        align-self: flex-start;
+        background: #fff;
+        color: var(--ink);
+      }
+      .bubble audio {
+        max-width: 100%;
+        margin-top: 6px;
+      }
+      .composer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+        background: var(--shell-bar);
+        border-top: 1px solid rgba(15, 40, 64, 0.1);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .composer input[type='text'] {
+        flex: 1;
+        min-width: 120px;
+      }
+      .rec-on {
+        background: var(--morocco-red, #8b5e4d) !important;
+        color: #fff !important;
+      }
+    </style>
+    <link rel="stylesheet" href="css/app-shell.css" />
+  </head>
+  <body class="app-page">
+    <div class="top-bar">
+      <button type="button" class="icon-btn" id="back">←</button>
+      <div style="text-align: center; flex: 1; min-width: 0">
+        <h1 id="peerTitle" style="margin: 0; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">محادثة</h1>
+        <div id="peerPhone" style="font-size: 0.75rem; color: var(--muted); font-weight: 600"></div>
+      </div>
+      <button type="button" class="icon-btn" id="btnCall" title="اتصال">📞</button>
+    </div>
+    <div class="page-scroll" style="max-width: 560px">
+      <div id="msgs"></div>
+    </div>
+    <div class="composer">
+      <input type="text" id="txt" placeholder="اكتب رسالة…" />
+      <button type="button" class="btn btn-outline" id="btnMic" title="تسجيل صوتي">🎤</button>
+      <button type="button" class="btn btn-primary" id="send">إرسال</button>
+    </div>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/socket-hub.js"></script>
+    <script>
+      (function () {
+        if (!AlAselConfig.getToken()) {
+          location.href = 'login.html';
+          return;
+        }
+        var q = new URLSearchParams(location.search);
+        var peerId = q.get('peer') || '';
+        var peerName = q.get('name') || 'محادثة';
+        if (!peerId) {
+          AlAselUi.toast('معرّف غير صالح', 'error');
+          location.href = 'inbox.html';
+          return;
+        }
+        document.getElementById('peerTitle').textContent = peerName;
+        document.getElementById('back').onclick = function () {
+          history.back();
+        };
+
+        var cid = null;
+        var meId = null;
+        var mediaRecorder = null;
+        var audioChunks = [];
+        var recording = false;
+        var unsubMsg = null;
+        function renderMessages(items) {
+          var el = document.getElementById('msgs');
+          el.innerHTML = (items || [])
+            .map(function (m) {
+              var mine = String(m.senderId) === String(meId);
+              var t = (m.text || '').trim();
+              var au = m.audioUrl;
+              var audioBlock = '';
+              if (au) {
+                var src = au.startsWith('data:') ? au : AlAselApi.resolveMedia(au);
+                audioBlock =
+                  '<audio controls preload="metadata" style="width:100%;margin-top:6px" src="' +
+                  AlAselUi.escapeHtml(src) +
+                  '"></audio>';
+              }
+              return (
+                '<div class="bubble ' +
+                (mine ? 'me' : 'them') +
+                '">' +
+                (t ? AlAselUi.escapeHtml(t) : '') +
+                audioBlock +
+                '</div>'
+              );
+            })
+            .join('');
+          el.scrollTop = el.scrollHeight;
+        }
+
+        async function refresh() {
+          if (!cid) return;
+          try {
+            var data = await AlAselApi.listMessages(cid);
+            renderMessages(data.items || []);
+          } catch (_) {}
+        }
+
+        async function boot() {
+          try {
+            var u = await AlAselSession.refresh();
+            meId = u.id;
+            if (AlAselSocket && AlAselSocket.connect) {
+              AlAselSocket.connect(meId);
+            }
+            var o = await AlAselApi.openConversation(peerId);
+            cid = o.id || o;
+            if (cid) {
+              await AlAselApi.markRead(cid);
+              if (AlAselSocket && AlAselSocket.joinConversation) {
+                AlAselSocket.joinConversation(cid);
+              }
+              if (AlAselSocket && AlAselSocket.addNewMessageListener) {
+                unsubMsg = AlAselSocket.addNewMessageListener(function (data) {
+                  if (String(data.conversationId) !== String(cid)) return;
+                  refresh();
+                });
+              }
+            }
+            try {
+              var ph = await AlAselApi.peerContact(peerId);
+              if (ph.phone) document.getElementById('peerPhone').textContent = ph.phone;
+            } catch (_) {}
+            await refresh();
+          } catch (e) {
+            AlAselUi.toast(e.message || String(e), 'error');
+          }
+        }
+
+        document.getElementById('send').onclick = async function () {
+          var t = document.getElementById('txt').value.trim();
+          if (!t || !cid) return;
+          document.getElementById('txt').value = '';
+          try {
+            await AlAselApi.sendMessage(cid, t);
+            await refresh();
+          } catch (e) {
+            AlAselUi.toast(e.message || String(e), 'error');
+          }
+        };
+
+        document.getElementById('btnCall').onclick = async function () {
+          try {
+            var ph = await AlAselApi.peerContact(peerId);
+            var raw = (ph.phone || '').replace(/\s/g, '');
+            if (!raw) {
+              AlAselUi.toast('لا يوجد رقم لهذا الشخص.', 'error');
+              return;
+            }
+            window.location.href = 'tel:' + raw;
+          } catch (e) {
+            AlAselUi.toast(e.message || String(e), 'error');
+          }
+        };
+
+        document.getElementById('btnMic').onclick = async function () {
+          var btn = document.getElementById('btnMic');
+          if (!cid) return;
+          if (recording) {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+              mediaRecorder.stop();
+            }
+            recording = false;
+            btn.classList.remove('rec-on');
+            btn.textContent = '🎤';
+            return;
+          }
+          try {
+            var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            audioChunks = [];
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = function (e) {
+              if (e.data.size) audioChunks.push(e.data);
+            };
+            mediaRecorder.onstop = async function () {
+              stream.getTracks().forEach(function (tr) {
+                tr.stop();
+              });
+              var blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+              var r = new FileReader();
+              r.onloadend = async function () {
+                var dataUrl = r.result;
+                try {
+                  await AlAselApi.sendMessage(cid, null, dataUrl);
+                  await refresh();
+                } catch (e) {
+                  AlAselUi.toast(e.message || String(e), 'error');
+                }
+              };
+              r.readAsDataURL(blob);
+            };
+            mediaRecorder.start();
+            recording = true;
+            btn.classList.add('rec-on');
+            btn.textContent = '⏹';
+          } catch (e) {
+            AlAselUi.toast('اسمح بالميكروفون في الإعدادات.', 'error');
+          }
+        };
+
+        window.addEventListener('beforeunload', function () {
+          if (typeof unsubMsg === 'function') unsubMsg();
+          if (cid && AlAselSocket && AlAselSocket.leaveConversation) AlAselSocket.leaveConversation(cid);
+        });
+
+        boot();
+        setInterval(refresh, 5000);
+      })();
+    </script>
+  </body>
+</html>

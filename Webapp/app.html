@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>الأصل — التطبيق</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/app-entry.css" />
+  </head>
+  <body class="app-entry-page">
+    <header class="app-entry-top">
+      <a href="index.html">← الموقع</a>
+    </header>
+
+    <main class="app-entry-main">
+      <div class="app-entry-grid">
+        <div class="app-entry-visual">
+          <img src="assets/mobile/app-splash-screenshot.png" alt="لقطة شاشة من تطبيق الأصل" width="720" height="1280" loading="eager" />
+        </div>
+
+        <div class="app-entry-copy">
+          <h1>جاهز للانطلاق مع الأصل</h1>
+          <p class="app-entry-lead">
+            حمّل التطبيق من Google Play قريباً، أو تابع مباشرة على الويب إن كنت مسجّلاً بالفعل.
+          </p>
+
+          <div class="app-entry-stores">
+            <button type="button" class="store-badge-play" disabled aria-disabled="true" title="غير متاح — التطبيق غير منشور بعد">
+              <span class="store-badge-play__pre">قريباً على</span>
+              <span class="store-badge-play__row">
+                <span class="store-badge-play__icon" aria-hidden="true"></span>
+                <span class="store-badge-play__brand">Google Play</span>
+              </span>
+            </button>
+          </div>
+          <p class="store-badge-note">زر Google Play معطّل حتى نشر التطبيق في المتجر.</p>
+
+          <div class="app-entry-actions">
+            <button type="button" class="btn btn-primary btn-block" id="btnWeb">متابعة على الويب</button>
+          </div>
+          <p class="app-entry-secondary"><a href="login.html">تسجيل الدخول</a> · <a href="index.html">الرئيسية</a></p>
+        </div>
+      </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+      (function () {
+        var btn = document.getElementById('btnWeb');
+        btn.addEventListener('click', async function () {
+          btn.disabled = true;
+          var t = AlAselConfig.getToken();
+          if (!t) {
+            location.href = 'login.html';
+            return;
+          }
+          try {
+            var u = await AlAselApi.me();
+            location.href = u.role === 'artisan' ? 'artisan.html' : 'client.html';
+          } catch (_) {
+            AlAselConfig.setToken(null);
+            location.href = 'login.html';
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>الأصل — حرفي</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/app-shell.css" />
+  </head>
+  <body class="app-page">
+    <div class="asel-shell-bar">
+      <button type="button" class="icon-btn" id="shellReportBtn" title="إبلاغ عن مشكلة">⚑</button>
+      <div class="asel-shell-center">
+        <img src="assets/branding/logo_al_asel.png" alt="" class="asel-shell-logo" width="44" height="44" />
+        <span class="asel-shell-mediouna">مديونة</span>
+      </div>
+      <button type="button" class="asel-shell-inbox" id="shellInboxBtn" title="الرسائل">
+        <span class="asel-shell-inbox-ico">✉</span>
+        <span id="shellUnread" class="asel-shell-badge" style="display: none">0</span>
+      </button>
+    </div>
+    <div class="app-shell">
+      <header class="top-bar">
+        <h1 id="topTitle">الطلبات</h1>
+        <div class="top-bar-actions">
+          <button type="button" class="icon-btn" id="btnNew" title="منشور جديد">＋</button>
+          <button type="button" class="icon-btn" id="btnInbox" title="الرسائل">✉</button>
+          <button type="button" class="icon-btn" id="btnMenu" title="قائمة">☰</button>
+        </div>
+      </header>
+
+      <div id="panel-demands" class="panel page-scroll active">
+        <div class="card" style="margin-bottom: 12px">
+          <div class="card-hero" style="border-radius: 12px 12px 0 0">تصفح حسب الصنعة وتواصل مع الزبائن في مديونة.</div>
+          <div class="card-body" style="padding-top: 8px">
+            <strong>طلبات الزبائن — مديونة</strong>
+          </div>
+        </div>
+        <div id="demList"></div>
+      </div>
+
+      <div id="panel-discover" class="panel page-scroll">
+        <div class="card">
+          <div class="card-body">
+            <div class="field">
+              <label>المهنة</label>
+              <select id="adCat"></select>
+            </div>
+            <div class="field">
+              <label>المدينة</label>
+              <input id="adCity" />
+            </div>
+            <label class="checkbox-row">
+              <input type="checkbox" id="adAvail" />
+              <span>المتاحون فقط</span>
+            </label>
+            <button type="button" class="btn btn-primary btn-block" id="adSearch">بحث</button>
+          </div>
+        </div>
+        <div id="discList"></div>
+      </div>
+
+      <div id="panel-posts" class="panel page-scroll">
+        <h2 class="app-panel-title">منشوراتي</h2>
+        <div id="myPostsList"></div>
+      </div>
+
+      <div id="panel-profile" class="panel page-scroll">
+        <h2 class="app-panel-title">ملفي كحرفي</h2>
+        <div class="card" style="padding: 0; overflow: hidden">
+          <div class="card-hero" style="border-radius: 0">إدارة ملفك، خدماتك، وثقة الزبائن</div>
+          <div class="card-body">
+            <div style="text-align: center">
+              <input type="file" id="ap_photo" accept="image/*" hidden />
+              <img id="ap_avatar" class="avatar" style="width: 96px; height: 96px; margin: 0 auto; display: none" alt="" />
+              <button type="button" class="btn btn-outline" style="margin-top: 8px" id="ap_pick">تغيير الصورة</button>
+            </div>
+            <div class="app-stat-grid" style="margin-top: 16px">
+              <div class="app-stat-item">
+                <div class="app-stat-value" id="ap_followers">0</div>
+                <div class="app-stat-label">متابعون</div>
+              </div>
+              <div class="app-stat-item">
+                <div class="app-stat-value" id="ap_demands">0</div>
+                <div class="app-stat-label">طلبات الزبائن</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 12px">
+          <div class="card-body">
+            <h3 class="app-subheading app-subheading--sm" style="margin-top: 0">بيانات الاتصال</h3>
+            <p><span style="color: var(--muted)">البريد:</span> <span id="ap_email">—</span></p>
+            <p style="font-size: 0.82rem; color: var(--muted)">يظهر للزبائن للتواصل (حسب الشاشة).</p>
+            <div class="field">
+              <label>الهاتف</label>
+              <input id="ap_phone" type="tel" />
+            </div>
+            <div class="field">
+              <label>الموقع / الحي</label>
+              <textarea id="ap_loc" rows="2"></textarea>
+            </div>
+            <h3 class="app-subheading app-subheading--sm">الهوية</h3>
+            <div class="field">
+              <label>الاسم الأول</label>
+              <input id="ap_fn" />
+            </div>
+            <div class="field">
+              <label>الاسم</label>
+              <input id="ap_ln" />
+            </div>
+            <h3 class="app-subheading app-subheading--sm">النشاط</h3>
+            <div class="field">
+              <label>المجالات — مفصولة بفاصلة</label>
+              <input id="ap_domain" />
+            </div>
+            <div class="field">
+              <label>الوصف</label>
+              <textarea id="ap_desc" rows="4"></textarea>
+            </div>
+            <div class="field">
+              <label>التحقق من الحساب</label>
+              <div class="row-between" style="gap: 8px; flex-wrap: wrap">
+                <input type="file" id="cinRa" accept="image/*" hidden />
+                <input type="file" id="cinVa" accept="image/*" hidden />
+                <button type="button" class="btn btn-outline" id="btnCRa">وجه البطاقة</button>
+                <button type="button" class="btn btn-outline" id="btnCVa">ظهر البطاقة</button>
+              </div>
+              <p style="margin-top: 8px"><a href="verify-email.html">تأكيد البريد</a></p>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" id="ap_save">حفظ الملف</button>
+          </div>
+        </div>
+      </div>
+
+      <nav class="bottom-nav">
+        <button type="button" data-tab="demands" class="active"><span class="nav-ico">▤</span><span>الطلبات</span></button>
+        <button type="button" data-tab="discover"><span class="nav-ico">◎</span><span>استكشاف</span></button>
+        <button type="button" data-tab="posts"><span class="nav-ico">✎</span><span>منشوراتي</span></button>
+        <button type="button" data-tab="profile"><span class="nav-ico">☺</span><span>الملف</span></button>
+      </nav>
+    </div>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="js/moroccan-trades.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/categories.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/socket-hub.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/feed-render.js"></script>
+    <script src="js/artisan-app.js"></script>
+  </body>
+</html>

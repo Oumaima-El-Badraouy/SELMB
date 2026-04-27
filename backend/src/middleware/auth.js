@@ -9,6 +9,10 @@ if (process.env.MEMORY_STORE !== '1' && process.env.USE_FIREBASE_AUTH === '1') {
  * JWT (email/password) OR optional demo header OR Firebase if enabled.
  */
 export async function requireAuth(req, res, next) {
+  if (req.method === 'OPTIONS') {
+    return next();
+  }
+
   if (process.env.USE_DEMO_AUTH === '1' && process.env.MEMORY_STORE === '1') {
     const uid = req.headers['x-demo-uid'] || 'demo_user';
     req.user = { uid: String(uid), email: 'demo@al-asel.ma' };

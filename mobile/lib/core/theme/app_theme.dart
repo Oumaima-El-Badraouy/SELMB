@@ -13,14 +13,20 @@ class AppTheme {
         seedColor: AppColors.deepBlue,
         primary: AppColors.deepBlue,
         onPrimary: AppColors.white,
-        secondary: AppColors.terracotta,
+        secondary: AppColors.zellijGlaze,
         onSecondary: AppColors.white,
         tertiary: AppColors.gold,
         surface: AppColors.parchment,
         onSurface: AppColors.ink,
-        error: const Color(0xFFB42318),
+        primaryContainer: AppColors.zellijGlaze.withValues(alpha: 0.22),
+        onPrimaryContainer: AppColors.deepBlue,
+        secondaryContainer: AppColors.zerbiyaIndigo.withValues(alpha: 0.14),
+        onSecondaryContainer: AppColors.ink,
+        tertiaryContainer: AppColors.gold.withValues(alpha: 0.2),
+        onTertiaryContainer: AppColors.deepBlue,
+        error: AppColors.moroccoRed,
       ),
-      scaffoldBackgroundColor: AppColors.sand,
+      scaffoldBackgroundColor: AppColors.zerbiyaWool,
     );
 
     final cairo = GoogleFonts.cairoTextTheme(base.textTheme);
@@ -42,6 +48,16 @@ class AppTheme {
 
     return base.copyWith(
       textTheme: textTheme,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.fuchsia: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
       appBarTheme: AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 0.5,
@@ -89,7 +105,8 @@ class AppTheme {
           foregroundColor: AppColors.white,
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          elevation: 0,
+          elevation: 2,
+          shadowColor: AppColors.gold.withValues(alpha: 0.45),
           textStyle: GoogleFonts.cairo(fontWeight: FontWeight.w700, fontSize: 16),
         ),
       ),
@@ -114,7 +131,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.terracotta,
+          foregroundColor: AppColors.zellijGlaze,
           textStyle: GoogleFonts.cairo(fontWeight: FontWeight.w600),
         ),
       ),
@@ -128,10 +145,10 @@ class AppTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.parchment,
-        elevation: 8,
-        shadowColor: AppColors.deepBlue.withValues(alpha: 0.12),
+        elevation: 10,
+        shadowColor: AppColors.zerbiyaIndigo.withValues(alpha: 0.14),
         height: 72,
-        indicatorColor: AppColors.gold.withValues(alpha: 0.38),
+        indicatorColor: Color.lerp(AppColors.gold, AppColors.zellijGlaze, 0.35)!.withValues(alpha: 0.42),
         labelTextStyle: WidgetStateProperty.resolveWith((s) {
           final sel = s.contains(WidgetState.selected);
           return GoogleFonts.cairo(
@@ -156,10 +173,13 @@ class AppTheme {
         backgroundColor: AppColors.deepBlue,
         contentTextStyle: GoogleFonts.cairo(color: AppColors.white, fontWeight: FontWeight.w600),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: AppColors.gold.withValues(alpha: 0.55), width: 1.5),
+        ),
       ),
       dividerTheme: DividerThemeData(color: AppColors.gold.withValues(alpha: 0.25), thickness: 1),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(color: AppColors.terracotta),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(color: AppColors.zellijGlaze),
       listTileTheme: ListTileThemeData(
         iconColor: AppColors.deepBlue,
         titleTextStyle: GoogleFonts.cairo(fontWeight: FontWeight.w600, color: AppColors.ink),

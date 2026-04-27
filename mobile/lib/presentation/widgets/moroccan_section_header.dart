@@ -73,6 +73,20 @@ class MoroccanSectionHeader extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 5),
+        Container(
+          height: 3,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(1.5),
+            gradient: LinearGradient(
+              colors: [
+                AppColors.zerbiyaIndigo.withValues(alpha: 0.5),
+                AppColors.zellijGlaze.withValues(alpha: 0.55),
+                AppColors.deepBlueLight.withValues(alpha: 0.45),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

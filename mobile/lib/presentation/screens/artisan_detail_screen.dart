@@ -9,7 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/models/artisan_public_detail.dart';
 import '../providers/app_providers.dart';
 import '../widgets/moroccan_app_bar.dart';
-import '../widgets/moroccan_pattern_background.dart';
+import '../widgets/moroccan_shell_background.dart';
 import '../widgets/post_card.dart';
 
 final _artisanFullProvider = FutureProvider.autoDispose.family<ArtisanPublicDetail, String>((ref, id) async {
@@ -27,13 +27,14 @@ class ArtisanDetailScreen extends ConsumerWidget {
     final async = ref.watch(_artisanFullProvider(artisanId));
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: MoroccanAppBar(
         title: Text(
           S.artisanDetailSubtitle,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.zellijGlaze),
         ),
       ),
-      body: MoroccanPatternBackground(
+      body: MoroccanShellBackground(
         child: async.when(
           data: (d) => RefreshIndicator(
             onRefresh: () async => ref.invalidate(_artisanFullProvider(artisanId)),

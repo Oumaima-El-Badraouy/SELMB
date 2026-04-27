@@ -1,0 +1,175 @@
+/**
+ * Page d’entrée « دخول التطبيق » (app.html) — style landing type store (inspiré inDrive).
+ */
+.app-entry-page {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  background: linear-gradient(180deg, #faf9f7 0%, #f0ebe4 100%);
+  color: var(--ink);
+}
+
+.app-entry-top {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-entry-top a {
+  font-weight: 800;
+  color: var(--deep-blue);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.app-entry-main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px 20px 48px;
+}
+
+.app-entry-grid {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .app-entry-grid {
+    grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.05fr);
+    gap: 56px;
+  }
+}
+
+.app-entry-visual {
+  display: flex;
+  justify-content: center;
+  order: -1;
+}
+
+@media (min-width: 900px) {
+  .app-entry-visual {
+    order: 0;
+  }
+}
+
+.app-entry-visual img {
+  width: min(100%, 340px);
+  height: auto;
+  border-radius: 28px;
+  box-shadow:
+    0 32px 64px rgba(12, 34, 54, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  object-fit: contain;
+  background: #fff;
+}
+
+.app-entry-copy h1 {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 4.5vw, 2.45rem);
+  font-weight: 800;
+  color: var(--deep-blue);
+  letter-spacing: 0.03em;
+  line-height: 1.15;
+}
+
+.app-entry-lead {
+  margin: 0 0 28px;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.app-entry-stores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+/* Badge style « Google Play » (non cliquable) */
+.store-badge-play {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 18px 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(180deg, #3c4043 0%, #2d3134 100%);
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.78;
+  font-family: 'Roboto', var(--font-body), sans-serif;
+  text-align: right;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.store-badge-play__pre {
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.95;
+}
+
+.store-badge-play__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.store-badge-play__icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  background: conic-gradient(from 200deg at 50% 50%, #00d655 0deg, #00c853 280deg, #00a846 280deg 360deg);
+  border-radius: 5px;
+  position: relative;
+}
+
+.store-badge-play__icon::after {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-style: solid;
+  border-width: 5px 0 5px 8px;
+  border-color: transparent transparent transparent #fff;
+}
+
+.store-badge-play__brand {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.store-badge-note {
+  margin: 0 0 20px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.app-entry-actions .btn {
+  min-height: 52px;
+  font-size: 1rem;
+}
+
+.app-entry-secondary {
+  margin-top: 18px;
+  font-size: 0.92rem;
+}
+
+.app-entry-secondary a {
+  font-weight: 800;
+  color: var(--zellij);
+}

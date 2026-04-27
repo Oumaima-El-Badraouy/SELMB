@@ -27,21 +27,16 @@ class MoroccanAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          decoration: const BoxDecoration(gradient: AppGradients.headerWarm),
-          child: AppBar(
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            backgroundColor: Colors.transparent,
-            foregroundColor: AppColors.parchment,
-            iconTheme: const IconThemeData(color: AppColors.parchment),
-            leading: leading,
-            title: DefaultTextStyle(
-              style: const TextStyle(color: AppColors.parchment),
-              child: title,
-            ),
-            actions: actions,
-          ),
+        AppBar(
+          elevation: 0,
+          scrolledUnderElevation: 0.5,
+          shadowColor: AppColors.deepBlue.withValues(alpha: 0.08),
+          backgroundColor: AppColors.shellAppBarSurface,
+          surfaceTintColor: Colors.transparent,
+          foregroundColor: AppColors.deepBlue,
+          leading: leading,
+          title: title,
+          actions: actions,
         ),
         SizedBox(
           height: 10,

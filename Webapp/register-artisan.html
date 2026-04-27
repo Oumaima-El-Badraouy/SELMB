@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar" class="site-layout">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>تسجيل الحرفي — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/site-chrome.css" />
+  </head>
+  <body data-nav-active="auth" class="site-layout">
+    <div id="site-nav-root"></div>
+    <main class="site-body-flex page-scroll" style="max-width: 480px; margin: 0 auto; width: 100%; padding-top: 8px">
+      <header class="auth-page-header">
+        <span class="auth-page-eyebrow">فضاء الحرفي</span>
+        <h1 class="auth-page-title">تسجيل الحرفي</h1>
+        <p style="margin: 8px 0 0; color: var(--muted); font-size: 0.92rem; font-weight: 600">ملفك ومهنتك التقليدية في مديونة</p>
+      </header>
+      <div class="card card--elevate" style="margin-top: 8px">
+        <div class="card-body" style="text-align: center">
+          <input type="file" id="photo" accept="image/*" hidden />
+          <button type="button" class="btn btn-outline" id="pickPhoto">صورة الملف (موصى بها)</button>
+          <div id="phPrev" style="margin-top: 8px"></div>
+        </div>
+      </div>
+      <div class="card card--elevate">
+        <div class="card-body">
+          <form id="f">
+            <div class="field">
+              <label>الاسم الكامل</label>
+              <input name="fullName" required />
+            </div>
+            <div class="field">
+              <label>المهنة التقليدية</label>
+              <select name="domain" id="trade"></select>
+            </div>
+            <div class="field">
+              <label>وصف النشاط (10 أحرف على الأقل)</label>
+              <textarea name="description" rows="4" required minlength="10"></textarea>
+            </div>
+            <div class="field">
+              <label>الهاتف</label>
+              <input name="phone" type="tel" required />
+            </div>
+            <div class="field">
+              <label>البريد</label>
+              <input name="email" type="email" required />
+            </div>
+            <div class="field">
+              <label>كلمة المرور</label>
+              <input name="password" type="password" minlength="6" required />
+            </div>
+            <div class="field">
+              <label>الموقع</label>
+              <textarea name="location" rows="2" required></textarea>
+            </div>
+            <p style="font-weight: 700; margin: 16px 0 8px">البطاقة الوطنية (إلزامي)</p>
+            <div class="row-between" style="gap: 8px">
+              <div style="flex: 1">
+                <input type="file" id="cinR" accept="image/*" hidden />
+                <button type="button" class="btn btn-outline btn-block" id="btnR">وجه البطاقة</button>
+              </div>
+              <div style="flex: 1">
+                <input type="file" id="cinV" accept="image/*" hidden />
+                <button type="button" class="btn btn-outline btn-block" id="btnV">ظهر البطاقة</button>
+              </div>
+            </div>
+            <label class="checkbox-row">
+              <input type="checkbox" id="mediouna" required />
+              <span>أؤكد أنني ساكن في مديونة</span>
+            </label>
+            <button type="submit" class="btn btn-primary btn-block" id="go">إنشاء الحساب</button>
+          </form>
+          <p style="text-align: center; margin-top: 16px"><a href="login.html">لديك حساب؟ تسجيل الدخول</a> · <a href="index.html">الموقع</a></p>
+        </div>
+      </div>
+    </main>
+    <div id="site-footer-root"></div>
+    <script src="js/site-chrome.js"></script>
+    <script src="js/moroccan-trades.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+      (function () {
+        var sel = document.getElementById('trade');
+        MOROCCAN_TRADES.forEach(function (t) {
+          var o = document.createElement('option');
+          o.value = t.id;
+          o.textContent = t.labelAr;
+          sel.appendChild(o);
+        });
+        var photoData = null,
+          cinR = null,
+          cinV = null;
+        document.getElementById('pickPhoto').onclick = function () {
+          document.getElementById('photo').click();
+        };
+        document.getElementById('photo').onchange = function (ev) {
+          read(ev, function (d) {
+            photoData = d;
+            document.getElementById('phPrev').innerHTML =
+              '<img src="' + d + '" alt="" style="max-width:120px;border-radius:12px"/>';
+          });
+        };
+        function read(ev, cb) {
+          var f = ev.target.files[0];
+          if (!f) return;
+          if (f.size > 4 * 1024 * 1024) {
+            AlAselUi.toast('الصورة كبيرة جداً (الحد ~4 ميغابايت).', 'error');
+            return;
+          }
+          var r = new FileReader();
+          r.onload = function () {
+            cb(r.result);
+          };
+          r.readAsDataURL(f);
+        }
+        document.getElementById('btnR').onclick = function () {
+          document.getElementById('cinR').click();
+        };
+        document.getElementById('btnV').onclick = function () {
+          document.getElementById('cinV').click();
+        };
+        document.getElementById('cinR').onchange = function (e) {
+          read(e, function (d) {
+            cinR = d;
+            AlAselUi.toast('تم تحميل وجه البطاقة');
+          });
+        };
+        document.getElementById('cinV').onchange = function (e) {
+          read(e, function (d) {
+            cinV = d;
+            AlAselUi.toast('تم تحميل ظهر البطاقة');
+          });
+        };
+        document.getElementById('f').onsubmit = async function (e) {
+          e.preventDefault();
+          if (!document.getElementById('mediouna').checked) {
+            AlAselUi.toast('يجب تأكيد الإقامة في مديونة.', 'error');
+            return;
+          }
+          if (!cinR || !cinV) {
+            AlAselUi.toast('أضف صورتي البطاقة الوطنية.', 'error');
+            return;
+          }
+          var fd = new FormData(e.target);
+          var loc = (fd.get('location') || '').toString().trim();
+          if (loc.length < 2) {
+            AlAselUi.toast('أدخل موقعك.', 'error');
+            return;
+          }
+          var btn = document.getElementById('go');
+          btn.disabled = true;
+          try {
+            await AlAselApi.registerArtisan({
+              fullName: fd.get('fullName'),
+              domain: fd.get('domain'),
+              description: fd.get('description'),
+              phone: fd.get('phone'),
+              email: fd.get('email'),
+              password: fd.get('password'),
+              location: loc,
+              isMediounaVerified: true,
+              photoUrl: photoData || undefined,
+              cinRectoUrl: cinR,
+              cinVersoUrl: cinV,
+            });
+            location.href = 'artisan.html';
+          } catch (err) {
+            AlAselUi.toast(err.message || String(err), 'error');
+            btn.disabled = false;
+          }
+        };
+      })();
+    </script>
+  </body>
+</html>

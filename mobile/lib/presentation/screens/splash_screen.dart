@@ -5,11 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/auth/auth_notifier.dart';
-import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
-import '../widgets/ds/cultural_motifs_painter.dart';
-import '../widgets/ds/gradient_title.dart';
-import '../widgets/moroccan_pattern_background.dart';
+import '../widgets/islamic_splash_background.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -18,8 +15,31 @@ class SplashScreen extends ConsumerStatefulWidget {
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerProviderStateMixin {
   bool _scheduled = false;
+  late AnimationController _c;
+  late Animation<double> _logoScale;
+  late Animation<double> _logoOpacity;
+
+  @override
+  void initState() {
+    super.initState();
+    // Animation plus lente : le logo reste lisible (fondu + échelle).
+    _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 3400));
+    _logoScale = Tween<double>(begin: 0.22, end: 1.0).animate(
+      CurvedAnimation(parent: _c, curve: const Interval(0, 0.55, curve: Curves.easeOutCubic)),
+    );
+    _logoOpacity = Tween<double>(begin: 0, end: 1.0).animate(
+      CurvedAnimation(parent: _c, curve: const Interval(0, 0.48, curve: Curves.easeOut)),
+    );
+    _c.forward();
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
 
   /// Même instance de tween sur tous les rebuilds — évite de relancer l’animation à chaque [ref.watch].
   final Tween<double> _entranceTween = Tween<double>(begin: 0.0, end: 1.0);
@@ -27,7 +47,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Future<void> _navigateAfterSplash() async {
     final prefs = await SharedPreferences.getInstance();
     final longDone = prefs.getBool('splash_long_shown') ?? false;
-    final ms = longDone ? 900 : 1600;
+    // Première visite : laisser le temps d’apprécier le logo + fin d’animation.
+    final ms = longDone ? 1600 : 4600;
     await Future.delayed(Duration(milliseconds: ms));
     if (!longDone) await prefs.setBool('splash_long_shown', true);
     if (!mounted) return;
@@ -51,100 +72,61 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     }
 
     return Scaffold(
-      body: MoroccanPatternBackground(
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            const Positioned.fill(
-              child: CustomPaint(
-                painter: ZellijSplashRosettePainter(centerBiasY: 0.36),
-              ),
-            ),
-            Center(
-              child: TweenAnimationBuilder<double>(
-                key: const ValueKey<String>('splash_entrance'),
-                tween: _entranceTween,
-                duration: const Duration(milliseconds: 1200),
-                curve: Curves.easeOutCubic,
-                builder: (context, t, child) {
-                  return Opacity(
-                    opacity: t,
-                    child: Transform.scale(
-                      scale: 0.86 + 0.14 * t,
-                      child: child,
-                    ),
-                  );
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DecoratedBox(
+      body: IslamicSplashBackground(
+        child: AnimatedBuilder(
+          animation: _c,
+          builder: (context, _) {
+            return Center(
+              child: Transform.scale(
+                scale: _logoScale.value,
+                child: Opacity(
+                  opacity: _logoOpacity.value,
+                  child: Hero(
+                    tag: 'al_asel_logo',
+                    child: DecoratedBox(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xFFD4AF37).withValues(alpha: 0.65),
+                          width: 2.5,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.deepBlue.withValues(alpha: 0.18),
-                            blurRadius: 40,
-                            spreadRadius: 2,
+                            color: const Color(0xFF8B7355).withValues(alpha: 0.14),
+                            blurRadius: 42,
+                            spreadRadius: 0,
+                            offset: const Offset(0, 16),
                           ),
                           BoxShadow(
-                            color: AppColors.gold.withValues(alpha: 0.32),
-                            blurRadius: 36,
-                            spreadRadius: 4,
+                            color: const Color(0xFFFFD700).withValues(alpha: 0.22),
+                            blurRadius: 24,
+                            spreadRadius: -4,
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
                       child: ClipOval(
                         child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                AppColors.white.withValues(alpha: 0.95),
-                                AppColors.parchment.withValues(alpha: 0.88),
-                              ],
-                            ),
-                          ),
+                          color: AppColors.white,
                           padding: const EdgeInsets.all(14),
-                          child: Hero(
-                            tag: 'al_asel_logo',
-                            child: Image.asset(
-                              'assets/branding/logo_al_asel.png',
-                              width: 260,
-                              fit: BoxFit.contain,
-                              errorBuilder: (_, __, ___) => SvgPicture.asset(
-                                'assets/branding/logo.svg',
-                                width: 140,
-                                height: 140,
-                              ),
+                          child: Image.asset(
+                            'assets/branding/logo_al_asel.png',
+                            width: 260,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => SvgPicture.asset(
+                              'assets/branding/logo.svg',
+                              width: 130,
+                              height: 130,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 28),
-                    const AlAselGradientTitleOnLight(
-                      S.appName,
-                      fontSize: 34,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: 120,
-                      child: LinearProgressIndicator(
-                        minHeight: 3,
-                        borderRadius: BorderRadius.circular(8),
-                        backgroundColor: AppColors.sandDeep.withValues(alpha: 0.6),
-                        color: AppColors.gold,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../core/auth/auth_notifier.dart';
@@ -13,8 +14,9 @@ import '../../core/theme/form_spacing.dart';
 import '../../data/models/user_model.dart';
 import '../providers/app_providers.dart';
 import '../widgets/cin_upload_section.dart';
-import '../widgets/moroccan_app_bar.dart';
-import '../widgets/moroccan_pattern_background.dart';
+import '../widgets/moroccan_card.dart';
+import '../widgets/morocco_location_picker.dart';
+import '../widgets/moroccan_ui_kit.dart';
 
 /// Nombre de demandes clients (posts `client_request`) visibles pour les artisans.
 final _clientDemandsCountProvider = FutureProvider.autoDispose<int>((ref) async {
@@ -181,8 +183,9 @@ class _ArtisanProfileTabScreenState extends ConsumerState<ArtisanProfileTabScree
     final demandsAsync = ref.watch(_clientDemandsCountProvider);
 
     return Scaffold(
-      appBar: AlAselFlatAppBar(
-        title: S.artisanMyProfileTitle,
+      backgroundColor: Colors.transparent,
+      appBar: MoroccanTabAppBar.bar(
+        title: const Text(S.artisanMyProfileTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout_rounded),
@@ -193,74 +196,117 @@ class _ArtisanProfileTabScreenState extends ConsumerState<ArtisanProfileTabScree
           ),
         ],
       ),
-      body: MoroccanPatternBackground(
-        child: loading || u == null
-            ? const Center(child: CircularProgressIndicator())
-            : ListView(
+      body: loading || u == null
+          ? const Center(child: CircularProgressIndicator())
+          : ListView(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
                 children: [
-                  Center(
-                    child: AnimatedBuilder(
-                      animation: Listenable.merge([_firstName, _lastName]),
-                      builder: (context, _) {
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            _uploadingPhoto
-                                ? CircleAvatar(
-                                    radius: 52,
-                                    backgroundColor: AppColors.sandDeep,
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(24),
-                                      child: CircularProgressIndicator(strokeWidth: 2),
-                                    ),
-                                  )
-                                : _avatar(u, 52),
-                            Positioned(
-                              right: -4,
-                              bottom: -4,
-                              child: Material(
-                                color: AppColors.deepBlue,
-                                shape: const CircleBorder(),
-                                child: IconButton(
-                                  icon: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
-                                  onPressed: _uploadingPhoto ? null : _pickPhoto,
-                                  tooltip: S.changePhotoTooltip,
+                  MoroccanCard(
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.deepBlue,
+                                AppColors.zellijGlaze.withValues(alpha: 0.88),
+                              ],
+                            ),
+                            borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.storefront_rounded, color: Colors.white.withValues(alpha: 0.95), size: 20),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  S.artisanProfileHeroLine,
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 12.5,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white.withValues(alpha: 0.96),
+                                    height: 1.35,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
+                          child: Column(
+                            children: [
+                              Center(
+                                child: AnimatedBuilder(
+                                  animation: Listenable.merge([_firstName, _lastName]),
+                                  builder: (context, _) {
+                                    return Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        _uploadingPhoto
+                                            ? CircleAvatar(
+                                                radius: 52,
+                                                backgroundColor: AppColors.sandDeep,
+                                                child: const Padding(
+                                                  padding: EdgeInsets.all(24),
+                                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                                ),
+                                              )
+                                            : _avatar(u, 52),
+                                        Positioned(
+                                          right: -4,
+                                          bottom: -4,
+                                          child: Material(
+                                            color: AppColors.deepBlue,
+                                            shape: const CircleBorder(),
+                                            child: IconButton(
+                                              icon: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
+                                              onPressed: _uploadingPhoto ? null : _pickPhoto,
+                                              tooltip: S.changePhotoTooltip,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              AnimatedBuilder(
+                                animation: Listenable.merge([_firstName, _lastName]),
+                                builder: (context, _) {
+                                  final combined = '${_firstName.text.trim()} ${_lastName.text.trim()}'.trim();
+                                  return Text(
+                                    combined.isEmpty ? u.display : combined,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  followersAsync.when(
+                                    data: (n) => _StatChip(label: S.followersLabel, value: '$n'),
+                                    loading: () => _StatChip(label: S.followersLabel, value: '…'),
+                                    error: (_, __) => _StatChip(label: S.followersLabel, value: '—'),
+                                  ),
+                                  demandsAsync.when(
+                                    data: (n) => _StatChip(label: S.clientDemandsCountLabel, value: '$n'),
+                                    loading: () => _StatChip(label: S.clientDemandsCountLabel, value: '…'),
+                                    error: (_, __) => _StatChip(label: S.clientDemandsCountLabel, value: '—'),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  AnimatedBuilder(
-                    animation: Listenable.merge([_firstName, _lastName]),
-                    builder: (context, _) {
-                      final combined = '${_firstName.text.trim()} ${_lastName.text.trim()}'.trim();
-                      return Text(
-                        combined.isEmpty ? u.display : combined,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      followersAsync.when(
-                        data: (n) => _StatChip(label: S.followersLabel, value: '$n'),
-                        loading: () => _StatChip(label: S.followersLabel, value: '…'),
-                        error: (_, __) => _StatChip(label: S.followersLabel, value: '—'),
-                      ),
-                      demandsAsync.when(
-                        data: (n) => _StatChip(label: S.clientDemandsCountLabel, value: '$n'),
-                        loading: () => _StatChip(label: S.clientDemandsCountLabel, value: '…'),
-                        error: (_, __) => _StatChip(label: S.clientDemandsCountLabel, value: '—'),
-                      ),
-                    ],
                   ),
                   const SizedBox(height: 20),
                   const Text(S.coordinatesSection, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
@@ -282,14 +328,10 @@ class _ArtisanProfileTabScreenState extends ConsumerState<ArtisanProfileTabScree
                     ),
                   ),
                   FormSpacing.betweenInputs,
-                  TextField(
+                  MoroccoLocationTextField(
                     controller: _location,
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: const InputDecoration(
-                      labelText: S.fieldLocationRequired,
-                      hintText: S.fieldLocationHint,
-                      border: OutlineInputBorder(),
-                    ),
+                    labelText: S.fieldLocationRequired,
+                    hintText: S.fieldLocationHint,
                   ),
                   const SizedBox(height: 20),
                   const Text(S.identitySection, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
@@ -345,7 +387,6 @@ class _ArtisanProfileTabScreenState extends ConsumerState<ArtisanProfileTabScree
                   ),
                 ],
               ),
-      ),
     );
   }
 }

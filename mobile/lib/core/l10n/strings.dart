@@ -4,6 +4,9 @@ class S {
 
   static const String appName = 'الأصل';
 
+  /// Ligne sous le logo (splash) — effet « premium » sans répéter le nom de marque.
+  static const String splashTagline = 'مديونة · زليج · أصالة';
+
   // Accueil (home)
   static const String homeDecorLine = 'مرحبا — الأصل';
   static const String homeMainTitle = 'الأصل';
@@ -15,6 +18,8 @@ class S {
   static const String homeCardArtisanTitle = 'فضاء الحرفي';
   static const String homeCardArtisanSubtitle = 'الملف، معرض قبل/بعد';
   static const String mediouna = 'مديونة';
+  /// Porte emblématique — cadre connexion / storytelling.
+  static const String mediounaKasbahCaption = 'قصبة مديونة';
 
   // Shell / nav
   static const String messages = 'الرسائل';
@@ -146,6 +151,15 @@ class S {
   static const String fieldPhoneRequired = 'الهاتف (إلزامي)';
   static const String fieldLocationRequired = 'الموقع / الحي (إلزامي)';
   static const String fieldLocationHint = 'مثال: حي، دوار، نقطة قريبة منك';
+  static const String mapPickLocationTitle = 'اختر الموقع على الخريطة';
+  static const String mapUseMyPosition = 'موقعي الحالي';
+  static const String mapConfirmSelection = 'تأكيد المكان';
+  static const String mapOpenPickerHint = 'فتح الخريطة';
+  static const String mapManualBelow = 'حرّك الخريطة تحت الصليب، أو عدّل النص يدوياً.';
+  static const String mapPermissionDenied = 'لم يُسمح بالموقع — أدخل العنوان يدوياً أو فعّل الإذن من الإعدادات.';
+  static const String mapGeoError = 'تعذر قراءة العنوان من الخريطة. اكتب الموقع يدوياً.';
+  static const String mapWebHint =
+      'على الويب: أدخل موقعك في الحقل أدناه. على الهاتف تتوفر الخريطة مع تحديد تلقائي.';
   static const String errLocationRequired = 'أدخل موقعك (حي أو منطقة، حرفان على الأقل).';
   static const String locationSectionTitle = 'الموقع';
   static const String saveLocationButton = 'حفظ';
@@ -178,7 +192,15 @@ class S {
   static const String otherArtisansTitle = 'حرفيون آخرون';
   static const String noOtherServices = 'لا توجد خدمات أخرى منشورة.';
   static const String clientDemandsScreenTitle = 'طلبات الزبائن — مديونة';
+  /// Sous-titre carte héros (écran demandes artisan).
+  static const String artisanDemandsHeroSubtitle = 'تصفح حسب الصنعة وتواصل مع الزبائن في مديونة.';
   static const String noDemandsYet = 'لا طلبات بعد.';
+  /// Fil client — bandeau sous la recherche.
+  static const String clientFeedHeroLine = 'خدمات وحرف تقليدية من حرفيي الجهة';
+  /// Carte haut de page profil client.
+  static const String clientProfileHeroLine = 'طلباتك، متابعاتك، ومديونة في مكان واحد';
+  /// En-tête carte profil artisan.
+  static const String artisanProfileHeroLine = 'إدارة ملفك، خدماتك، وثقة الزبائن';
   static const String fabNew = 'جديد';
   static const String createFirstServicePost = 'أنشئ أول منشور خدمة';
 

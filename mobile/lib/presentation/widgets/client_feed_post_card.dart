@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/auth/auth_notifier.dart';
 import '../../core/l10n/strings.dart';
@@ -8,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/models/post_model.dart';
 import '../providers/app_providers.dart';
 import 'author_avatar.dart';
+import 'moroccan_card.dart';
 import 'post_media_preview.dart';
 import 'post_comments_sheet.dart';
 import 'post_likers_sheet.dart';
@@ -147,19 +149,18 @@ class _ClientFeedPostCardState extends ConsumerState<ClientFeedPostCard> {
     final isFav = me?.favoritePostIds.contains(widget.post.id) ?? false;
     final author = widget.post.authorDisplayName ?? S.fallbackArtisan;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        border: Border.all(color: AppColors.sandDeep),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
-            child: Row(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: MoroccanCard(
+        padding: EdgeInsets.zero,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
+                child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
@@ -180,7 +181,7 @@ class _ClientFeedPostCardState extends ConsumerState<ClientFeedPostCard> {
                     children: [
                       Text(
                         author,
-                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                        style: GoogleFonts.elMessiri(fontWeight: FontWeight.w700, fontSize: 14, color: AppColors.deepBlue),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -243,7 +244,10 @@ class _ClientFeedPostCardState extends ConsumerState<ClientFeedPostCard> {
             ),
           ),
           if (widget.post.media != null && widget.post.media!.isNotEmpty)
-            PostMediaPreview(media: widget.post.media!, aspectRatio: 1),
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(4)),
+              child: PostMediaPreview(media: widget.post.media!, aspectRatio: 1),
+            ),
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 6, 8, 4),
             child: LayoutBuilder(
@@ -338,14 +342,16 @@ class _ClientFeedPostCardState extends ConsumerState<ClientFeedPostCard> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-            child: Text(
-              widget.post.content,
-              style: const TextStyle(fontSize: 14, height: 1.35),
-            ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                child: Text(
+                  widget.post.content,
+                  style: GoogleFonts.cairo(fontSize: 14, height: 1.35, color: AppColors.ink),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

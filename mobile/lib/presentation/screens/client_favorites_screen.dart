@@ -21,7 +21,7 @@ class ClientFavoritesScreen extends ConsumerWidget {
     final async = ref.watch(_favoritesFeedProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.sand,
+      backgroundColor: Colors.transparent,
       body: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(_favoritesFeedProvider);
@@ -32,23 +32,11 @@ class ClientFavoritesScreen extends ConsumerWidget {
               SliverAppBar(
                 pinned: true,
                 floating: false,
-                elevation: 0,
-                scrolledUnderElevation: 0,
-                backgroundColor: Colors.transparent,
+                backgroundColor: AppColors.shellAppBarSurface,
                 surfaceTintColor: Colors.transparent,
-                foregroundColor: AppColors.parchment,
-                iconTheme: const IconThemeData(color: AppColors.parchment),
-                flexibleSpace: Container(
-                  decoration: const BoxDecoration(gradient: AppGradients.headerWarm),
-                ),
-                title: Text(
-                  S.favoritesTitle,
-                  style: GoogleFonts.elMessiri(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 18,
-                    color: AppColors.parchment,
-                  ),
-                ),
+                elevation: 0.5,
+                foregroundColor: AppColors.deepBlue,
+                title: Text(S.favoritesTitle, style: TextStyle(fontWeight: FontWeight.w800)),
               ),
               async.when(
                 data: (posts) {

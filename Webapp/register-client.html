@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar" class="site-layout">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>تسجيل الزبون — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/site-chrome.css" />
+  </head>
+  <body data-nav-active="auth" class="site-layout">
+    <div id="site-nav-root"></div>
+    <main class="site-body-flex page-scroll" style="max-width: 480px; margin: 0 auto; width: 100%; padding-top: 8px">
+      <header class="auth-page-header">
+        <span class="auth-page-eyebrow">انضم إلى المنصّة</span>
+        <h1 class="auth-page-title">تسجيل الزبون</h1>
+        <p style="margin: 8px 0 0; color: var(--muted); font-size: 0.92rem; font-weight: 600">أكمل بياناتك للبدء في مديونة</p>
+      </header>
+      <div class="card card--elevate" style="margin-top: 8px">
+        <div class="card-body">
+          <p class="field" style="text-align: center; color: var(--muted); font-size: 0.9rem">صورة الملف (اختياري)</p>
+          <div style="text-align: center">
+            <input type="file" id="photo" accept="image/*" hidden />
+            <button type="button" class="btn btn-outline" id="pickPhoto">اختيار صورة</button>
+            <div id="phPrev" style="margin-top: 8px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card card--elevate">
+        <div class="card-body">
+          <form id="f">
+            <div class="field">
+              <label>الاسم الأول</label>
+              <input name="firstName" required />
+            </div>
+            <div class="field">
+              <label>الاسم</label>
+              <input name="lastName" required />
+            </div>
+            <div class="field">
+              <label>الهاتف</label>
+              <input name="phone" type="tel" required />
+            </div>
+            <div class="field">
+              <label>البريد</label>
+              <input name="email" type="email" required />
+            </div>
+            <div class="field">
+              <label>كلمة المرور (6 أحرف على الأقل)</label>
+              <input name="password" type="password" minlength="6" required />
+            </div>
+            <div class="field">
+              <label>الموقع / الحي</label>
+              <textarea name="location" rows="2" required placeholder="مثال: حي، دوار…"></textarea>
+            </div>
+            <label class="checkbox-row">
+              <input type="checkbox" name="mediouna" id="mediouna" required />
+              <span>أؤكد أنني ساكن في مديونة</span>
+            </label>
+            <button type="submit" class="btn btn-primary btn-block" id="go">إنشاء الحساب</button>
+          </form>
+          <p style="text-align: center; margin-top: 16px"><a href="login.html">لديك حساب؟ تسجيل الدخول</a> · <a href="index.html">الموقع</a></p>
+        </div>
+      </div>
+    </main>
+    <div id="site-footer-root"></div>
+    <script src="js/site-chrome.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+      (function () {
+        var photoData = null;
+        document.getElementById('pickPhoto').onclick = function () {
+          document.getElementById('photo').click();
+        };
+        document.getElementById('photo').onchange = function (ev) {
+          var f = ev.target.files[0];
+          if (!f) return;
+          var r = new FileReader();
+          r.onload = function () {
+            photoData = r.result;
+            document.getElementById('phPrev').innerHTML =
+              '<img src="' + photoData + '" alt="" style="max-width:120px;border-radius:12px" />';
+          };
+          r.readAsDataURL(f);
+        };
+        document.getElementById('f').onsubmit = async function (e) {
+          e.preventDefault();
+          if (!document.getElementById('mediouna').checked) {
+            AlAselUi.toast('يجب تأكيد الإقامة في مديونة.', 'error');
+            return;
+          }
+          var fd = new FormData(e.target);
+          var loc = (fd.get('location') || '').toString().trim();
+          if (loc.length < 2) {
+            AlAselUi.toast('أدخل موقعك (حرفان على الأقل).', 'error');
+            return;
+          }
+          var btn = document.getElementById('go');
+          btn.disabled = true;
+          try {
+            await AlAselApi.registerClient({
+              firstName: fd.get('firstName'),
+              lastName: fd.get('lastName'),
+              phone: fd.get('phone'),
+              email: fd.get('email'),
+              password: fd.get('password'),
+              location: loc,
+              isMediounaVerified: true,
+              photoUrl: photoData || undefined,
+            });
+            location.href = 'client.html';
+          } catch (err) {
+            AlAselUi.toast(err.message || String(err), 'error');
+            btn.disabled = false;
+          }
+        };
+      })();
+    </script>
+  </body>
+</html>

@@ -6,8 +6,7 @@ import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/post_model.dart';
 import '../providers/app_providers.dart';
-import '../widgets/moroccan_app_bar.dart';
-import '../widgets/moroccan_pattern_background.dart';
+import '../widgets/moroccan_internal_dashboard.dart';
 import '../widgets/post_card.dart';
 
 final _demandsFeedProvider = FutureProvider.autoDispose.family<List<PostModel>, String>((ref, catKey) async {
@@ -35,55 +34,102 @@ class _ArtisanDemandsScreenState extends ConsumerState<ArtisanDemandsScreen> {
     final async = ref.watch(_demandsFeedProvider(catKey));
 
     return Scaffold(
-      appBar: const AlAselFlatAppBar(title: S.clientDemandsScreenTitle),
-      body: MoroccanPatternBackground(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: 46,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                children: [
-                  for (final c in _cats)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: FilterChip(
-                        label: Text(S.categoryLabel(c), style: const TextStyle(fontSize: 13)),
-                        selected: catKey == c,
-                        onSelected: (_) => setState(() => catKey = c),
-                        selectedColor: AppColors.terracotta.withValues(alpha: 0.2),
-                        checkmarkColor: AppColors.deepBlue,
-                      ),
-                    ),
-                ],
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        bottom: false,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(_demandsFeedProvider(catKey));
+            await ref.read(_demandsFeedProvider(catKey).future);
+          },
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              MoroccanDashboardHeroSliver(
+                title: S.clientDemandsScreenTitle,
+                subtitle: S.artisanDemandsHeroSubtitle,
+                icon: Icons.handshake_rounded,
               ),
-            ),
-            Expanded(
-              child: async.when(
+              SliverToBoxAdapter(
+                child: MoroccanChipsPanel(
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    children: [
+                      for (final c in _cats)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: FilterChip(
+                            label: Text(S.categoryLabel(c), style: const TextStyle(fontSize: 13)),
+                            selected: catKey == c,
+                            onSelected: (_) => setState(() => catKey = c),
+                            selectedColor: AppColors.terracotta.withValues(alpha: 0.22),
+                            checkmarkColor: AppColors.deepBlue,
+                            side: BorderSide(color: AppColors.deepBlue.withValues(alpha: 0.15)),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              ...async.when(
                 data: (posts) {
                   if (posts.isEmpty) {
-                    return const Center(child: Text(S.noDemandsYet));
+                    return [
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: MoroccanEmptyState(
+                          title: S.noDemandsYet,
+                          icon: Icons.inbox_outlined,
+                        ),
+                      ),
+                    ];
                   }
-                  return RefreshIndicator(
-                    onRefresh: () async => ref.invalidate(_demandsFeedProvider(catKey)),
-                    child: ListView.builder(
-                      itemCount: posts.length,
-                      itemBuilder: (_, i) => PostCard(
-                        post: posts[i],
-                        showChat: true,
-                        showFollow: false,
-                        onEngagementChanged: () => ref.invalidate(_demandsFeedProvider(catKey)),
+                  return [
+                    SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(10, 4, 10, 28),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, i) => PostCard(
+                            post: posts[i],
+                            showChat: true,
+                            showFollow: false,
+                            onEngagementChanged: () => ref.invalidate(_demandsFeedProvider(catKey)),
+                          ),
+                          childCount: posts.length,
+                        ),
                       ),
                     ),
-                  );
+                  ];
                 },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('$e', style: const TextStyle(color: AppColors.muted))),
+                loading: () => [
+                  const SliverFillRemaining(
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(48),
+                        child: CircularProgressIndicator(color: AppColors.deepBlue),
+                      ),
+                    ),
+                  ),
+                ],
+                error: (e, _) => [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Text(
+                          '$e',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: AppColors.muted),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -7,8 +7,8 @@ import '../../core/l10n/strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/form_spacing.dart';
 import '../providers/app_providers.dart';
-import '../widgets/moroccan_app_bar.dart';
-import '../widgets/moroccan_pattern_background.dart';
+import '../widgets/moroccan_shell_background.dart';
+import '../widgets/moroccan_ui_kit.dart';
 
 class EmailVerificationScreen extends ConsumerStatefulWidget {
   const EmailVerificationScreen({super.key});
@@ -69,8 +69,9 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
   Widget build(BuildContext context) {
     final u = ref.watch(authNotifierProvider).user;
     return Scaffold(
-      appBar: const AlAselFlatAppBar(title: S.verifyEmailTitle),
-      body: MoroccanPatternBackground(
+      backgroundColor: Colors.transparent,
+      appBar: MoroccanTabAppBar.bar(title: Text(S.verifyEmailTitle)),
+      body: MoroccanShellBackground(
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [

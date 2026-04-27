@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>إبلاغ — الأصل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/app-shell.css" />
+  </head>
+  <body class="app-page">
+    <div class="top-bar">
+      <button type="button" class="icon-btn" id="back">←</button>
+      <h1>إبلاغ عن مشكلة</h1>
+      <span></span>
+    </div>
+    <div class="page-scroll" style="max-width: 480px">
+      <div class="card">
+        <div class="card-body">
+          <div class="field">
+            <label>التصنيف (اختياري)</label>
+            <input type="text" id="cat" />
+          </div>
+          <div class="field">
+            <label>التفاصيل</label>
+            <textarea id="txt" rows="5" required></textarea>
+          </div>
+          <button type="button" class="btn btn-primary btn-block" id="go">إرسال</button>
+        </div>
+      </div>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/static-app.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+      (function () {
+        if (!AlAselConfig.getToken()) location.href = 'login.html';
+        document.getElementById('back').onclick = function () {
+          history.back();
+        };
+        document.getElementById('go').onclick = async function () {
+          var t = document.getElementById('txt').value.trim();
+          if (!t) return;
+          try {
+            await AlAselApi.submitReport(t, document.getElementById('cat').value.trim());
+            AlAselUi.toast('تم إرسال البلاغ. شكراً.');
+            history.back();
+          } catch (e) {
+            AlAselUi.toast(e.message || String(e), 'error');
+          }
+        };
+      })();
+    </script>
+  </body>
+</html>

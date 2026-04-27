@@ -15,6 +15,8 @@ import '../../data/models/user_model.dart';
 import '../providers/app_providers.dart';
 import '../widgets/author_avatar.dart';
 import '../widgets/cin_upload_section.dart';
+import '../widgets/moroccan_card.dart';
+import '../widgets/morocco_location_picker.dart';
 
 final _myDemandsProvider = FutureProvider.autoDispose<List<PostModel>>((ref) async {
   ref.watch(feedSocketTickProvider);
@@ -33,14 +35,28 @@ Future<void> _editClientLocation(BuildContext context, WidgetRef ref, String? cu
     context: context,
     builder: (ctx) => AlertDialog(
       title: const Text(S.locationSectionTitle),
-      content: TextField(
-        controller: c,
-        autofocus: true,
-        maxLines: 2,
-        decoration: const InputDecoration(
-          labelText: S.fieldLocationRequired,
-          hintText: S.fieldLocationHint,
-        ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: c,
+            autofocus: false,
+            maxLines: 2,
+            decoration: const InputDecoration(
+              labelText: S.fieldLocationRequired,
+              hintText: S.fieldLocationHint,
+            ),
+          ),
+          const SizedBox(height: 10),
+          OutlinedButton.icon(
+            onPressed: () async {
+              final v = await showMoroccoLocationPicker(ctx, initialText: c.text);
+              if (v != null && v.trim().length >= 2) c.text = v.trim();
+            },
+            icon: const Icon(Icons.map_outlined),
+            label: Text(S.mapOpenPickerHint, style: Theme.of(ctx).textTheme.labelLarge),
+          ),
+        ],
       ),
       actions: [
         TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text(S.cancel)),
@@ -87,30 +103,18 @@ class ClientProfileScreen extends ConsumerWidget {
     final followingAsync = ref.watch(_followingCountProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.sand,
+      backgroundColor: Colors.transparent,
       body: u == null
           ? const Center(child: Text(S.notLoggedIn))
           : CustomScrollView(
               slivers: [
                 SliverAppBar(
                   pinned: true,
-                  elevation: 0,
-                  scrolledUnderElevation: 0,
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: AppColors.shellAppBarSurface,
                   surfaceTintColor: Colors.transparent,
-                  foregroundColor: AppColors.parchment,
-                  iconTheme: const IconThemeData(color: AppColors.parchment),
-                  flexibleSpace: Container(
-                    decoration: const BoxDecoration(gradient: AppGradients.headerWarm),
-                  ),
-                  title: Text(
-                    _handle(u),
-                    style: GoogleFonts.elMessiri(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                      color: AppColors.parchment,
-                    ),
-                  ),
+                  elevation: 0.5,
+                  foregroundColor: AppColors.deepBlue,
+                  title: Text(_handle(u), style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.ink)),
                   centerTitle: true,
                   actions: [
                     IconButton(
@@ -126,88 +130,128 @@ class ClientProfileScreen extends ConsumerWidget {
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            _profileAvatar(u, 44),
-                            const SizedBox(width: 28),
-                            Expanded(
-                              child: followingAsync.when(
-                                data: (n) => demandsAsync.when(
-                                  data: (d) => Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      _statColumn(context, '${d.length}', S.statDemands),
-                                      _statColumn(context, '$n', S.statFollows),
-                                    ],
-                                  ),
-                                  loading: () => const SizedBox(height: 40),
-                                  error: (_, __) => const SizedBox.shrink(),
-                                ),
-                                loading: () => const SizedBox(height: 40),
-                                error: (_, __) => const SizedBox.shrink(),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          _fullName(u),
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(u.email, style: const TextStyle(color: AppColors.muted, fontSize: 13)),
-                        const SizedBox(height: 10),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.place_outlined, size: 20, color: AppColors.deepBlue.withValues(alpha: 0.75)),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    S.locationSectionTitle,
-                                    style: TextStyle(fontSize: 12, color: AppColors.muted.withValues(alpha: 0.95)),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    (u.location != null && u.location!.trim().isNotEmpty) ? u.location!.trim() : '—',
-                                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                                  ),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                    child: MoroccanCard(
+                      padding: EdgeInsets.zero,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.deepBlue,
+                                  AppColors.zellijGlaze.withValues(alpha: 0.88),
                                 ],
                               ),
+                              borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
                             ),
-                            IconButton(
-                              icon: const Icon(Icons.edit_outlined, size: 20),
-                              tooltip: S.saveLocationButton,
-                              onPressed: () => _editClientLocation(context, ref, u.location),
+                            child: Row(
+                              children: [
+                                Icon(Icons.person_rounded, color: Colors.white.withValues(alpha: 0.95), size: 20),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    S.clientProfileHeroLine,
+                                    style: GoogleFonts.cairo(
+                                      fontSize: 12.5,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white.withValues(alpha: 0.96),
+                                      height: 1.35,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        if (u.isMediounaVerified == true) ...[
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Icons.verified_outlined, size: 16, color: AppColors.deepBlue.withValues(alpha: 0.8)),
-                              const SizedBox(width: 4),
-                              Text(S.mediouna, style: TextStyle(fontSize: 13, color: AppColors.deepBlue.withValues(alpha: 0.85))),
-                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(18, 16, 18, 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    _profileAvatar(u, 48),
+                                    const SizedBox(width: 20),
+                                    Expanded(
+                                      child: followingAsync.when(
+                                        data: (n) => demandsAsync.when(
+                                          data: (d) => Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              _statColumn(context, '${d.length}', S.statDemands),
+                                              _statColumn(context, '$n', S.statFollows),
+                                            ],
+                                          ),
+                                          loading: () => const SizedBox(height: 40),
+                                          error: (_, __) => const SizedBox.shrink(),
+                                        ),
+                                        loading: () => const SizedBox(height: 40),
+                                        error: (_, __) => const SizedBox.shrink(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 14),
+                                Text(
+                                  _fullName(u),
+                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(u.email, style: const TextStyle(color: AppColors.muted, fontSize: 13)),
+                                const SizedBox(height: 12),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.place_outlined, size: 20, color: AppColors.deepBlue.withValues(alpha: 0.75)),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            S.locationSectionTitle,
+                                            style: TextStyle(fontSize: 12, color: AppColors.muted.withValues(alpha: 0.95)),
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            (u.location != null && u.location!.trim().isNotEmpty) ? u.location!.trim() : '—',
+                                            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.edit_outlined, size: 20),
+                                      tooltip: S.saveLocationButton,
+                                      onPressed: () => _editClientLocation(context, ref, u.location),
+                                    ),
+                                  ],
+                                ),
+                                if (u.isMediounaVerified == true) ...[
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.verified_outlined, size: 16, color: AppColors.deepBlue.withValues(alpha: 0.8)),
+                                      const SizedBox(width: 4),
+                                      Text(S.mediouna, style: TextStyle(fontSize: 13, color: AppColors.deepBlue.withValues(alpha: 0.85))),
+                                    ],
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                          const Divider(height: 1),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(18, 12, 18, 8),
+                            child: Text(
+                              S.myDemandsSection,
+                              style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                            ),
                           ),
                         ],
-                        const SizedBox(height: 20),
-                        const Divider(height: 1),
-                        const SizedBox(height: 12),
-                        Text(
-                          S.myDemandsSection,
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        const SizedBox(height: 8),
-                      ],
+                      ),
                     ),
                   ),
                 ),
