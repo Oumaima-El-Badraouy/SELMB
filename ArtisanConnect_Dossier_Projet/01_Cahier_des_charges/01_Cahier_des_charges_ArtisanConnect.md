@@ -206,7 +206,7 @@ flowchart LR
 ```
 
 ## 8. Planning prévisionnel
-L'équipe doit construire son propre planning dans `../02_Gestion_de_projet/02_Diagramme_Gantt.mmd` et son PERT dans `../02_Gestion_de_projet/03_Diagramme_PERT.md`. Ces fichiers fournissent une méthode et des gabarits, pas une solution prédéfinie. Les documents, la préparation de soutenance et certaines maquettes peuvent généralement être étudiés comme activités parallélisables; l'équipe doit justifier les dépendances réellement retenues.
+Commencez par `../02_Gestion_de_projet/01_Tableau_activites_Gantt_PERT.md` : il fournit les événements, durées estimées et étapes précédentes. L'équipe construit ensuite son propre planning dans `02_Diagramme_Gantt.mmd` et son PERT dans `03_Diagramme_PERT.md`. Ces fichiers fournissent une méthode et des gabarits, pas une solution prédéfinie. Les documents, la préparation de soutenance et certaines maquettes peuvent généralement être étudiés comme activités parallélisables; l'équipe doit justifier les dépendances réellement retenues.
 
 ## 9. Critères de validation globaux
 - Les scénarios F-CLI-01 à F-CLI-07, F-ART-01 à F-ART-04 et F-ADM-01 à F-ADM-04 sont démontrés avec données de test.

@@ -248,7 +248,7 @@ flowchart LR
 ```
 
 ## 8. Planning prévisionnel
-L'équipe doit construire son propre planning dans `../02_Gestion_de_projet/02_Diagramme_Gantt.mmd` et son PERT dans `../02_Gestion_de_projet/03_Diagramme_PERT.md`. Ces fichiers fournissent une méthode et des gabarits, pas une solution prédéfinie. Les documents, la préparation de soutenance et certaines maquettes peuvent généralement être étudiés comme activités parallélisables; l'équipe doit justifier les dépendances réellement retenues.
+Commencez par `../02_Gestion_de_projet/01_Tableau_activites_Gantt_PERT.md` : il fournit les événements, durées estimées et étapes précédentes. L'équipe construit ensuite son propre planning dans `02_Diagramme_Gantt.mmd` et son PERT dans `03_Diagramme_PERT.md`. Ces fichiers fournissent une méthode et des gabarits, pas une solution prédéfinie. Les documents, la préparation de soutenance et certaines maquettes peuvent généralement être étudiés comme activités parallélisables; l'équipe doit justifier les dépendances réellement retenues.
 
 ## 9. Critères de validation globaux
 - Les scénarios F-CLI-01 à F-CLI-07, F-ART-01 à F-ART-04 et F-ADM-01 à F-ADM-04 sont démontrés avec données de test.
@@ -263,7 +263,7 @@ Le MVP privilégie un parcours fiable plutôt qu'une large couverture fonctionne
 
 gantt = """\
 %% GABARIT PÉDAGOGIQUE — À COMPLÉTER PAR L'ÉQUIPE
-%% Objectif : construire un planning de 8 semaines à partir du backlog Trello.
+%% Objectif : construire un planning de 8 semaines à partir de `01_Tableau_activites_Gantt_PERT.md`.
 %% 1. Choisir une date de départ avec l'encadrant.
 %% 2. Estimer chaque tâche en jours ouvrés et justifier l'estimation.
 %% 3. Identifier les dépendances réellement bloquantes.
@@ -475,7 +475,7 @@ Ce dossier pédagogique accompagne un projet de Génie Logiciel sur une marketpl
 ## Ordre de lecture recommandé
 1. `01_Cahier_des_charges/01_Cahier_des_charges_ArtisanConnect.md` — besoin, périmètre, règles métier, UML et architecture.
 2. `07_Trello_Import/Guide_import_Trello.md` puis `Trello_ArtisanConnect.csv` — organisation opérationnelle.
-3. `02_Gestion_de_projet/02_Diagramme_Gantt.mmd` et `03_Diagramme_PERT.md` — gabarits et méthode pour construire le calendrier, les dépendances et le chemin critique.
+3. `02_Gestion_de_projet/01_Tableau_activites_Gantt_PERT.md` — activités, durées estimées et prédécesseurs; puis `02_Diagramme_Gantt.mmd` et `03_Diagramme_PERT.md` — gabarits et méthode pour construire les diagrammes.
 4. `04_Rapport/04_Rapport_ArtisanConnect.md` — trame académique à compléter après réalisation.
 5. `05_Presentation/05_Presentation_ArtisanConnect.pptx` — support de soutenance.
 6. `06_Guide_etudiants/06_Guide_etudiants_ArtisanConnect.md` — guide de démarrage.
@@ -522,10 +522,63 @@ trello_tasks = [
 ("Phase 10 : Présentation et livraison", "Répéter et livrer les livrables", "Chef de projet + équipe", "Haute", "1 j", "Slides", ["Répartition parole", "Vérifier liens", "Exporter", "Déposer"], "Livrables complets déposés."),
 ]
 
+# Shared planning input: it is intentionally a task matrix, not a completed Gantt or PERT.
+# The team must validate or adjust estimates and dependencies with the supervisor.
+predecessors = [
+    "—", "T01", "T02", "T03", "T04", "T05", "T03", "T07", "T08", "T08",
+    "T02", "T11", "T12", "T10", "T14", "T15", "T16", "T15, T16",
+    "T10, T12", "T19, T15, T16", "T20, T17", "T20, T18", "T20, T21, T22",
+    "T17, T20, T22", "T24", "T17", "T25", "T25, T26", "T27, T28", "T29",
+    "T25", "T29, T31", "T32",
+]
+assert len(predecessors) == len(trello_tasks)
+planning_rows = []
+for index, (task, predecessor) in enumerate(zip(trello_tasks, predecessors), start=1):
+    phase, activity, owner, priority, duration, _deps, _checks, acceptance = task
+    planning_rows.append({
+        "ID": f"T{index:02d}",
+        "Phase": phase,
+        "Événement / activité": activity,
+        "Durée estimée": duration,
+        "Étape(s) précédente(s)": predecessor,
+        "Responsable": owner,
+        "Livrable / critère": acceptance,
+    })
+
+planning_intro = """\
+# Tableau d'activités pour construire le Gantt et le PERT
+> **Usage pédagogique :** ce tableau est l'entrée de travail de l'équipe. Il propose des activités, des estimations initiales et des prédécesseurs logiques; il ne constitue pas un Gantt ou un PERT terminé. Avant de dessiner les diagrammes, l'équipe doit valider/adapter les durées et dépendances avec l'encadrant.
+
+## Comment l'utiliser
+1. Gardez l'identifiant `Txx` : il permet de relier une ligne du tableau aux cartes Trello.
+2. Confirmez qu'une étape précédente est réellement bloquante. Retirez les liens seulement « pratiques ».
+3. Pour le **Gantt**, choisissez la date de départ et placez chaque activité après tous ses prédécesseurs.
+4. Pour le **PERT**, reportez ID, durée et prédécesseurs; calculez ES, EF, LS, LF et la marge dans le gabarit PERT.
+5. Les durées sont des estimations de départ, à adapter à la taille réelle de l'équipe. Une activité marquée `—` n'a pas de prédécesseur.
+
+## Activités proposées
+| ID | Phase | Événement / activité | Durée estimée | Étape(s) précédente(s) | Responsable |
+|---|---|---|---:|---|---|
+"""
+planning_table = "\n".join(
+    f"| {row['ID']} | {row['Phase']} | {row['Événement / activité']} | {row['Durée estimée']} | {row['Étape(s) précédente(s)']} | {row['Responsable']} |"
+    for row in planning_rows
+)
+planning_outro = """\
+
+## Vérification avant de créer les diagrammes
+- Toute activité non initiale possède un ou plusieurs IDs précédents existants.
+- Les dépendances ne forment pas de boucle.
+- Les activités en parallèle ont des prédécesseurs différents ou compatibles.
+- La somme n'est pas la durée du projet : seuls les enchaînements dépendants déterminent la durée et le chemin critique.
+"""
+planning_markdown = planning_intro + planning_table + planning_outro
+
 def write(path: Path, content: str):
     path.write_text(content.rstrip() + "\n", encoding="utf-8")
 
 write(CDC / "01_Cahier_des_charges_ArtisanConnect.md", cahier)
+write(PROJECT / "01_Tableau_activites_Gantt_PERT.md", planning_markdown)
 write(PROJECT / "02_Diagramme_Gantt.mmd", gantt)
 write(PROJECT / "03_Diagramme_PERT.md", pert)
 write(REPORT / "04_Rapport_ArtisanConnect.md", report)
@@ -533,6 +586,11 @@ write(GUIDE / "06_Guide_etudiants_ArtisanConnect.md", guide)
 write(ROOT / "README.md", readme)
 write(UML / "Diagrammes_UML_ArtisanConnect.md", "# Diagrammes UML — ArtisanConnect\n\nLes diagrammes de cas d'utilisation, classes et séquences sont inclus dans le cahier des charges afin de garder les règles métier et leur représentation synchronisées.\n\n" + use_case + "\n" + classes + "\n" + sequences)
 (PROJECT / "02_Diagramme_Gantt.png").unlink(missing_ok=True)
+
+with (PROJECT / "01_Tableau_activites_Gantt_PERT.csv").open("w", newline="", encoding="utf-8-sig") as f:
+    writer = csv.DictWriter(f, fieldnames=list(planning_rows[0].keys()))
+    writer.writeheader()
+    writer.writerows(planning_rows)
 
 with (TRELLO / "Trello_ArtisanConnect.csv").open("w", newline="", encoding="utf-8-sig") as f:
     fields = ["List", "Name", "Description", "Labels", "Members", "Checklist", "Due"]
