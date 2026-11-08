@@ -15,7 +15,6 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak
-from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path("ArtisanConnect_Dossier_Projet")
 CDC = ROOT / "01_Cahier_des_charges"
@@ -28,9 +27,8 @@ TRELLO = ROOT / "07_Trello_Import"
 for directory in (CDC, PROJECT, UML, REPORT, PRESENTATION, GUIDE, TRELLO):
     directory.mkdir(parents=True, exist_ok=True)
 
-START = "09/11/2026"
 ASSUMPTIONS = """\
-> **Hypothèses de cadrage.** Le planning démarre le 9 novembre 2026, dure huit semaines de cinq jours ouvrés et suppose une équipe de quatre étudiants : chef·fe de projet/analyste, concepteur·rice UX, développeur·se back-end et développeur·se front-end/intégrateur·rice. Le paiement en ligne, la livraison et les notifications externes ne sont pas inclus dans le MVP : une commande est une demande confirmée par l'artisan. Les choix techniques proposés sont à valider avec l'encadrant.
+> **Hypothèses de cadrage.** L'équipe doit proposer un planning de huit semaines de cinq jours ouvrés et suppose une équipe de quatre étudiants : chef·fe de projet/analyste, concepteur·rice UX, développeur·se back-end et développeur·se front-end/intégrateur·rice. Le paiement en ligne, la livraison et les notifications externes ne sont pas inclus dans le MVP : une commande est une demande confirmée par l'artisan. Les choix techniques proposés sont à valider avec l'encadrant.
 """
 
 use_case = """\
@@ -250,7 +248,7 @@ flowchart LR
 ```
 
 ## 8. Planning prévisionnel
-Le planning de huit semaines, les dépendances et les jalons sont détaillés dans `../02_Gestion_de_projet/02_Diagramme_Gantt.mmd` et `../02_Gestion_de_projet/03_Diagramme_PERT.md`. Les documents, la préparation de soutenance et certaines maquettes sont parallélisables; intégration et recette restent séquentielles après les noyaux front-end/back-end.
+L'équipe doit construire son propre planning dans `../02_Gestion_de_projet/02_Diagramme_Gantt.mmd` et son PERT dans `../02_Gestion_de_projet/03_Diagramme_PERT.md`. Ces fichiers fournissent une méthode et des gabarits, pas une solution prédéfinie. Les documents, la préparation de soutenance et certaines maquettes peuvent généralement être étudiés comme activités parallélisables; l'équipe doit justifier les dépendances réellement retenues.
 
 ## 9. Critères de validation globaux
 - Les scénarios F-CLI-01 à F-CLI-07, F-ART-01 à F-ART-04 et F-ADM-01 à F-ADM-04 sont démontrés avec données de test.
@@ -264,70 +262,82 @@ Le MVP privilégie un parcours fiable plutôt qu'une large couverture fonctionne
 """
 
 gantt = """\
+%% GABARIT PÉDAGOGIQUE — À COMPLÉTER PAR L'ÉQUIPE
+%% Objectif : construire un planning de 8 semaines à partir du backlog Trello.
+%% 1. Choisir une date de départ avec l'encadrant.
+%% 2. Estimer chaque tâche en jours ouvrés et justifier l'estimation.
+%% 3. Identifier les dépendances réellement bloquantes.
+%% 4. Ajouter les jalons; marquer `crit` seulement après le calcul PERT.
+%% Syntaxe : Tâche :id, YYYY-MM-DD, 3d | Dépendance :id2, after id, 2d
 gantt
-    title ArtisanConnect — planning prévisionnel (8 semaines, 9 nov. 2026 → 3 janv. 2027)
+    title ArtisanConnect — Gantt à compléter par l'équipe
     dateFormat  YYYY-MM-DD
     axisFormat  %d/%m
     excludes    weekends
-    section Phase 1 — Analyse
-    A Cadrage et kickoff                         :crit, a1, 2026-11-09, 2d
-    B Entretiens, besoins et personas            :crit, a2, after a1, 4d
-    C Cahier des charges et validation            :crit, a3, after a2, 3d
-    Jalon : besoins validés                       :milestone, m1, after a3, 0d
+    section Phase 1 — Analyse et cahier des charges
+    %% [À compléter]
     section Phase 2 — Planification
-    D Backlog, estimations et risques             :crit, a4, after a3, 2d
-    section Phase 3 — UML / architecture
-    E Modèle de données et UML                    :crit, a5, after a4, 5d
-    F Architecture, API et environnement          :crit, a6, after a5, 3d
-    section Phase 4 — UI/UX
-    G Wireframes et design system                 :g1, after a3, 4d
-    section Phase 5 — Backend
-    H Authentification, catalogue, stock, commandes :crit, h1, after a6, 8d
-    section Phase 6 — Frontend
-    I Parcours client, artisan et admin           :i1, after g1, 8d
+    %% [À compléter]
+    section Phase 3 — Conception UML
+    %% [À compléter]
+    section Phase 4 — Conception UI/UX
+    %% [À compléter]
+    section Phase 5 — Développement Backend
+    %% [À compléter]
+    section Phase 6 — Développement Frontend
+    %% [À compléter]
     section Phase 7 — Intégration
-    J Intégration API, responsive et données démo :crit, j1, after h1, 4d
-    Jalon : MVP intégré                           :milestone, m2, after j1, 0d
+    %% [À compléter]
     section Phase 8 — Tests
-    K Tests unitaires, intégration et recette     :crit, k1, after j1, 4d
+    %% [À compléter]
     section Phase 9 — Documentation
-    L Documentation technique et utilisateur      :crit, l1, after k1, 3d
-    section Phase 10 — Livraison
-    M Soutenance, démonstration et livraison      :crit, m3, after l1, 2d
-    Jalon : livraison                             :milestone, m4, after m3, 0d
+    %% [À compléter]
+    section Phase 10 — Présentation et livraison
+    %% [À compléter]
 """
 
 pert = """\
-# Diagramme PERT — ArtisanConnect
-## Données de calcul
-Calendrier : 5 jours ouvrés/semaine, démarrage le 09/11/2026. Les durées sont des estimations pédagogiques, pas des charges constatées. Les activités critiques sont **A → B → C → D → E → F → H → J → K → L → M**, pour une durée totale de **40 jours ouvrés**, soit huit semaines.
+# Guide et gabarit PERT — ArtisanConnect
+> Ce document ne contient volontairement **ni durées, ni chemin critique, ni calcul déjà réalisé**. L'équipe doit les produire à partir du backlog et faire valider ses hypothèses.
 
+## 1. Ce qu'il faut préparer
+1. Reprendre les tâches principales du backlog Trello, sans forcément recopier chaque sous-tâche.
+2. Donner un identifiant court à chaque activité (A, B, C…).
+3. Estimer les durées en jours ouvrés avec l'équipe.
+4. Noter les prédécesseurs indispensables : ceux qui bloquent vraiment le démarrage.
+5. Faire le passage avant, puis le passage arrière. Une marge nulle indique une activité critique.
+
+## 2. Calculs à appliquer
+- **Passage avant** : `ES = max(EF des prédécesseurs)`; `EF = ES + durée`. Sans prédécesseur, `ES = 0`.
+- **Durée du projet** : maximum des `EF` des activités finales.
+- **Passage arrière** : activité finale : `LF = durée totale`, `LS = LF − durée`. Sinon : `LF = min(LS des successeurs)`.
+- **Marge totale** : `LS − ES` (ou `LF − EF`). Marge égale à zéro = activité du chemin critique.
+
+## 3. Tableau de calcul à compléter
+| Act. | Activité | Durée | Prédécesseur(s) | ES | EF | LS | LF | Marge |
+|---|---|---:|---|---:|---:|---:|---:|---:|
+| A | [ex. cadrage — à préciser] | [ ] | — | [ ] | [ ] | [ ] | [ ] | [ ] |
+| B | [à compléter] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| C | [à compléter] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| … | [ajouter toutes les activités retenues] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+
+## 4. Gabarit Mermaid
+Remplacez les crochets par vos activités et ajoutez/supprimez les nœuds. N'appliquez le style `critical` qu'après les calculs.
 ```mermaid
 flowchart LR
-  A["A Cadrage<br/>2j"] --> B["B Besoins<br/>4j"] --> C["C Cahier<br/>3j"] --> D["D Planification<br/>2j"] --> E["E UML / données<br/>5j"] --> F["F Architecture<br/>3j"] --> H["H Backend<br/>8j"] --> J["J Intégration<br/>4j"] --> K["K Tests<br/>5j"] --> L["L Documentation<br/>3j"] --> M["M Livraison<br/>2j"]
-  C --> G["G UI/UX<br/>4j"] --> I["I Frontend<br/>8j"] --> J
-  classDef critical fill:#a6403a,color:#fff,stroke:#6d211d,stroke-width:3px;
-  class A,B,C,D,E,F,H,J,K,L,M critical;
+  A["A — [activité]<br/>[durée]"] --> B["B — [activité]<br/>[durée]"]
+  B --> C["C — [activité]<br/>[durée]"]
+  %% Ajoutez les branches parallèles et convergences réelles.
+  %% classDef critical fill:#a6403a,color:#fff;
+  %% class [identifiants à marge nulle] critical;
 ```
 
-| Act. | Activité | Durée | Prédécesseur | ES | EF | LS | LF | Marge |
-|---|---|---:|---|---:|---:|---:|---:|---:|
-| A | Cadrage et kickoff | 2 | — | 0 | 2 | 0 | 2 | 0 |
-| B | Besoins/personas | 4 | A | 2 | 6 | 2 | 6 | 0 |
-| C | Cahier des charges | 3 | B | 6 | 9 | 6 | 9 | 0 |
-| D | Backlog/planification | 2 | C | 9 | 11 | 9 | 11 | 0 |
-| E | UML et modèle de données | 5 | D | 11 | 16 | 11 | 16 | 0 |
-| F | Architecture/API/environnement | 3 | E | 16 | 19 | 16 | 19 | 0 |
-| G | Wireframes/design system | 4 | C | 9 | 13 | 15 | 19 | 6 |
-| H | Noyau back-end | 8 | F | 19 | 27 | 19 | 27 | 0 |
-| I | Parcours front-end | 8 | G | 13 | 21 | 19 | 27 | 6 |
-| J | Intégration | 4 | H, I | 27 | 31 | 27 | 31 | 0 |
-| K | Tests et recette | 4 | J | 31 | 35 | 31 | 35 | 0 |
-| L | Documentation | 3 | K | 35 | 38 | 35 | 38 | 0 |
-| M | Livraison/soutenance | 2 | L | 38 | 40 | 38 | 40 | 0 |
-
-### Vérification mathématique
-Passage avant : `EF = ES + durée`; ainsi EF(M) = 38 + 2 = **40**. Passage arrière depuis LF(M)=40 : `LS = LF − durée`; pour chaque prédécesseur, `LF = min(LS des successeurs)`. La marge `LS − ES` est nulle pour A, B, C, D, E, F, H, J, K, L et M : leur chaîne est donc critique. G et I ont chacun 6 jours de marge; tout retard au-delà de cette marge retarde J et la livraison.
+## 5. Contrôle avant remise
+- Les tâches du Gantt et les activités PERT désignent les mêmes livrables.
+- Toute activité, sauf la première, a un prédécesseur justifié.
+- Les convergences utilisent un maximum au passage avant et un minimum au passage arrière.
+- La durée finale PERT est cohérente avec le Gantt de huit semaines.
+- Le chemin critique est démontré par les marges, jamais choisi intuitivement.
 """
 
 report = f"""\
@@ -367,7 +377,7 @@ Les acteurs sont le visiteur, le client, l'artisan et l'administrateur. Le clien
 Le cahier des charges détaillé est fourni dans `01_Cahier_des_charges/01_Cahier_des_charges_ArtisanConnect.md`. Le périmètre MVP couvre inscription, catalogue, filtres, fiche produit, panier, commande, historique, gestion artisan et administration. La règle structurante est la commande mono-artisan et transactionnelle : prix et stock sont revérifiés sur le serveur.
 
 ## Chapitre 4 — Gestion et planification du projet
-La méthode recommandée est un flux itératif à tableaux Trello : backlog priorisé, tâches prêtes, en cours, en revue et terminées. Le projet est planifié sur huit semaines. Le chemin critique de 40 jours est A-B-C-D-E-F-H-J-K-L-M; les maquettes et le parcours front-end disposent d'une marge de six jours dans le modèle PERT. Voir le Gantt et PERT en annexe.
+La méthode recommandée est un flux itératif à tableaux Trello : backlog priorisé, tâches prêtes, en cours, en revue et terminées. L'équipe établira un planning de huit semaines et calculera elle-même son chemin critique à partir des gabarits Gantt et PERT. Le rapport final devra présenter les hypothèses, le tableau de calcul et les diagrammes effectivement retenus.
 
 ## Chapitre 5 — Conception UML
 Le modèle comprend Utilisateur spécialisé en Client et Artisan, Produit, Catégorie, Panier/LignePanier et Commande/LigneCommande. Les relations protègent l'historique : une ligne de commande garde le prix unitaire validé, et un produit commandé est archivé plutôt que supprimé. Les cas d'utilisation et séquences détaillés se trouvent dans le cahier des charges.
@@ -431,7 +441,7 @@ Attribuez un rôle principal à chacun, sans créer des silos : chef·fe de proj
 Le tableau contient `Product Backlog`, `À faire`, `En cours`, `En revue`, `Terminé`. Une carte va de gauche à droite. Ne placez en « En cours » que ce que vous avez commencé; gardez une seule carte active par personne si possible. Lisez la description : elle donne responsable, dépendances, checklist et critères d'acceptation. Importez le CSV fourni suivant le guide Trello.
 
 ## 6. Lire le Gantt et le PERT
-Le **Gantt** donne les dates, durées et tâches parallèles. Le **PERT** montre les dépendances. Les activités rouges sont critiques : tout retard les concernant retarde la livraison. G et I ont une marge de six jours dans le modèle; ce n'est pas une invitation à les repousser.
+Le **Gantt** donne les dates, durées et tâches parallèles. Le **PERT** montre les dépendances et permet de calculer le chemin critique. Commencez par le tableau PERT : après les passages avant/arrière, mettez en évidence uniquement les activités dont la marge est nulle.
 
 ## 7. Démarrage pas à pas
 1. Lisez le cahier des charges et validez les hypothèses avec l'encadrant.
@@ -455,7 +465,7 @@ Cahier des charges, backlog/Trello, Gantt, PERT, UML, maquettes, code versionné
 - Attendre la fin pour intégrer front-end et back-end.
 
 ## 10. Roadmap
-S1 analyse; S2 planification/UML; S3 architecture/UX; S4-S5 noyaux back-end et front-end; S6 intégration; S7 tests; S8 documentation, répétition et livraison. Consultez `02_Gestion_de_projet/02_Diagramme_Gantt.mmd` pour les dates détaillées.
+S1 analyse; S2 planification/UML; S3 architecture/UX; S4-S5 noyaux back-end et front-end; S6 intégration; S7 tests; S8 documentation, répétition et livraison. Utilisez ces repères pour proposer des dates, puis faites-les valider avant de compléter `02_Gestion_de_projet/02_Diagramme_Gantt.mmd`.
 """
 
 readme = """\
@@ -465,7 +475,7 @@ Ce dossier pédagogique accompagne un projet de Génie Logiciel sur une marketpl
 ## Ordre de lecture recommandé
 1. `01_Cahier_des_charges/01_Cahier_des_charges_ArtisanConnect.md` — besoin, périmètre, règles métier, UML et architecture.
 2. `07_Trello_Import/Guide_import_Trello.md` puis `Trello_ArtisanConnect.csv` — organisation opérationnelle.
-3. `02_Gestion_de_projet/02_Diagramme_Gantt.mmd` et `03_Diagramme_PERT.md` — calendrier, dépendances et chemin critique.
+3. `02_Gestion_de_projet/02_Diagramme_Gantt.mmd` et `03_Diagramme_PERT.md` — gabarits et méthode pour construire le calendrier, les dépendances et le chemin critique.
 4. `04_Rapport/04_Rapport_ArtisanConnect.md` — trame académique à compléter après réalisation.
 5. `05_Presentation/05_Presentation_ArtisanConnect.pptx` — support de soutenance.
 6. `06_Guide_etudiants/06_Guide_etudiants_ArtisanConnect.md` — guide de démarrage.
@@ -522,34 +532,7 @@ write(REPORT / "04_Rapport_ArtisanConnect.md", report)
 write(GUIDE / "06_Guide_etudiants_ArtisanConnect.md", guide)
 write(ROOT / "README.md", readme)
 write(UML / "Diagrammes_UML_ArtisanConnect.md", "# Diagrammes UML — ArtisanConnect\n\nLes diagrammes de cas d'utilisation, classes et séquences sont inclus dans le cahier des charges afin de garder les règles métier et leur représentation synchronisées.\n\n" + use_case + "\n" + classes + "\n" + sequences)
-
-# Raster companion of the Mermaid Gantt for viewers that do not render Mermaid.
-img = Image.new("RGB", (1800, 900), "#f8f5ef")
-draw = ImageDraw.Draw(img)
-font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
-small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 15)
-bold = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 28)
-draw.text((55, 35), "ArtisanConnect — Gantt prévisionnel (8 semaines)", fill="#142c41", font=bold)
-left, top, width = 520, 115, 1180
-for week in range(8):
-    x = left + week * width // 8
-    draw.rectangle((x, top, x + width // 8, 840), outline="#c7c1b7", width=1)
-    draw.text((x + 8, 85), f"S{week + 1}", fill="#0c7b7d", font=font)
-items = [
-    ("Cadrage / besoins / cahier", 0, 2, "#a6403a"), ("Backlog et planification", 2, 1, "#a6403a"),
-    ("UML et modèle de données", 2, 1, "#a6403a"), ("Architecture / API", 3, 1, "#a6403a"),
-    ("Wireframes / design system", 2, 1, "#0c7b7d"), ("Backend MVP", 4, 2, "#a6403a"),
-    ("Frontend MVP", 4, 2, "#0c7b7d"), ("Intégration", 6, 1, "#a6403a"),
-    ("Tests / recette", 7, 1, "#a6403a"), ("Documentation / soutenance", 7, 1, "#a6403a"),
-]
-for index, (label, week, span, color) in enumerate(items):
-    y = 135 + index * 68
-    draw.text((55, y + 14), label, fill="#142c41", font=small)
-    x1 = left + week * width // 8 + 5
-    x2 = left + (week + span) * width // 8 - 5
-    draw.rounded_rectangle((x1, y, x2, y + 42), radius=9, fill=color)
-draw.text((55, 855), "Rouge : chemin critique · Bleu-vert : activités parallélisables · Source : 02_Diagramme_Gantt.mmd", fill="#142c41", font=small)
-img.save(PROJECT / "02_Diagramme_Gantt.png")
+(PROJECT / "02_Diagramme_Gantt.png").unlink(missing_ok=True)
 
 with (TRELLO / "Trello_ArtisanConnect.csv").open("w", newline="", encoding="utf-8-sig") as f:
     fields = ["List", "Name", "Description", "Labels", "Members", "Checklist", "Due"]
@@ -658,8 +641,8 @@ add_slide("Acteurs", "Responsabilités distinctes", ["Visiteur : consultation pu
 add_slide("Fonctionnalités principales", "Le périmètre MVP", ["Authentification et rôles", "Catalogue / recherche / fiche produit", "Panier et commande transactionnelle", "Tableaux de bord artisan et administration"])
 add_slide("Architecture", "Web + API REST + données", ["React/Vite responsive", "Express : validation, RBAC, règles métier", "PostgreSQL : données relationnelles et transactions", "Stockage objet : images"])
 add_slide("Cas d'utilisation", "Parcours clés", ["Client : consulter → panier → commande", "Artisan : gérer produit → stock → commande", "Admin : modérer utilisateurs, produits, catégories"])
-add_slide("Planning Gantt", "8 semaines à partir du 9 novembre 2026", ["S1 : analyse et cadrage", "S2–S3 : planification, UML, architecture, UX", "S4–S6 : développement et intégration", "S7–S8 : tests, documentation, soutenance"])
-add_slide("PERT et chemin critique", "40 jours ouvrés", ["A → B → C → D → E → F → H → J → K → L → M", "UI/UX et front-end sont parallélisables", "Marge de 6 jours sur la branche UX/front-end"])
+add_slide("Construire le Gantt", "Exercice de planification de l'équipe", ["Reprendre les activités du backlog", "Proposer des dates et durées sur 8 semaines", "Justifier les dépendances et jalons", "Compléter le gabarit Mermaid fourni"])
+add_slide("Construire le PERT", "Exercice de calcul à partir du Gantt", ["Identifier activités et prédécesseurs", "Calculer ES, EF, LS, LF et marges", "Déduire le chemin critique à partir des marges nulles", "Ne pas inventer les résultats avant le calcul"])
 add_slide("Maquettes UI/UX", "À insérer après conception", ["[PLACEHOLDER] Écran catalogue", "[PLACEHOLDER] Fiche produit et panier", "[PLACEHOLDER] Tableau de bord artisan", "Utiliser des captures réelles, jamais des résultats inventés"])
 add_slide("Technologies proposées", "À valider avant implémentation", ["React + Vite", "Node.js + Express", "PostgreSQL + Prisma", "GitHub, Trello, Mermaid, tests automatisés"])
 add_slide("Démonstration attendue", "Un parcours de bout en bout", ["Client crée un compte et recherche", "Ajoute un produit disponible au panier", "Confirme la commande", "Artisan la consulte et met à jour son statut"])

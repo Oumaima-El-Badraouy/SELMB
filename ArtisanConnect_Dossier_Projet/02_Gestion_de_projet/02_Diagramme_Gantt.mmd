@@ -1,31 +1,32 @@
+%% GABARIT PÉDAGOGIQUE — À COMPLÉTER PAR L'ÉQUIPE
+%% Objectif : construire un planning de 8 semaines à partir du backlog Trello.
+%% 1. Choisir une date de départ avec l'encadrant.
+%% 2. Estimer chaque tâche en jours ouvrés et justifier l'estimation.
+%% 3. Identifier les dépendances réellement bloquantes.
+%% 4. Ajouter les jalons; marquer `crit` seulement après le calcul PERT.
+%% Syntaxe : Tâche :id, YYYY-MM-DD, 3d | Dépendance :id2, after id, 2d
 gantt
-    title ArtisanConnect — planning prévisionnel (8 semaines, 9 nov. 2026 → 3 janv. 2027)
+    title ArtisanConnect — Gantt à compléter par l'équipe
     dateFormat  YYYY-MM-DD
     axisFormat  %d/%m
     excludes    weekends
-    section Phase 1 — Analyse
-    A Cadrage et kickoff                         :crit, a1, 2026-11-09, 2d
-    B Entretiens, besoins et personas            :crit, a2, after a1, 4d
-    C Cahier des charges et validation            :crit, a3, after a2, 3d
-    Jalon : besoins validés                       :milestone, m1, after a3, 0d
+    section Phase 1 — Analyse et cahier des charges
+    %% [À compléter]
     section Phase 2 — Planification
-    D Backlog, estimations et risques             :crit, a4, after a3, 2d
-    section Phase 3 — UML / architecture
-    E Modèle de données et UML                    :crit, a5, after a4, 5d
-    F Architecture, API et environnement          :crit, a6, after a5, 3d
-    section Phase 4 — UI/UX
-    G Wireframes et design system                 :g1, after a3, 4d
-    section Phase 5 — Backend
-    H Authentification, catalogue, stock, commandes :crit, h1, after a6, 8d
-    section Phase 6 — Frontend
-    I Parcours client, artisan et admin           :i1, after g1, 8d
+    %% [À compléter]
+    section Phase 3 — Conception UML
+    %% [À compléter]
+    section Phase 4 — Conception UI/UX
+    %% [À compléter]
+    section Phase 5 — Développement Backend
+    %% [À compléter]
+    section Phase 6 — Développement Frontend
+    %% [À compléter]
     section Phase 7 — Intégration
-    J Intégration API, responsive et données démo :crit, j1, after h1, 4d
-    Jalon : MVP intégré                           :milestone, m2, after j1, 0d
+    %% [À compléter]
     section Phase 8 — Tests
-    K Tests unitaires, intégration et recette     :crit, k1, after j1, 4d
+    %% [À compléter]
     section Phase 9 — Documentation
-    L Documentation technique et utilisateur      :crit, l1, after k1, 3d
-    section Phase 10 — Livraison
-    M Soutenance, démonstration et livraison      :crit, m3, after l1, 2d
-    Jalon : livraison                             :milestone, m4, after m3, 0d
+    %% [À compléter]
+    section Phase 10 — Présentation et livraison
+    %% [À compléter]

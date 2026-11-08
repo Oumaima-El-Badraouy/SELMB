@@ -34,7 +34,7 @@ Les acteurs sont le visiteur, le client, l'artisan et l'administrateur. Le clien
 Le cahier des charges détaillé est fourni dans `01_Cahier_des_charges/01_Cahier_des_charges_ArtisanConnect.md`. Le périmètre MVP couvre inscription, catalogue, filtres, fiche produit, panier, commande, historique, gestion artisan et administration. La règle structurante est la commande mono-artisan et transactionnelle : prix et stock sont revérifiés sur le serveur.
 
 ## Chapitre 4 — Gestion et planification du projet
-La méthode recommandée est un flux itératif à tableaux Trello : backlog priorisé, tâches prêtes, en cours, en revue et terminées. Le projet est planifié sur huit semaines. Le chemin critique de 40 jours est A-B-C-D-E-F-H-J-K-L-M; les maquettes et le parcours front-end disposent d'une marge de six jours dans le modèle PERT. Voir le Gantt et PERT en annexe.
+La méthode recommandée est un flux itératif à tableaux Trello : backlog priorisé, tâches prêtes, en cours, en revue et terminées. L'équipe établira un planning de huit semaines et calculera elle-même son chemin critique à partir des gabarits Gantt et PERT. Le rapport final devra présenter les hypothèses, le tableau de calcul et les diagrammes effectivement retenus.
 
 ## Chapitre 5 — Conception UML
 Le modèle comprend Utilisateur spécialisé en Client et Artisan, Produit, Catégorie, Panier/LignePanier et Commande/LigneCommande. Les relations protègent l'historique : une ligne de commande garde le prix unitaire validé, et un produit commandé est archivé plutôt que supprimé. Les cas d'utilisation et séquences détaillés se trouvent dans le cahier des charges.

@@ -3,7 +3,7 @@
 
 Bienvenue. ArtisanConnect est une marketplace web : les artisans marocains publient des produits et les clients les découvrent, les placent dans un panier puis créent une commande. L'objectif du module n'est pas seulement de coder : vous devez expliquer le besoin, planifier, concevoir, tester et démontrer votre solution.
 
-> **Hypothèses de cadrage.** Le planning démarre le 9 novembre 2026, dure huit semaines de cinq jours ouvrés et suppose une équipe de quatre étudiants : chef·fe de projet/analyste, concepteur·rice UX, développeur·se back-end et développeur·se front-end/intégrateur·rice. Le paiement en ligne, la livraison et les notifications externes ne sont pas inclus dans le MVP : une commande est une demande confirmée par l'artisan. Les choix techniques proposés sont à valider avec l'encadrant.
+> **Hypothèses de cadrage.** L'équipe doit proposer un planning de huit semaines de cinq jours ouvrés et suppose une équipe de quatre étudiants : chef·fe de projet/analyste, concepteur·rice UX, développeur·se back-end et développeur·se front-end/intégrateur·rice. Le paiement en ligne, la livraison et les notifications externes ne sont pas inclus dans le MVP : une commande est une demande confirmée par l'artisan. Les choix techniques proposés sont à valider avec l'encadrant.
 
 
 ## 1. Comprendre le projet
@@ -27,7 +27,7 @@ Attribuez un rôle principal à chacun, sans créer des silos : chef·fe de proj
 Le tableau contient `Product Backlog`, `À faire`, `En cours`, `En revue`, `Terminé`. Une carte va de gauche à droite. Ne placez en « En cours » que ce que vous avez commencé; gardez une seule carte active par personne si possible. Lisez la description : elle donne responsable, dépendances, checklist et critères d'acceptation. Importez le CSV fourni suivant le guide Trello.
 
 ## 6. Lire le Gantt et le PERT
-Le **Gantt** donne les dates, durées et tâches parallèles. Le **PERT** montre les dépendances. Les activités rouges sont critiques : tout retard les concernant retarde la livraison. G et I ont une marge de six jours dans le modèle; ce n'est pas une invitation à les repousser.
+Le **Gantt** donne les dates, durées et tâches parallèles. Le **PERT** montre les dépendances et permet de calculer le chemin critique. Commencez par le tableau PERT : après les passages avant/arrière, mettez en évidence uniquement les activités dont la marge est nulle.
 
 ## 7. Démarrage pas à pas
 1. Lisez le cahier des charges et validez les hypothèses avec l'encadrant.
@@ -51,4 +51,4 @@ Cahier des charges, backlog/Trello, Gantt, PERT, UML, maquettes, code versionné
 - Attendre la fin pour intégrer front-end et back-end.
 
 ## 10. Roadmap
-S1 analyse; S2 planification/UML; S3 architecture/UX; S4-S5 noyaux back-end et front-end; S6 intégration; S7 tests; S8 documentation, répétition et livraison. Consultez `02_Gestion_de_projet/02_Diagramme_Gantt.mmd` pour les dates détaillées.
+S1 analyse; S2 planification/UML; S3 architecture/UX; S4-S5 noyaux back-end et front-end; S6 intégration; S7 tests; S8 documentation, répétition et livraison. Utilisez ces repères pour proposer des dates, puis faites-les valider avant de compléter `02_Gestion_de_projet/02_Diagramme_Gantt.mmd`.
