@@ -1,0 +1,265 @@
+﻿List,Name,Description,Labels,Members,Checklist,Due
+Product Backlog,Cadrer le projet et identifier les parties prenantes,"Phase : Phase 1 : Analyse et cahier des charges
+Responsable/rôle : Chef de projet
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Aucune
+
+Critères d'acceptation :
+Objectifs, périmètre et acteurs validés.",Phase 1 : Analyse et cahier des charges,Chef de projet,Réunir le groupe | Identifier client/artisan/admin | Valider le problème,
+Product Backlog,Recueillir et prioriser les besoins,"Phase : Phase 1 : Analyse et cahier des charges
+Responsable/rôle : Analyste
+Priorité : Haute
+Estimation : 4 j
+Dépendances : Cadrage
+
+Critères d'acceptation :
+Backlog de besoins relu par l'équipe.",Phase 1 : Analyse et cahier des charges,Analyste,Rédiger personas | Lister besoins | Classer MVP/hors périmètre,
+Product Backlog,Rédiger et faire valider le cahier des charges,"Phase : Phase 1 : Analyse et cahier des charges
+Responsable/rôle : Chef de projet
+Priorité : Haute
+Estimation : 3 j
+Dépendances : Besoins
+
+Critères d'acceptation :
+Document versionné et validé par encadrant.",Phase 1 : Analyse et cahier des charges,Chef de projet,Fonctionnel | Non fonctionnel | Règles métier | Critères d'acceptation,
+Product Backlog,Construire le backlog produit,"Phase : Phase 2 : Planification du projet
+Responsable/rôle : Product Owner fictif
+Priorité : Haute
+Estimation : 1 j
+Dépendances : Cahier des charges
+
+Critères d'acceptation :
+Toutes les fonctions MVP ont une carte.",Phase 2 : Planification du projet,Product Owner fictif,Créer user stories | Ajouter priorités | Ajouter critères,
+Product Backlog,Estimer les tâches et analyser les risques,"Phase : Phase 2 : Planification du projet
+Responsable/rôle : Chef de projet
+Priorité : Haute
+Estimation : 1 j
+Dépendances : Backlog
+
+Critères d'acceptation :
+Estimations et risques visibles.",Phase 2 : Planification du projet,Chef de projet,Estimer durées | Lister risques | Prévoir réponses,
+Product Backlog,"Préparer Gantt, PERT et jalons","Phase : Phase 2 : Planification du projet
+Responsable/rôle : Chef de projet
+Priorité : Haute
+Estimation : 1 j
+Dépendances : Estimations
+
+Critères d'acceptation :
+Gantt et PERT cohérents.",Phase 2 : Planification du projet,Chef de projet,Définir dépendances | Calculer chemin critique | Faire relire,
+Product Backlog,Modéliser les cas d'utilisation,"Phase : Phase 3 : Conception UML
+Responsable/rôle : Analyste
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Cahier des charges
+
+Critères d'acceptation :
+Tous les besoins MVP sont couverts.",Phase 3 : Conception UML,Analyste,Acteurs | Cas client | Cas artisan/admin,
+Product Backlog,Concevoir le diagramme de classes et données,"Phase : Phase 3 : Conception UML
+Responsable/rôle : Back-end
+Priorité : Haute
+Estimation : 3 j
+Dépendances : Cas d'utilisation
+
+Critères d'acceptation :
+Modèle cohérent avec panier/commande/stock.",Phase 3 : Conception UML,Back-end,Entités | Relations | Contraintes,
+Product Backlog,Décrire les séquences critiques,"Phase : Phase 3 : Conception UML
+Responsable/rôle : Analyste
+Priorité : Moyenne
+Estimation : 2 j
+Dépendances : Diagramme de classes
+
+Critères d'acceptation :
+Flux et responsabilités clairs.",Phase 3 : Conception UML,Analyste,Commande | Mise à jour produit | Erreurs,
+Product Backlog,Définir contrat API et architecture,"Phase : Phase 3 : Conception UML
+Responsable/rôle : Back-end
+Priorité : Haute
+Estimation : 3 j
+Dépendances : Classes
+
+Critères d'acceptation :
+Contrat relu par front-end.",Phase 3 : Conception UML,Back-end,Endpoints | RBAC | Erreurs | Variables env,
+Product Backlog,Créer personas et parcours utilisateur,"Phase : Phase 4 : Conception UI/UX
+Responsable/rôle : UX/UI
+Priorité : Moyenne
+Estimation : 1 j
+Dépendances : Besoins
+
+Critères d'acceptation :
+Parcours sans ambiguïté.",Phase 4 : Conception UI/UX,UX/UI,Parcours client | Parcours artisan | Parcours admin,
+Product Backlog,Produire wireframes responsive,"Phase : Phase 4 : Conception UI/UX
+Responsable/rôle : UX/UI
+Priorité : Haute
+Estimation : 3 j
+Dépendances : Parcours
+
+Critères d'acceptation :
+Maquettes mobile et desktop validées.",Phase 4 : Conception UI/UX,UX/UI,Catalogue | Fiche | Panier | Dashboards,
+Product Backlog,Établir le design system,"Phase : Phase 4 : Conception UI/UX
+Responsable/rôle : UX/UI
+Priorité : Moyenne
+Estimation : 1 j
+Dépendances : Wireframes
+
+Critères d'acceptation :
+Composants réutilisables définis.",Phase 4 : Conception UI/UX,UX/UI,Couleurs | Typo | Composants | Accessibilité,
+Product Backlog,"Initialiser backend, base de données et CI","Phase : Phase 5 : Développement Backend
+Responsable/rôle : Back-end
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Architecture
+
+Critères d'acceptation :
+Installation reproductible.",Phase 5 : Développement Backend,Back-end,Configuration | Schéma/migrations | Variables env | Healthcheck,
+Product Backlog,Implémenter authentification et RBAC,"Phase : Phase 5 : Développement Backend
+Responsable/rôle : Back-end
+Priorité : Haute
+Estimation : 3 j
+Dépendances : Initialisation
+
+Critères d'acceptation :
+Routes protégées et tests d'accès.",Phase 5 : Développement Backend,Back-end,Register/login | Hash | JWT/session | Middleware rôles,
+Product Backlog,Implémenter catégories et catalogue produits,"Phase : Phase 5 : Développement Backend
+Responsable/rôle : Back-end
+Priorité : Haute
+Estimation : 3 j
+Dépendances : RBAC
+
+Critères d'acceptation :
+Catalogue conforme au contrat.",Phase 5 : Développement Backend,Back-end,CRUD artisan | Lecture publique | Recherche/filtres | Pagination,
+Product Backlog,"Implémenter stock, panier et commande","Phase : Phase 5 : Développement Backend
+Responsable/rôle : Back-end
+Priorité : Haute
+Estimation : 4 j
+Dépendances : Catalogue
+
+Critères d'acceptation :
+Survente et accès non autorisés refusés.",Phase 5 : Développement Backend,Back-end,Panier | Transaction stock | Lignes commande | Statuts,
+Product Backlog,Implémenter administration et modération,"Phase : Phase 5 : Développement Backend
+Responsable/rôle : Back-end
+Priorité : Moyenne
+Estimation : 2 j
+Dépendances : RBAC, catalogue
+
+Critères d'acceptation :
+Accès admin vérifié.",Phase 5 : Développement Backend,Back-end,Utilisateurs | Artisans | Produits | Catégories,
+Product Backlog,Initialiser front-end et navigation,"Phase : Phase 6 : Développement Frontend
+Responsable/rôle : Front-end
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Wireframes, architecture
+
+Critères d'acceptation :
+Navigation de base fonctionnelle.",Phase 6 : Développement Frontend,Front-end,Routes | Layout | Client API | Gestion erreurs,
+Product Backlog,Développer authentification et catalogue,"Phase : Phase 6 : Développement Frontend
+Responsable/rôle : Front-end
+Priorité : Haute
+Estimation : 3 j
+Dépendances : Navigation, API auth/catalogue
+
+Critères d'acceptation :
+Parcours visiteur/client démontrable.",Phase 6 : Développement Frontend,Front-end,Formulaires | Liste | Filtres | Fiche,
+Product Backlog,Développer panier et suivi de commande,"Phase : Phase 6 : Développement Frontend
+Responsable/rôle : Front-end
+Priorité : Haute
+Estimation : 3 j
+Dépendances : API commande
+
+Critères d'acceptation :
+Commande visible dans historique.",Phase 6 : Développement Frontend,Front-end,Panier | Validation | Historique | États vides,
+Product Backlog,Développer tableaux artisan et admin,"Phase : Phase 6 : Développement Frontend
+Responsable/rôle : Front-end
+Priorité : Moyenne
+Estimation : 3 j
+Dépendances : APIs artisan/admin
+
+Critères d'acceptation :
+Droits et écrans cohérents.",Phase 6 : Développement Frontend,Front-end,Produits | Stock | Commandes | Modération,
+Product Backlog,Rendre les écrans responsive et accessibles,"Phase : Phase 6 : Développement Frontend
+Responsable/rôle : Front-end
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Écrans principaux
+
+Critères d'acceptation :
+Recette responsive sans blocage.",Phase 6 : Développement Frontend,Front-end,360px | Desktop | Focus | Contrastes,
+Product Backlog,"Intégrer front-end, API et données de démonstration","Phase : Phase 7 : Intégration
+Responsable/rôle : Intégrateur
+Priorité : Haute
+Estimation : 3 j
+Dépendances : Noyaux front/backend
+
+Critères d'acceptation :
+Parcours bout en bout fonctionnel.",Phase 7 : Intégration,Intégrateur,Connecter endpoints | Seeder | Erreurs | Images,
+Product Backlog,Préparer déploiement de démonstration,"Phase : Phase 7 : Intégration
+Responsable/rôle : DevOps/Intégrateur
+Priorité : Moyenne
+Estimation : 1 j
+Dépendances : Intégration
+
+Critères d'acceptation :
+Build reproductible; déploiement à valider.",Phase 7 : Intégration,DevOps/Intégrateur,Variables env | Build | URL | Journalisation,
+Product Backlog,Écrire tests unitaires des règles métier,"Phase : Phase 8 : Tests
+Responsable/rôle : QA + Back-end
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Backend
+
+Critères d'acceptation :
+Tests essentiels verts.",Phase 8 : Tests,QA + Back-end,Totaux | Stock | Statuts | RBAC,
+Product Backlog,Exécuter tests d'intégration API,"Phase : Phase 8 : Tests
+Responsable/rôle : QA + Back-end
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Tests unitaires, intégration
+
+Critères d'acceptation :
+Rapport de tests conservé.",Phase 8 : Tests,QA + Back-end,Auth | Commande | Isolation | Erreurs,
+Product Backlog,Réaliser recette fonctionnelle et responsive,"Phase : Phase 8 : Tests
+Responsable/rôle : QA + équipe
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Front-end intégré
+
+Critères d'acceptation :
+PV de recette complété.",Phase 8 : Tests,QA + équipe,Scénarios | Navigateurs | Mobile | Anomalies,
+Product Backlog,Corriger anomalies bloquantes,"Phase : Phase 8 : Tests
+Responsable/rôle : Équipe
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Recette
+
+Critères d'acceptation :
+Aucun défaut bloquant ouvert.",Phase 8 : Tests,Équipe,Trier | Corriger | Rejouer | Fermer,
+Product Backlog,Rédiger documentation technique et README,"Phase : Phase 9 : Documentation
+Responsable/rôle : Back-end + Front-end
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Intégration
+
+Critères d'acceptation :
+Un pair installe avec le guide.",Phase 9 : Documentation,Back-end + Front-end,Installation | API | Architecture | Données,
+Product Backlog,"Finaliser rapport, UML et preuves","Phase : Phase 9 : Documentation
+Responsable/rôle : Chef de projet
+Priorité : Haute
+Estimation : 2 j
+Dépendances : Tests
+
+Critères d'acceptation :
+Aucune affirmation non prouvée.",Phase 9 : Documentation,Chef de projet,Résultats réels | Captures | Annexes | Relecture,
+Product Backlog,Préparer slides et démonstration,"Phase : Phase 10 : Présentation et livraison
+Responsable/rôle : Équipe
+Priorité : Haute
+Estimation : 1 j
+Dépendances : Documentation
+
+Critères d'acceptation :
+Présentation lisible et répétée.",Phase 10 : Présentation et livraison,Équipe,Slides | Script démo | Plan B | Chronométrage,
+Product Backlog,Répéter et livrer les livrables,"Phase : Phase 10 : Présentation et livraison
+Responsable/rôle : Chef de projet + équipe
+Priorité : Haute
+Estimation : 1 j
+Dépendances : Slides
+
+Critères d'acceptation :
+Livrables complets déposés.",Phase 10 : Présentation et livraison,Chef de projet + équipe,Répartition parole | Vérifier liens | Exporter | Déposer,

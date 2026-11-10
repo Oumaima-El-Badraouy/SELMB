@@ -1,0 +1,34 @@
+﻿ID,Phase,Événement / activité,Durée estimée,Étape(s) précédente(s),Responsable,Livrable / critère
+T01,Phase 1 : Analyse et cahier des charges,Cadrer le projet et identifier les parties prenantes,2 j,—,Chef de projet,"Objectifs, périmètre et acteurs validés."
+T02,Phase 1 : Analyse et cahier des charges,Recueillir et prioriser les besoins,4 j,T01,Analyste,Backlog de besoins relu par l'équipe.
+T03,Phase 1 : Analyse et cahier des charges,Rédiger et faire valider le cahier des charges,3 j,T02,Chef de projet,Document versionné et validé par encadrant.
+T04,Phase 2 : Planification du projet,Construire le backlog produit,1 j,T03,Product Owner fictif,Toutes les fonctions MVP ont une carte.
+T05,Phase 2 : Planification du projet,Estimer les tâches et analyser les risques,1 j,T04,Chef de projet,Estimations et risques visibles.
+T06,Phase 2 : Planification du projet,"Préparer Gantt, PERT et jalons",1 j,T05,Chef de projet,Gantt et PERT cohérents.
+T07,Phase 3 : Conception UML,Modéliser les cas d'utilisation,2 j,T03,Analyste,Tous les besoins MVP sont couverts.
+T08,Phase 3 : Conception UML,Concevoir le diagramme de classes et données,3 j,T07,Back-end,Modèle cohérent avec panier/commande/stock.
+T09,Phase 3 : Conception UML,Décrire les séquences critiques,2 j,T08,Analyste,Flux et responsabilités clairs.
+T10,Phase 3 : Conception UML,Définir contrat API et architecture,3 j,T08,Back-end,Contrat relu par front-end.
+T11,Phase 4 : Conception UI/UX,Créer personas et parcours utilisateur,1 j,T02,UX/UI,Parcours sans ambiguïté.
+T12,Phase 4 : Conception UI/UX,Produire wireframes responsive,3 j,T11,UX/UI,Maquettes mobile et desktop validées.
+T13,Phase 4 : Conception UI/UX,Établir le design system,1 j,T12,UX/UI,Composants réutilisables définis.
+T14,Phase 5 : Développement Backend,"Initialiser backend, base de données et CI",2 j,T10,Back-end,Installation reproductible.
+T15,Phase 5 : Développement Backend,Implémenter authentification et RBAC,3 j,T14,Back-end,Routes protégées et tests d'accès.
+T16,Phase 5 : Développement Backend,Implémenter catégories et catalogue produits,3 j,T15,Back-end,Catalogue conforme au contrat.
+T17,Phase 5 : Développement Backend,"Implémenter stock, panier et commande",4 j,T16,Back-end,Survente et accès non autorisés refusés.
+T18,Phase 5 : Développement Backend,Implémenter administration et modération,2 j,"T15, T16",Back-end,Accès admin vérifié.
+T19,Phase 6 : Développement Frontend,Initialiser front-end et navigation,2 j,"T10, T12",Front-end,Navigation de base fonctionnelle.
+T20,Phase 6 : Développement Frontend,Développer authentification et catalogue,3 j,"T19, T15, T16",Front-end,Parcours visiteur/client démontrable.
+T21,Phase 6 : Développement Frontend,Développer panier et suivi de commande,3 j,"T20, T17",Front-end,Commande visible dans historique.
+T22,Phase 6 : Développement Frontend,Développer tableaux artisan et admin,3 j,"T20, T18",Front-end,Droits et écrans cohérents.
+T23,Phase 6 : Développement Frontend,Rendre les écrans responsive et accessibles,2 j,"T20, T21, T22",Front-end,Recette responsive sans blocage.
+T24,Phase 7 : Intégration,"Intégrer front-end, API et données de démonstration",3 j,"T17, T20, T22",Intégrateur,Parcours bout en bout fonctionnel.
+T25,Phase 7 : Intégration,Préparer déploiement de démonstration,1 j,T24,DevOps/Intégrateur,Build reproductible; déploiement à valider.
+T26,Phase 8 : Tests,Écrire tests unitaires des règles métier,2 j,T17,QA + Back-end,Tests essentiels verts.
+T27,Phase 8 : Tests,Exécuter tests d'intégration API,2 j,T25,QA + Back-end,Rapport de tests conservé.
+T28,Phase 8 : Tests,Réaliser recette fonctionnelle et responsive,2 j,"T25, T26",QA + équipe,PV de recette complété.
+T29,Phase 8 : Tests,Corriger anomalies bloquantes,2 j,"T27, T28",Équipe,Aucun défaut bloquant ouvert.
+T30,Phase 9 : Documentation,Rédiger documentation technique et README,2 j,T29,Back-end + Front-end,Un pair installe avec le guide.
+T31,Phase 9 : Documentation,"Finaliser rapport, UML et preuves",2 j,T25,Chef de projet,Aucune affirmation non prouvée.
+T32,Phase 10 : Présentation et livraison,Préparer slides et démonstration,1 j,"T29, T31",Équipe,Présentation lisible et répétée.
+T33,Phase 10 : Présentation et livraison,Répéter et livrer les livrables,1 j,T32,Chef de projet + équipe,Livrables complets déposés.
