@@ -38,14 +38,20 @@ ARTISAN = CAPTURES / "03-artisan-registration.png"
 LOGO = REPO / "Webapp/assets/branding/logo_al_asel.png"
 BACKGROUND = REPO / "Webapp/assets/branding/site-page-bg.png"
 
-# Moroccan-inspired palette used by the running application.
-NAVY = RGBColor(15, 40, 64)
-TEAL = RGBColor(31, 109, 114)
-GOLD = RGBColor(218, 161, 61)
-TERRACOTTA = RGBColor(184, 92, 46)
-CREAM = RGBColor(249, 246, 239)
-INK = RGBColor(27, 43, 52)
-MUTED = RGBColor(87, 103, 111)
+# Bright, Moroccan-inspired palette. Dark shades are retained only for legible text.
+NAVY = RGBColor(25, 78, 120)
+TEAL = RGBColor(0, 173, 169)
+GOLD = RGBColor(247, 184, 41)
+TERRACOTTA = RGBColor(244, 103, 70)
+PURPLE = RGBColor(120, 86, 211)
+PINK = RGBColor(238, 91, 143)
+SKY = RGBColor(219, 246, 248)
+MINT = RGBColor(225, 247, 235)
+PEACH = RGBColor(255, 238, 226)
+LILAC = RGBColor(240, 235, 255)
+CREAM = RGBColor(255, 251, 246)
+INK = RGBColor(28, 57, 72)
+MUTED = RGBColor(91, 110, 119)
 WHITE = RGBColor(255, 255, 255)
 
 prs = Presentation()
@@ -57,6 +63,31 @@ def fill_background(slide, color=CREAM):
     fill = slide.background.fill
     fill.solid()
     fill.fore_color.rgb = color
+
+
+def add_decor(slide, variant=0):
+    """Bright, low-contrast decorative geometry behind the slide content."""
+    palettes = [
+        (SKY, GOLD, TEAL),
+        (PEACH, PINK, TERRACOTTA),
+        (LILAC, PURPLE, TEAL),
+        (MINT, GOLD, TERRACOTTA),
+    ]
+    pale, bright, accent = palettes[variant % len(palettes)]
+    add_rect(slide, 10.85, -.62, 3.0, 2.15, pale, radius=True)
+    circle = slide.shapes.add_shape(MSO_SHAPE.OVAL, Inches(11.72), Inches(.28), Inches(1.45), Inches(1.45))
+    circle.fill.solid()
+    circle.fill.fore_color.rgb = bright
+    circle.fill.transparency = 22
+    circle.line.fill.background()
+    for i in range(4):
+        diamond = slide.shapes.add_shape(
+            MSO_SHAPE.DIAMOND, Inches(.38 + i * .26), Inches(6.75 - i * .08), Inches(.16), Inches(.16)
+        )
+        diamond.fill.solid()
+        diamond.fill.fore_color.rgb = accent if i % 2 == 0 else bright
+        diamond.fill.transparency = 12
+        diamond.line.fill.background()
 
 
 def add_text(slide, text, x, y, w, h, size=20, color=INK, bold=False,
@@ -105,16 +136,20 @@ def add_picture_cover(slide, image_path, x, y, w, h):
 
 
 def add_title(slide, number, title, subtitle=None):
-    add_text(slide, f"{number:02d}", .72, .45, .55, .3, 11, GOLD, True)
+    accents = [TEAL, TERRACOTTA, PURPLE, PINK, GOLD]
+    accent = accents[(number - 1) % len(accents)]
+    add_rect(slide, .72, .38, .57, .38, accent, radius=True)
+    add_text(slide, f"{number:02d}", .72, .47, .57, .16, 10, WHITE, True, align=PP_ALIGN.CENTER)
     add_text(slide, title, .72, .78, 11.3, .55, 29, NAVY, True)
     if subtitle:
         add_text(slide, subtitle, .74, 1.38, 11, .35, 12, MUTED)
-    add_rect(slide, .72, 1.84, 1.1, .05, GOLD)
+    add_rect(slide, .72, 1.84, 1.1, .05, accent)
 
 
 def add_footer(slide, label="ArtisanConnect · Génie Logiciel"):
     add_text(slide, label, .72, 7.08, 6, .2, 9, MUTED)
-    add_text(slide, "5 min", 11.85, 7.08, .75, .2, 9, MUTED, align=PP_ALIGN.RIGHT)
+    add_rect(slide, 11.78, 7.0, .82, .25, GOLD, radius=True)
+    add_text(slide, "5 min", 11.78, 7.06, .82, .12, 8, INK, True, align=PP_ALIGN.CENTER)
 
 
 def bullet(slide, text, x, y, accent=TEAL):
@@ -123,7 +158,8 @@ def bullet(slide, text, x, y, accent=TEAL):
 
 
 def add_image_card(slide, image, x, y, w, h, caption):
-    add_rect(slide, x - .06, y - .06, w + .12, h + .42, WHITE, radius=True)
+    add_rect(slide, x - .1, y - .1, w + .2, h + .52, WHITE, radius=True)
+    add_rect(slide, x + .2, y - .16, 1.05, .1, GOLD, radius=True)
     add_picture_cover(slide, image, x, y, w, h)
     add_text(slide, caption, x + .14, y + h + .09, w - .28, .2, 10, MUTED, align=PP_ALIGN.CENTER)
 
@@ -131,19 +167,22 @@ def add_image_card(slide, image, x, y, w, h, caption):
 # 01 — Cover
 slide = prs.slides.add_slide(prs.slide_layouts[6])
 add_picture_cover(slide, LANDING, 0, 0, 13.333, 7.5)
-add_rect(slide, 0, 0, 13.333, 7.5, NAVY, transparency=20)
-add_rect(slide, .68, .65, 6.5, 5.7, NAVY, radius=True, transparency=10)
+add_rect(slide, 0, 0, 13.333, 7.5, CREAM, transparency=48)
+add_rect(slide, .68, .65, 6.5, 5.7, WHITE, radius=True, transparency=9)
+add_rect(slide, 6.72, .72, 5.7, .18, TEAL, radius=True)
+add_rect(slide, 11.12, 5.78, 1.3, .18, TERRACOTTA, radius=True)
 if LOGO.exists():
     slide.shapes.add_picture(str(LOGO), Inches(.98), Inches(.95), height=Inches(.78))
-add_text(slide, "ArtisanConnect", 1.0, 2.12, 5.55, .65, 36, WHITE, True)
-add_text(slide, "Valoriser l’artisanat marocain\npar une expérience numérique simple.", 1.03, 2.95, 5.45, 1.1, 21, WHITE)
+add_text(slide, "ArtisanConnect", 1.0, 2.12, 5.55, .65, 36, NAVY, True)
+add_text(slide, "Valoriser l’artisanat marocain\npar une expérience numérique simple.", 1.03, 2.95, 5.45, 1.1, 21, INK)
 add_rect(slide, 1.03, 4.52, 1.15, .06, GOLD)
-add_text(slide, "Projet de Génie Logiciel · Présentation 5 minutes", 1.03, 4.8, 5.35, .35, 13, RGBColor(225, 231, 227))
-add_text(slide, "Équipe : [à compléter]  ·  Encadrant·e : [à compléter]", 1.03, 5.34, 5.35, .35, 11, RGBColor(225, 231, 227))
+add_text(slide, "Projet de Génie Logiciel · Présentation 5 minutes", 1.03, 4.8, 5.35, .35, 13, TEAL)
+add_text(slide, "Équipe : [à compléter]  ·  Encadrant·e : [à compléter]", 1.03, 5.34, 5.35, .35, 11, MUTED)
 
 # 02 — Problem
 slide = prs.slides.add_slide(prs.slide_layouts[6])
 fill_background(slide)
+add_decor(slide, 0)
 add_title(slide, 2, "Le défi", "Les artisans ont du savoir-faire; leur visibilité numérique reste fragmentée.")
 for x, icon, heading, body in [
     (.78, "01", "Découvrir", "Le client ne trouve pas facilement une offre locale structurée."),
@@ -160,7 +199,8 @@ add_footer(slide)
 
 # 03 — Solution
 slide = prs.slides.add_slide(prs.slide_layouts[6])
-fill_background(slide, NAVY)
+fill_background(slide, SKY)
+add_decor(slide, 1)
 add_title(slide, 3, "La réponse : une plateforme qui relie", "Un parcours clair — de la découverte au suivi.",)
 for idx, (title, text, color) in enumerate([
     ("1. Explorer", "Trouver un artisan ou une offre selon le besoin.", TEAL),
@@ -172,13 +212,14 @@ for idx, (title, text, color) in enumerate([
     add_text(slide, title, x + .28, 2.81, 2.85, .4, 21, WHITE, True)
     add_text(slide, text, x + .28, 3.62, 2.76, .75, 14, WHITE)
     if idx < 2:
-        add_text(slide, "→", x + 3.55, 3.38, .42, .35, 26, WHITE, True, align=PP_ALIGN.CENTER)
-add_text(slide, "Un MVP centré sur l’utilité avant la complexité.", .9, 5.72, 11.5, .35, 18, WHITE, True, align=PP_ALIGN.CENTER)
+        add_text(slide, "→", x + 3.55, 3.38, .42, .35, 26, NAVY, True, align=PP_ALIGN.CENTER)
+add_text(slide, "Un MVP centré sur l’utilité avant la complexité.", .9, 5.72, 11.5, .35, 18, NAVY, True, align=PP_ALIGN.CENTER)
 add_footer(slide)
 
 # 04 — Actors
 slide = prs.slides.add_slide(prs.slide_layouts[6])
 fill_background(slide)
+add_decor(slide, 2)
 add_title(slide, 4, "Trois rôles, une même plateforme", "Chaque rôle reçoit les informations et actions dont il a besoin.")
 roles = [
     ("Client", "Découvrir\nCréer une demande\nSuivre l’échange", TEAL),
@@ -196,6 +237,7 @@ add_footer(slide)
 # 05 — Real screen: landing
 slide = prs.slides.add_slide(prs.slide_layouts[6])
 fill_background(slide)
+add_decor(slide, 3)
 add_title(slide, 5, "Une identité numérique ancrée dans l’artisanat", "Capture réelle — page d’accueil de l’interface web existante.")
 add_image_card(slide, LANDING, .92, 2.12, 7.23, 4.16, "Page d’accueil : identité, accès et points d’entrée")
 bullet(slide, "Une identité visuelle inspirée du zellige et du tissage.", 8.65, 2.45, GOLD)
@@ -206,6 +248,7 @@ add_footer(slide)
 # 06 — Real screen: client
 slide = prs.slides.add_slide(prs.slide_layouts[6])
 fill_background(slide, RGBColor(239, 245, 244))
+add_decor(slide, 0)
 add_title(slide, 6, "Parcours client : démarrer simplement", "Capture réelle — formulaire d’inscription client.")
 add_image_card(slide, CLIENT, 6.6, 2.05, 5.72, 4.35, "Inscription client")
 add_text(slide, "L’idée clé", .88, 2.47, 4.3, .38, 22, NAVY, True)
@@ -217,6 +260,7 @@ add_footer(slide)
 # 07 — Real screen: artisan
 slide = prs.slides.add_slide(prs.slide_layouts[6])
 fill_background(slide)
+add_decor(slide, 1)
 add_title(slide, 7, "Parcours artisan : rendre le savoir-faire visible", "Capture réelle — espace d’inscription et de présentation artisan.")
 add_image_card(slide, ARTISAN, .84, 2.06, 6.02, 4.32, "Création d’un profil artisan")
 add_text(slide, "Ce que la plateforme valorise", 7.44, 2.45, 4.8, .38, 20, NAVY, True)
@@ -227,7 +271,8 @@ add_footer(slide)
 
 # 08 — Technology
 slide = prs.slides.add_slide(prs.slide_layouts[6])
-fill_background(slide, NAVY)
+fill_background(slide, LILAC)
+add_decor(slide, 2)
 add_title(slide, 8, "Une architecture simple à expliquer", "Les technologies observées dans le dépôt existant.")
 layers = [
     ("Interface", "Web HTML/CSS/JS\n+ application Flutter", TEAL),
@@ -240,13 +285,14 @@ for i, (heading, content, color) in enumerate(layers):
     add_text(slide, heading, x + .27, 2.93, 2.75, .35, 21, WHITE, True, align=PP_ALIGN.CENTER)
     add_text(slide, content, x + .25, 3.57, 2.8, .63, 14, WHITE, align=PP_ALIGN.CENTER)
     if i < 2:
-        add_text(slide, "→", x + 3.4, 3.34, .45, .4, 25, WHITE, True, align=PP_ALIGN.CENTER)
-add_text(slide, "Objectif technique : une base maintenable, testable et évolutive.", .9, 5.64, 11.45, .35, 17, WHITE, True, align=PP_ALIGN.CENTER)
+        add_text(slide, "→", x + 3.4, 3.34, .45, .4, 25, NAVY, True, align=PP_ALIGN.CENTER)
+add_text(slide, "Objectif technique : une base maintenable, testable et évolutive.", .9, 5.64, 11.45, .35, 17, NAVY, True, align=PP_ALIGN.CENTER)
 add_footer(slide)
 
 # 09 — Method / evidence
 slide = prs.slides.add_slide(prs.slide_layouts[6])
 fill_background(slide)
+add_decor(slide, 3)
 add_title(slide, 9, "Du besoin à un projet maîtrisé", "La qualité ne vient pas seulement du code.")
 steps = [
     ("01", "Cadrer", "Besoin, rôles et périmètre MVP"),
@@ -268,13 +314,15 @@ add_footer(slide)
 # 10 — Conclusion
 slide = prs.slides.add_slide(prs.slide_layouts[6])
 add_picture_cover(slide, LANDING, 0, 0, 13.333, 7.5)
-add_rect(slide, 0, 0, 13.333, 7.5, NAVY, transparency=14)
-add_rect(slide, 1.1, 1.05, 11.13, 5.1, NAVY, radius=True, transparency=8)
-add_text(slide, "ArtisanConnect", 1.48, 1.65, 4.2, .55, 31, WHITE, True)
-add_text(slide, "Une plateforme qui rapproche les clients\net les artisans autour de leur savoir-faire.", 1.48, 2.55, 6.4, .92, 23, WHITE)
+add_rect(slide, 0, 0, 13.333, 7.5, CREAM, transparency=56)
+add_rect(slide, 1.1, 1.05, 11.13, 5.1, WHITE, radius=True, transparency=8)
+add_rect(slide, 8.58, 1.05, 3.65, .18, PURPLE, radius=True)
+add_rect(slide, 10.8, 5.95, 1.42, .18, TERRACOTTA, radius=True)
+add_text(slide, "ArtisanConnect", 1.48, 1.65, 4.2, .55, 31, NAVY, True)
+add_text(slide, "Une plateforme qui rapproche les clients\net les artisans autour de leur savoir-faire.", 1.48, 2.55, 6.4, .92, 23, INK)
 add_rect(slide, 1.48, 3.87, 1.05, .06, GOLD)
-add_text(slide, "Prochaine étape : démontrer un parcours utilisateur de bout en bout.", 1.48, 4.32, 8.45, .35, 16, RGBColor(229, 234, 230))
-add_text(slide, "Merci · Questions ?", 1.48, 5.2, 5.7, .35, 20, WHITE, True)
+add_text(slide, "Prochaine étape : démontrer un parcours utilisateur de bout en bout.", 1.48, 4.32, 8.45, .35, 16, TEAL)
+add_text(slide, "Merci · Questions ?", 1.48, 5.2, 5.7, .35, 20, PURPLE, True)
 
 output = ROOT / "05_Presentation_ArtisanConnect.pptx"
 prs.save(output)
